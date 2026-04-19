@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-interface UseImageUploadProps {
-  onUpload?: (url: string) => void;
-}
+interface UseImageUploadProps { onUpload?: (url: string) => void; }
 
 export function useImageUpload({ onUpload }: UseImageUploadProps = {}) {
   const previewRef = useRef<string | null>(null);
@@ -11,53 +9,24 @@ export function useImageUpload({ onUpload }: UseImageUploadProps = {}) {
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileObject, setFileObject] = useState<File | null>(null);
 
-  const handleThumbnailClick = useCallback(() => {
-    fileInputRef.current?.click();
-  }, []);
+  const handleThumbnailClick = useCallback(() => { fileInputRef.current?.click(); }, []);
 
-  const handleFileChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (file) {
-        setFileName(file.name);
-        setFileObject(file);
-        const url = URL.createObjectURL(file);
-        setPreviewUrl(url);
-        previewRef.current = url;
-        onUpload?.(url);
-      }
-    },
-    [onUpload],
-  );
+  const handleFileChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setFileName(file.name); setFileObject(file);
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url); previewRef.current = url; onUpload?.(url);
+    }
+  }, [onUpload]);
 
   const handleRemove = useCallback(() => {
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-    }
-    setPreviewUrl(null);
-    setFileName(null);
-    setFileObject(null);
-    previewRef.current = null;
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setPreviewUrl(null); setFileName(null); setFileObject(null); previewRef.current = null;
+    if (fileInputRef.current) fileInputRef.current.value = "";
   }, [previewUrl]);
 
-  useEffect(() => {
-    return () => {
-      if (previewRef.current) {
-        URL.revokeObjectURL(previewRef.current);
-      }
-    };
-  }, []);
+  useEffect(() => { return () => { if (previewRef.current) URL.revokeObjectURL(previewRef.current); }; }, []);
 
-  return {
-    previewUrl,
-    fileName,
-    fileObject,
-    fileInputRef,
-    handleThumbnailClick,
-    handleFileChange,
-    handleRemove,
-  };
+  return { previewUrl, fileName, fileObject, fileInputRef, handleThumbnailClick, handleFileChange, handleRemove };
 }

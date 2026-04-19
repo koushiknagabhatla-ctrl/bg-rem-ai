@@ -1,4 +1,4 @@
-import { SignInCard } from "@/components/ui/sign-in-card-2"
+import { SignInCard } from "@/components/ui/sign-in-card"
 
 export default function LoginPage() {
   return <SignInCard />

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabase';
 import { motion } from 'framer-motion';
-import { LogOut, Layers, Sparkles } from 'lucide-react';
+import { LogOut, LayoutGrid, Sparkles, Menu, X } from 'lucide-react';
 
 export function Navbar() {
   const supabase = createBrowserSupabaseClient();
@@ -12,82 +12,89 @@ export function Navbar() {
   const pathname = usePathname();
   const [session, setSession] = useState<any>(undefined);
   const [loading, setLoading] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      setLoading(false);
-    });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => setSession(session));
+    supabase.auth.getSession().then(({ data }) => { setSession(data.session); setLoading(false); });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, s) => setSession(s));
     return () => subscription.unsubscribe();
   }, [supabase]);
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push('/');
-  };
+  const handleSignOut = async () => { await supabase.auth.signOut(); router.push('/'); };
 
-  // Hide navbar on auth pages for clean UX
+  // Minimal logo-only on auth pages
   if (pathname === '/login' || pathname === '/register') {
     return (
-      <header className="absolute top-0 w-full z-50 p-6 flex justify-between items-center">
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500/30 to-indigo-500/30 border border-white/10 flex items-center justify-center group-hover:from-purple-500/50 group-hover:to-indigo-500/50 transition-all">
-            <Sparkles className="w-4 h-4 text-white/80" />
+      <header className="absolute top-0 w-full z-50 px-6 py-5">
+        <Link href="/" className="inline-flex items-center gap-2.5 group">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-md shadow-violet-500/20">
+            <Sparkles className="w-3.5 h-3.5 text-white" />
           </div>
-          <span className="font-semibold text-lg text-white">PixelForge</span>
+          <span className="font-semibold text-white text-lg tracking-tight">PixelForge</span>
         </Link>
       </header>
     );
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/[0.04] bg-black/60 backdrop-blur-2xl">
-      <div className="flex h-16 items-center justify-between max-w-7xl mx-auto px-6">
-        
+    <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-xl border-b border-border/50">
+      <div className="flex h-14 items-center justify-between max-w-7xl mx-auto px-6">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <motion.div 
-             whileHover={{ rotate: 180 }}
-             transition={{ duration: 0.5, ease: "easeInOut" }}
-             className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-purple-500/20"
-          >
-            <Sparkles className="w-4 h-4 text-white" />
+        <Link href="/" className="flex items-center gap-2.5 group shrink-0">
+          <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.4 }}
+            className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-sm shadow-violet-500/20">
+            <Sparkles className="w-3 h-3 text-white" />
           </motion.div>
-          <span className="font-bold text-xl tracking-tight text-white group-hover:text-purple-300 transition-colors duration-300">PixelForge</span>
+          <span className="font-semibold text-[15px] tracking-tight">PixelForge</span>
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
-          <Link href="/#hero" className="text-sm font-medium text-white/50 hover:text-white transition-colors duration-200">Product</Link>
-          <Link href="/#about" className="text-sm font-medium text-white/50 hover:text-white transition-colors duration-200">Technology</Link>
-          <Link href="/#pricing" className="text-sm font-medium text-white/50 hover:text-white transition-colors duration-200">Pricing</Link>
+        {/* Desktop nav */}
+        <nav className="hidden md:flex items-center gap-1">
+          {[
+            { href: "/#features", label: "Features" },
+            { href: "/#pricing", label: "Pricing" },
+            { href: "/#about", label: "About" },
+          ].map((link) => (
+            <Link key={link.href} href={link.href} className="px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">{link.label}</Link>
+          ))}
         </nav>
 
-        {/* Auth */}
-        <div className="flex items-center gap-4">
+        {/* Right side */}
+        <div className="flex items-center gap-3">
           {!loading && (
             session ? (
-              <div className="flex items-center gap-4">
-                <Link href="/" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-medium text-white transition-all duration-200">
-                  <Layers className="w-4 h-4" /> Workspace
+              <div className="flex items-center gap-2">
+                <Link href="/" className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">
+                  <LayoutGrid className="w-3.5 h-3.5" /> Workspace
                 </Link>
-                <div className="h-6 w-px bg-white/10" />
-                <button onClick={handleSignOut} className="text-sm font-medium text-white/40 hover:text-red-400 transition-colors flex items-center gap-2">
-                  <LogOut className="w-4 h-4" /> <span className="hidden sm:inline">Sign Out</span>
+                <button onClick={handleSignOut} className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-muted-foreground hover:text-red-400 transition-colors">
+                  <LogOut className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Sign out</span>
                 </button>
               </div>
             ) : (
-              <div className="flex items-center gap-3">
-                <Link href="/login" className="text-sm font-medium text-white/60 hover:text-white transition-colors hidden sm:inline">Log in</Link>
-                <Link href="/register" className="px-5 py-2 rounded-lg bg-white text-black text-sm font-medium hover:bg-white/90 transition-all shadow-lg shadow-white/10">
+              <div className="flex items-center gap-2">
+                <Link href="/login" className="hidden sm:inline px-3.5 py-1.5 rounded-lg text-[13px] font-medium text-muted-foreground hover:text-foreground transition-colors">Log in</Link>
+                <Link href="/register" className="px-4 py-1.5 rounded-lg bg-primary text-primary-foreground text-[13px] font-medium hover:bg-primary/90 transition-colors shadow-sm shadow-primary/20">
                   Get Started
                 </Link>
               </div>
             )
           )}
+          <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden p-1.5 rounded-lg hover:bg-accent transition-colors">
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
+          className="md:hidden border-t border-border/50 bg-background px-6 py-4 space-y-2">
+          <Link href="/#features" onClick={() => setMobileOpen(false)} className="block py-2 text-sm text-muted-foreground hover:text-foreground">Features</Link>
+          <Link href="/#pricing" onClick={() => setMobileOpen(false)} className="block py-2 text-sm text-muted-foreground hover:text-foreground">Pricing</Link>
+          <Link href="/#about" onClick={() => setMobileOpen(false)} className="block py-2 text-sm text-muted-foreground hover:text-foreground">About</Link>
+        </motion.div>
+      )}
     </header>
   );
 }

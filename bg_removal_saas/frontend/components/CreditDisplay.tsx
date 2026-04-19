@@ -1,42 +1,28 @@
 'use client';
 import { useCredits } from '@/hooks/useCredits';
 import { useEffect, useState } from 'react';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Coins } from 'lucide-react';
 
 export function CreditDisplay({ triggerTime }: { triggerTime: number }) {
-    const { credits, isAdmin, loading, refetch } = useCredits();
-    const [pulse, setPulse] = useState(false);
+  const { credits, isAdmin, loading, refetch } = useCredits();
+  const [pulse, setPulse] = useState(false);
 
-    useEffect(() => {
-        refetch();
-        setPulse(true);
-        setTimeout(() => setPulse(false), 500);
-    }, [triggerTime, refetch]);
+  useEffect(() => { refetch(); setPulse(true); setTimeout(() => setPulse(false), 400); }, [triggerTime, refetch]);
 
-    if (loading) return null;
+  if (loading) return <div className="h-8 w-24 rounded-full bg-muted animate-pulse" />;
 
-    if (isAdmin) {
-        return (
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium shadow-lg shadow-amber-500/5">
-                <Sparkles className="w-4 h-4" />
-                <span>Admin</span>
-                <span className="text-white/30 mx-1">•</span>
-                <span>∞ Unlimited</span>
-            </div>
-        );
-    }
-
-    const isLow = credits !== 'Unlimited' && Number(credits) < 10;
-    
+  if (isAdmin) {
     return (
-        <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${
-            pulse ? 'scale-105' : ''
-        } ${
-            isLow 
-                ? 'text-red-400 border-red-500/20 bg-red-500/10' 
-                : 'text-purple-300 border-purple-500/20 bg-purple-500/10'
-        }`}>
-            {credits === 0 ? "Credits Depleted" : `${credits} Credits`}
-        </div>
+      <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/15 text-amber-400 text-xs font-semibold">
+        <Sparkles className="w-3.5 h-3.5" /> Admin — Unlimited
+      </div>
     );
+  }
+
+  const low = credits !== 'Unlimited' && Number(credits) < 10;
+  return (
+    <div className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-transform duration-200 ${pulse ? 'scale-105' : ''} ${low ? 'text-red-400 border-red-500/15 bg-red-500/5' : 'text-muted-foreground border-border/50 bg-muted/50'}`}>
+      <Coins className="w-3.5 h-3.5" /> {credits === 0 ? 'No credits' : `${credits} credits`}
+    </div>
+  );
 }
