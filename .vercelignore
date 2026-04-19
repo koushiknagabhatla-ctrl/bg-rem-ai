@@ -1,0 +1,18 @@
+# Ignore all Python and training related files at the root
+requirements.txt
+requirements_colab.txt
+backend/
+api/
+data/
+database/
+model/
+notebooks/
+bg_removal_saas/
+*.py
+*.onnx
+*.ipynb
+*.yaml
+Dockerfile
+
+# Only allow the frontend directory to be processed
+!frontend/
