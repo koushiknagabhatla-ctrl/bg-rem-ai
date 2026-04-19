@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+.next/
+out/
+
+# env files
+.env
+.env.local
+.env.production
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+
+# model files — NEVER commit these
+*.onnx
+*.pth
+*.pt
+checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+.venv/

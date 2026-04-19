@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+
+# Model files — YOUR IP, NEVER COMMIT
+*.onnx
+*.pth
+*.pt
+checkpoints/
+exported_models/
+
+# Environment
+.env
+.env.local
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+.next/
+out/
+
+# Data
+dataset/
+raw_data/
+eval_results/
+
+# Temp
+*.log
+validate.py

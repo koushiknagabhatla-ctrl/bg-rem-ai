@@ -1,0 +1,12 @@
+# Google Colab-specific requirements
+# These are pre-installed on Colab but listed for version compatibility
+
+# Already on Colab (don't reinstall unless version mismatch):
+# torch, torchvision, numpy, matplotlib, tqdm
+
+# Install these on Colab:
+albumentations>=1.3.0
+opencv-python-headless>=4.8.0
+onnx>=1.14.0
+onnxruntime>=1.15.0
+Pillow>=10.0.0

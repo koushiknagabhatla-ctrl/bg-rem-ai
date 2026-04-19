@@ -1,0 +1,44 @@
+# ─────────────────────────────────────────────────────────
+# Render.com Blueprint (Infrastructure as Code)
+# ─────────────────────────────────────────────────────────
+# Deploy with: render blueprint sync
+# Or connect repo in Render dashboard → auto-detects this file
+
+services:
+  - type: web
+    name: bg-removal-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    
+    # Render Starter Plan ($7/month) — always on
+    plan: starter
+    
+    # Health check
+    healthCheckPath: /health
+    
+    # Environment variables (set in Render dashboard for secrets)
+    envVars:
+      - key: PORT
+        value: "8000"
+      - key: ENV
+        value: "production"
+      - key: ENABLE_SIGNATURE_CHECK
+        value: "true"
+      - key: MODEL_PATH
+        value: "./model.onnx"
+      - key: ALLOWED_ORIGINS
+        sync: false  # Set manually in dashboard
+      # Secrets — set in Render dashboard, NOT here
+      # - ADMIN_API_KEY
+      # - WEBHOOK_SECRET
+      # - SUPABASE_URL
+      # - SUPABASE_SERVICE_KEY
+      # - UPSTASH_REDIS_REST_URL
+      # - UPSTASH_REDIS_REST_TOKEN
+
+    # Persistent disk for model file (optional)
+    # disk:
+    #   name: model-storage
+    #   mountPath: /models
+    #   sizeGB: 1
