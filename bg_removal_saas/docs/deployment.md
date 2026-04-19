@@ -71,4 +71,45 @@ Should return `{"status":"ok","model_loaded":true}`.
 - **CORS blocked**: Add Vercel URL to Fastapi CORS setup in `main.py` if not using the exact domain specified.
 - **402 on Admin**: Your `ADMIN_EMAIL` in Render environment variables must match login perfectly.
 
+## Debugging 500 Errors
+
+**STEP 1 — Check Vercel environment variables:**
+Vercel Dashboard → your project → Settings → Environment Variables
+Verify ALL of these exist:
+- `RENDER_API_URL`   (no trailing slash)
+- `WEBHOOK_SECRET`   (32 char hex)
+- `ADMIN_API_KEY`    (32 char hex)
+- `ADMIN_EMAIL`      (koushiknagabhatla@gmail.com)
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+**STEP 2 — Check Render backend is alive:**
+Open browser: `https://your-app.onrender.com/health`
+Should return: `{"status":"ok","model_loaded":true,"model_path":"/app/model/model_fp32.onnx","model_exists":true}`
+
+If model_loaded is false:
+→ Upload `model_fp32.onnx` to Render disk
+→ Render Dashboard → your service → Disks → Upload to `/app/model/model_fp32.onnx`
+
+If site doesn't load:
+→ Render is sleeping (free tier)
+→ Wait 30 seconds and refresh
+→ Or upgrade to Starter ($7/month)
+
+**STEP 3 — Check Render logs:**
+Render Dashboard → your service → Logs
+Look for any ERROR or Exception messages
+Common errors:
+- "FileNotFoundError" → model not uploaded
+- "Invalid API key"   → Cloudinary credentials wrong
+- "Connection refused"→ Supabase URL wrong
+
+**STEP 4 — Check Vercel function logs:**
+Vercel Dashboard → your project → Functions tab
+Click on "remove-bg" function. See exact error message with line number.
+
+**STEP 5 — Test backend directly:**
+`curl -X GET https://your-app.onrender.com/health`
+If this works but `/remove-bg` fails → problem is in authentication/gatekeeper layer.
+
 Enjoy your production-ready AI SaaS!

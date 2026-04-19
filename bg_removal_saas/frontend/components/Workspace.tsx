@@ -42,15 +42,49 @@ export function Workspace() {
     setApiStatus('Uploading...'); setError('');
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error('Please sign in first');
+      if (!session) {
+        setError('Please sign in first');
+        setApiStatus('');
+        return;
+      }
+
       setApiStatus('Processing...');
       const formData = new FormData(); formData.append('image', fileObject);
-      const res = await fetch('/api/remove-bg', { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}` }, body: formData });
-      if (!res.ok) { const t = await res.text(); try { const j = JSON.parse(t); throw new Error(j.error || j.detail || `Error ${res.status}`); } catch (p: any) { if (p.message.includes('Error')) throw p; throw new Error(`Server error (${res.status}): ${t.substring(0, 50)}`); } }
-      const data = await res.json();
-      if (data.result_url) { setResultUrl(data.result_url); setTab('output'); setTriggerTime(Date.now()); }
-      else throw new Error(data.error || 'No result returned');
-    } catch (e: any) { setError(e.message); }
+      
+      const response = await fetch('/api/remove-bg', { 
+        method: 'POST', 
+        headers: { 'Authorization': `Bearer ${session.access_token}` }, 
+        body: formData 
+      });
+
+      if (!response.ok) {
+        let errObj: any = {};
+        try { errObj = await response.json(); } catch (e) {}
+        
+        if (response.status === 402) {
+          setError('No credits left. You need 5 credits.');
+        } else if (response.status === 504) {
+          setError('Server is waking up. Try again in 30s.');
+        } else if (response.status === 429) {
+          setError('Too many requests. Wait 1 minute.');
+        } else {
+          setError(errObj.detail || errObj.error || 'Something went wrong. Try again.');
+        }
+        setApiStatus('');
+        return;
+      }
+      
+      const data = await response.json();
+      if (data.result_url) { 
+        setResultUrl(data.result_url); 
+        setTab('output'); 
+        setTriggerTime(Date.now()); 
+      } else { 
+        setError('Processing failed. Try again.');
+      }
+    } catch (e: any) { 
+      setError(e.message || 'Network error occurred'); 
+    }
     setApiStatus('');
   };
 

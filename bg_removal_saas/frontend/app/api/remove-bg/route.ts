@@ -1,74 +1,115 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 
-export const maxDuration = 60; // Increase timeout to 60s to survive Render Cold Starts
+// Vercel Serverless Function settings
+export const maxDuration = 60; // 60 seconds
 
 export async function POST(req: Request) {
     try {
+        // A) Validate Environment Variables instantly before doing any work
+        if (!process.env.RENDER_API_URL) return NextResponse.json({ error: 'RENDER_API_URL not configured' }, { status: 500 });
+        if (!process.env.WEBHOOK_SECRET) return NextResponse.json({ error: 'WEBHOOK_SECRET not configured' }, { status: 500 });
+        if (!process.env.ADMIN_EMAIL) return NextResponse.json({ error: 'ADMIN_EMAIL not configured' }, { status: 500 });
+        // ADMIN_API_KEY is technically optional but strongly suggested
+        
+        // Remove trailing slash if present
+        const renderUrl = process.env.RENDER_API_URL.endsWith('/') 
+            ? process.env.RENDER_API_URL.slice(0, -1) 
+            : process.env.RENDER_API_URL;
+
+        // B) Read formData directly
         const formData = await req.formData();
-        const image = formData.get('image') as File;
-        if (!image) return NextResponse.json({ error: 'No image' }, { status: 400 });
-
-        const authHeader = req.headers.get('Authorization');
-        if (!authHeader) return NextResponse.json({ error: 'No auth' }, { status: 401 });
-
-        const arrayBuffer = await image.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-
-        if (buffer.length > 20 * 1024 * 1024) {
-            return NextResponse.json({ error: 'File too large' }, { status: 413 });
+        const imageFile = formData.get('image') as File;
+        if (!imageFile) {
+            return NextResponse.json({ error: 'No image uploaded' }, { status: 400 });
         }
 
-        if (!process.env.WEBHOOK_SECRET) return NextResponse.json({ error: 'WEBHOOK_SECRET is not configured on the server' }, { status: 500 });
-        if (!process.env.RENDER_API_URL) return NextResponse.json({ error: 'RENDER_API_URL is not configured on the server' }, { status: 500 });
+        // C) Authentication header extraction
+        const authHeader = req.headers.get('Authorization');
+        if (!authHeader) {
+            return NextResponse.json({ error: 'No authorization header provided' }, { status: 401 });
+        }
 
-        // HMAC Signature
-        const timestamp = Date.now().toString();
-        const bodyHash = crypto.createHash('sha256').update(buffer).digest('hex');
-        const signature = crypto.createHmac('sha256', process.env.WEBHOOK_SECRET)
-            .update(`${timestamp}:${bodyHash}`)
-            .digest('hex');
-
-        // Check Admin
+        // Determine if Admin bypass
         let finalAuth = authHeader;
-        // In a real scenario, you'd decode JWT securely to verify email before trusting.
-        // For bypass if it's the admin, rely on email within JWT.
         try {
             const token = authHeader.split(' ')[1];
-            const payloadStr = Buffer.from(token.split('.')[1], 'base64').toString();
-            const payload = JSON.parse(payloadStr);
-            if (payload.email === process.env.ADMIN_EMAIL && process.env.ADMIN_EMAIL) {
-                if (process.env.ADMIN_API_KEY) {
+            if (token) {
+                const payloadStr = Buffer.from(token.split('.')[1], 'base64').toString();
+                const payload = JSON.parse(payloadStr);
+                if (payload.email === process.env.ADMIN_EMAIL && process.env.ADMIN_API_KEY) {
                     finalAuth = `Bearer ${process.env.ADMIN_API_KEY}`;
                 }
             }
-        } catch (e) {}
-
-        const newFormData = new FormData();
-        newFormData.append('image', new Blob([buffer], { type: image.type }), image.name);
-
-        const response = await fetch(`${process.env.RENDER_API_URL}/remove-bg`, {
-            method: 'POST',
-            headers: {
-                'Authorization': finalAuth,
-                'X-Timestamp': timestamp,
-                'X-Signature': signature
-            },
-            body: newFormData
-        });
-
-        const textResponse = await response.text();
-        let data;
-        try {
-            data = JSON.parse(textResponse);
         } catch (e) {
-            console.error("Backend non-JSON response:", textResponse);
-            return NextResponse.json({ error: `Backend error (${response.status}): ${textResponse.substring(0, 150)}` }, { status: response.status });
+            // Ignore token parse errors here; backend will reject invalid tokens natively
         }
 
-        return NextResponse.json(data, { status: response.status });
+        // D) Generate HMAC Signature
+        const timestamp = Date.now().toString();
+        let signature = "";
+        try {
+            const imageBuffer = Buffer.from(await imageFile.arrayBuffer());
+            const bodyHash = crypto.createHash('sha256').update(imageBuffer).digest('hex');
+            signature = crypto.createHmac('sha256', process.env.WEBHOOK_SECRET)
+                .update(`${timestamp}:${bodyHash}`)
+                .digest('hex');
+        } catch (sigErr: any) {
+            return NextResponse.json({ error: `HMAC Signature failed: ${sigErr.message}` }, { status: 500 });
+        }
+
+        // E) Forward to Render Backend with 60s Timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 60000);
+        
+        const forwardForm = new FormData();
+        forwardForm.append('image', imageFile);
+
+        let response;
+        try {
+            response = await fetch(`${renderUrl}/remove-bg`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': finalAuth,
+                    'X-Timestamp': timestamp,
+                    'X-Signature': signature,
+                },
+                body: forwardForm,
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+        } catch (fetchErr: any) {
+            clearTimeout(timeoutId);
+            if (fetchErr.name === 'AbortError') {
+                return NextResponse.json({ error: 'Backend timeout - Render may be waking up, try again' }, { status: 504 });
+            }
+            return NextResponse.json({ error: `Fetch to backend failed: ${fetchErr.message}` }, { status: 500 });
+        }
+
+        // F) Handle backend response gracefully
+        if (!response.ok) {
+            const text = await response.text();
+            let errObj;
+            try { errObj = JSON.parse(text); } catch (e) { errObj = { detail: text.substring(0, 200) }; }
+            return NextResponse.json(
+                { error: errObj.detail || errObj.error || `Backend returned ${response.status}` },
+                { status: response.status }
+            );
+        }
+
+        // G) Success return
+        let responseData;
+        try {
+            responseData = await response.json();
+        } catch (jsonErr: any) {
+            return NextResponse.json({ error: 'Backend returned invalid JSON' }, { status: 500 });
+        }
+        
+        return NextResponse.json(responseData, { status: 200 });
+
     } catch (error: any) {
-        console.error("API Route Error:", error);
-        return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+        // Last line defense against total crashes
+        console.error("API Route Fatal Error:", error);
+        return NextResponse.json({ error: `Internal API Error: ${error.message}` }, { status: 500 });
     }
 }
