@@ -18,7 +18,7 @@ export function DownloadButton({ resultUrl, reset }: { resultUrl: string, reset:
             ctx.fillRect(0,0, canvas.width, canvas.height);
             ctx.drawImage(img, 0, 0);
             
-            outBlob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.95)) as Blob;
+            outBlob = await new Promise(resolve => canvas.toBlob((b) => resolve(b as Blob), 'image/jpeg', 0.95));
         }
 
         const url = URL.createObjectURL(outBlob);
