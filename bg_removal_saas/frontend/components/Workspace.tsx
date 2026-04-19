@@ -32,6 +32,13 @@ export function Workspace() {
 
   const runExtraction = async () => {
     if (!fileObject) return;
+    
+    // Check Vercel 4.5MB body size limit for Serverless Functions
+    if (fileObject.size > 4.5 * 1024 * 1024) {
+      setError('File is too large. Vercel limits uploads to 4.5MB. We are working on a direct-to-cloud upload to bypass this, but for now please use a smaller image.');
+      return;
+    }
+    
     setApiStatus('Uploading...'); setError('');
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -39,7 +46,7 @@ export function Workspace() {
       setApiStatus('Processing...');
       const formData = new FormData(); formData.append('image', fileObject);
       const res = await fetch('/api/remove-bg', { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}` }, body: formData });
-      if (!res.ok) { const t = await res.text(); try { const j = JSON.parse(t); throw new Error(j.error || j.detail || `Error ${res.status}`); } catch (p: any) { if (p.message.includes('Error')) throw p; throw new Error(`Server error (${res.status})`); } }
+      if (!res.ok) { const t = await res.text(); try { const j = JSON.parse(t); throw new Error(j.error || j.detail || `Error ${res.status}`); } catch (p: any) { if (p.message.includes('Error')) throw p; throw new Error(`Server error (${res.status}): ${t.substring(0, 50)}`); } }
       const data = await res.json();
       if (data.result_url) { setResultUrl(data.result_url); setTab('output'); setTriggerTime(Date.now()); }
       else throw new Error(data.error || 'No result returned');
