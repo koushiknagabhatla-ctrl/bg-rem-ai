@@ -15,4 +15,5 @@ bg_removal_saas/
 Dockerfile
 
 # Only allow the frontend directory to be processed
-!frontend/
+!bg_removal_saas/frontend/
+!bg_removal_saas/
