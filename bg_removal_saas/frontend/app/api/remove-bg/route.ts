@@ -19,10 +19,13 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'File too large' }, { status: 413 });
         }
 
+        if (!process.env.WEBHOOK_SECRET) return NextResponse.json({ error: 'WEBHOOK_SECRET is not configured on the server' }, { status: 500 });
+        if (!process.env.RENDER_API_URL) return NextResponse.json({ error: 'RENDER_API_URL is not configured on the server' }, { status: 500 });
+
         // HMAC Signature
         const timestamp = Date.now().toString();
         const bodyHash = crypto.createHash('sha256').update(buffer).digest('hex');
-        const signature = crypto.createHmac('sha256', process.env.WEBHOOK_SECRET!)
+        const signature = crypto.createHmac('sha256', process.env.WEBHOOK_SECRET)
             .update(`${timestamp}:${bodyHash}`)
             .digest('hex');
 
@@ -34,8 +37,10 @@ export async function POST(req: Request) {
             const token = authHeader.split(' ')[1];
             const payloadStr = Buffer.from(token.split('.')[1], 'base64').toString();
             const payload = JSON.parse(payloadStr);
-            if (payload.email === process.env.ADMIN_EMAIL) {
-                finalAuth = `Bearer ${process.env.ADMIN_API_KEY}`;
+            if (payload.email === process.env.ADMIN_EMAIL && process.env.ADMIN_EMAIL) {
+                if (process.env.ADMIN_API_KEY) {
+                    finalAuth = `Bearer ${process.env.ADMIN_API_KEY}`;
+                }
             }
         } catch (e) {}
 
@@ -52,9 +57,18 @@ export async function POST(req: Request) {
             body: newFormData
         });
 
-        const data = await response.json();
+        const textResponse = await response.text();
+        let data;
+        try {
+            data = JSON.parse(textResponse);
+        } catch (e) {
+            console.error("Backend non-JSON response:", textResponse);
+            return NextResponse.json({ error: `Backend error (${response.status}): ${textResponse.substring(0, 150)}` }, { status: response.status });
+        }
+
         return NextResponse.json(data, { status: response.status });
     } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        console.error("API Route Error:", error);
+        return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
     }
 }
