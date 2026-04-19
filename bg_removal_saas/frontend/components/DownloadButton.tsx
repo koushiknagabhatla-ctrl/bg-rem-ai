@@ -28,20 +28,20 @@ export function DownloadButton({ resultUrl, reset }: { resultUrl: string, reset:
     };
 
     return (
-        <div className="flex flex-col items-center gap-6 mt-8">
-            <div className="flex flex-wrap justify-center gap-4">
-                <button onClick={() => downloadImage('transparent')} className="glass-card bg-gradient-to-r from-accent/20 to-accent/5 hover:from-accent hover:to-accent-light px-6 py-3 font-semibold transition-all">
+        <div className="flex flex-col items-center gap-6 mt-8 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+                <button onClick={() => downloadImage('transparent')} className="glass bg-white/5 hover:bg-indigo-500 hover:border-indigo-400 px-6 py-4 rounded-xl font-medium transition-all duration-300 text-white w-full shadow-lg">
                     Download PNG (Transparent)
                 </button>
-                <button onClick={() => downloadImage('#ffffff')} className="glass-card hover:bg-white hover:text-black px-6 py-3 font-semibold transition-all">
-                    White BG
+                <button onClick={() => downloadImage('#ffffff')} className="glass bg-white hover:bg-gray-100 hover:scale-105 text-black px-6 py-4 rounded-xl font-medium transition-all duration-300 w-full shadow-lg">
+                    Download JPEG (Solid White)
                 </button>
-                <button onClick={() => downloadImage('#000000')} className="glass-card hover:bg-zinc-800 px-6 py-3 font-semibold transition-all">
-                    Black BG
+                <button onClick={() => downloadImage('#000000')} className="glass bg-black hover:bg-neutral-900 border-white/20 px-6 py-4 rounded-xl font-medium transition-all duration-300 text-white w-full shadow-lg">
+                    Download JPEG (Solid Black)
                 </button>
             </div>
-            <button onClick={reset} className="text-zinc-400 hover:text-white underline text-sm">
-                Process another image
+            <button onClick={reset} className="text-white/50 hover:text-white underline underline-offset-4 transition-colors font-medium text-sm mt-2">
+                Discard and select another image
             </button>
         </div>
     );
