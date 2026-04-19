@@ -2,13 +2,12 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Navbar } from '@/components/Navbar';
 import './globals.css';
-import { cn } from '@/lib/utils';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
   title: 'PixelForge | Professional AI Background Removal',
-  description: 'AI-powered, 40ms per image background removal. Ultra-high fidelity.',
+  description: 'AI-powered background removal in 40ms. Custom MobileNetV3 U-Net with INT8 precision for ultra-high fidelity.',
 };
 
 export default function RootLayout({
@@ -18,17 +17,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body
-        className={cn(
-          'min-h-screen bg-background font-sans text-foreground antialiased selection:bg-accent/30',
-          inter.variable
-        )}
-      >
-        <div className="relative flex min-h-screen flex-col overflow-hidden">
-          {/* Universal Background Effects */}
-          <div className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-indigo-900/20 blur-[120px] pointer-events-none -z-10" />
-          <div className="absolute bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-violet-900/10 blur-[120px] pointer-events-none -z-10" />
-          
+      <body className={`min-h-screen bg-[#050507] font-sans text-white antialiased selection:bg-purple-500/30 ${inter.variable}`}>
+        <div className="relative flex min-h-screen flex-col">
           <Navbar />
           <main className="flex-1">{children}</main>
         </div>

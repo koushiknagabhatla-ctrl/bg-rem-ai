@@ -1,19 +1,18 @@
-# Ignore all Python and training related files at the root
+# Root-level files to ignore
 requirements.txt
 requirements_colab.txt
-backend/
-api/
-data/
-database/
-model/
-notebooks/
-bg_removal_saas/
 *.py
 *.onnx
 *.ipynb
 *.yaml
 Dockerfile
+README.md
 
-# Only allow the frontend directory to be processed
-!bg_removal_saas/frontend/
-!bg_removal_saas/
+# Directories to ignore (at root level, not inside bg_removal_saas/frontend)
+/backend/
+/api/
+/data/
+/database/
+/model/
+/notebooks/
+/docs/

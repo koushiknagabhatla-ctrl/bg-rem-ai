@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { createBrowserSupabaseClient } from '@/lib/supabase';
 import { LandingView } from '@/components/LandingView';
 import { Workspace } from '@/components/Workspace';
-import { motion } from 'framer-motion';
 
 export default function Home() {
     const supabase = createBrowserSupabaseClient();
@@ -21,20 +20,12 @@ export default function Home() {
 
     if (loading) {
         return (
-            <div className="flex-1 flex flex-col items-center justify-center min-h-[80vh]">
-                <div className="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
+            <div className="flex-1 flex flex-col items-center justify-center min-h-[80vh] gap-4">
+                <div className="w-10 h-10 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+                <p className="text-white/30 text-sm">Loading PixelForge...</p>
             </div>
         );
     }
 
-    return (
-        <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="flex-1 w-full"
-        >
-            {!session ? <LandingView /> : <Workspace />}
-        </motion.div>
-    );
+    return !session ? <LandingView /> : <Workspace />;
 }

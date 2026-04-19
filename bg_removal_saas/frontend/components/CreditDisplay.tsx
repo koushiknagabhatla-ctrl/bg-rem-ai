@@ -1,6 +1,7 @@
 'use client';
-import { useCredits } from '../hooks/useCredits';
+import { useCredits } from '@/hooks/useCredits';
 import { useEffect, useState } from 'react';
+import { Sparkles } from 'lucide-react';
 
 export function CreditDisplay({ triggerTime }: { triggerTime: number }) {
     const { credits, isAdmin, loading, refetch } = useCredits();
@@ -16,10 +17,11 @@ export function CreditDisplay({ triggerTime }: { triggerTime: number }) {
 
     if (isAdmin) {
         return (
-            <div className="glass px-5 py-2 border border-amber-500/30 text-amber-500 font-bold flex items-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.2)] rounded-full text-sm">
-                <span>⭐ Core Admin</span>
-                <span className="text-white mx-2">|</span>
-                <span>∞ Unlimited Generations</span>
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium shadow-lg shadow-amber-500/5">
+                <Sparkles className="w-4 h-4" />
+                <span>Admin</span>
+                <span className="text-white/30 mx-1">•</span>
+                <span>∞ Unlimited</span>
             </div>
         );
     }
@@ -27,8 +29,14 @@ export function CreditDisplay({ triggerTime }: { triggerTime: number }) {
     const isLow = credits !== 'Unlimited' && Number(credits) < 10;
     
     return (
-        <div className={`glass px-5 py-2 font-semibold transition-all duration-300 rounded-full text-sm border ${pulse ? 'scale-105 shadow-xl' : 'shadow-md'} ${isLow ? 'text-red-400 border-red-500/50 bg-red-500/10' : 'text-indigo-400 border-indigo-500/20 bg-indigo-500/10'}`}>
-            {credits === 0 ? "Credits Depleted" : `${credits} API Credits`}
+        <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${
+            pulse ? 'scale-105' : ''
+        } ${
+            isLow 
+                ? 'text-red-400 border-red-500/20 bg-red-500/10' 
+                : 'text-purple-300 border-purple-500/20 bg-purple-500/10'
+        }`}>
+            {credits === 0 ? "Credits Depleted" : `${credits} Credits`}
         </div>
     );
 }
