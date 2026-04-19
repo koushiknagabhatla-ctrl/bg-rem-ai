@@ -15,14 +15,12 @@ export default function Home() {
     return () => subscription.unsubscribe();
   }, [supabase]);
 
-  if (loading) {
-    return (
-      <div className="flex-1 flex flex-col items-center justify-center min-h-[80vh] gap-3">
-        <div className="w-8 h-8 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
-        <p className="text-xs text-muted-foreground">Loading...</p>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-black">
+      <div className="w-8 h-8 border-2 border-violet-500/20 border-t-violet-500 rounded-full animate-spin" />
+      <p className="text-xs text-white/20">Loading...</p>
+    </div>
+  );
 
   return !session ? <LandingView /> : <Workspace />;
 }

@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-interface UseImageUploadProps { onUpload?: (url: string) => void; }
-
-export function useImageUpload({ onUpload }: UseImageUploadProps = {}) {
+export function useImageUpload() {
   const previewRef = useRef<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -16,9 +14,9 @@ export function useImageUpload({ onUpload }: UseImageUploadProps = {}) {
     if (file) {
       setFileName(file.name); setFileObject(file);
       const url = URL.createObjectURL(file);
-      setPreviewUrl(url); previewRef.current = url; onUpload?.(url);
+      setPreviewUrl(url); previewRef.current = url;
     }
-  }, [onUpload]);
+  }, []);
 
   const handleRemove = useCallback(() => {
     if (previewUrl) URL.revokeObjectURL(previewUrl);
