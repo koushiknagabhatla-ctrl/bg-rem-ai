@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 
+export const maxDuration = 60; // Increase timeout to 60s to survive Render Cold Starts
+
 export async function POST(req: Request) {
     try {
         const formData = await req.formData();

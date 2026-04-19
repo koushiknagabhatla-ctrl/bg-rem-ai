@@ -41,7 +41,15 @@ export function DropZone({ onResult }: { onResult: (res: any) => void }) {
                 body: formData
             });
 
-            if (!res.ok) throw new Error((await res.json()).error || 'Failed');
+            if (!res.ok) {
+                const text = await res.text();
+                try {
+                    const json = JSON.parse(text);
+                    throw new Error(json.error || json.detail || 'Failed');
+                } catch {
+                    throw new Error(`Server Error (${res.status}): ${text.substring(0, 80)}...`);
+                }
+            }
             
             setStatusText("Polishing result...");
             const data = await res.json();
