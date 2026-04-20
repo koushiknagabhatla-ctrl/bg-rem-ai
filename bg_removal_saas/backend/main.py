@@ -70,10 +70,12 @@ class InferenceEngine:
         self.session = None
         self.loaded = False
         self.model_path = model_path
+        self.last_error = None
         self.load_model()
 
     def load_model(self):
         if not os.path.exists(self.model_path):
+            self.last_error = "File not found on disk"
             logger.error(f"FileNotFoundError: Model not found at {self.model_path}")
             self.loaded = False
             return
@@ -81,8 +83,10 @@ class InferenceEngine:
         try:
             self.session = ort.InferenceSession(self.model_path, providers=['CPUExecutionProvider'])
             self.loaded = True
+            self.last_error = None
             logger.info("Model loaded successfully.")
         except Exception as e:
+            self.last_error = str(e)
             logger.error(f"Failed to load ONNX model: {e}")
             self.loaded = False
 
@@ -174,7 +178,8 @@ def read_health():
         "status": "ok",
         "model_loaded": engine.loaded,
         "model_path": MODEL_PATH,
-        "model_exists": os.path.exists(MODEL_PATH)
+        "model_exists": os.path.exists(MODEL_PATH),
+        "last_error": getattr(engine, 'last_error', None)
     }
 
 @app.post("/remove-bg")
