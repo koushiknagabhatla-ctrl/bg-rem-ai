@@ -97,6 +97,16 @@ def export_to_onnx(
         do_constant_folding=True,  # Fold constants for optimization
     )
 
+    # ── MERGE EXTERNAL DATA INTO SINGLE FILE ──
+    try:
+        import onnx
+        logger.info(f"Merging external data into single file: {output_path}")
+        model_onnx = onnx.load(output_path, load_external_data=True)
+        onnx.save(model_onnx, output_path, save_as_external_data=False)
+        logger.info("Successfully merged to single ONNX file.")
+    except Exception as e:
+        logger.error(f"Failed to merge ONNX external data: {e}")
+
     # Verify
     file_size = os.path.getsize(output_path) / 1024 / 1024
     logger.info(f"ONNX model saved: {output_path} ({file_size:.1f} MB)")
