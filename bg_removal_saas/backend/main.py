@@ -33,7 +33,11 @@ WEBHOOK_SECRET = os.environ.get("WEBHOOK_SECRET")
 CLOUDINARY_CLOUD_NAME = os.environ.get("CLOUDINARY_CLOUD_NAME")
 CLOUDINARY_API_KEY = os.environ.get("CLOUDINARY_API_KEY")
 CLOUDINARY_API_SECRET = os.environ.get("CLOUDINARY_API_SECRET")
+# Fallback to local if disk mount is hiding it
 MODEL_PATH = os.environ.get("MODEL_PATH", "/app/model/model_fp32.onnx")
+if not os.path.exists(MODEL_PATH):
+    if os.path.exists("./model_fp32.onnx"):
+        MODEL_PATH = "./model_fp32.onnx"
 
 # Initialize Clients
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY) if SUPABASE_URL else None
@@ -54,7 +58,7 @@ app.add_middleware(
         "http://localhost:3000",
         "http://localhost:3001"
     ],
-    allow_origin_regex="https://.*\.vercel\.app",
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

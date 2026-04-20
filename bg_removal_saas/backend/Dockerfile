@@ -3,6 +3,7 @@ RUN apt-get update && apt-get install -y libgl1 libglib2.0-0 && rm -rf /var/lib/
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY model_fp32.onnx /app/model/model_fp32.onnx
+COPY model_fp32.onnx /app/model_fp32.onnx
+COPY *.data /app/
 COPY main.py .
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000"]
