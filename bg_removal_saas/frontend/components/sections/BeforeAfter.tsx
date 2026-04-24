@@ -13,9 +13,9 @@ export function BeforeAfter() {
     offset: ["0 1", "0.5 0.7"]
   });
 
-  const cardY = useTransform(scrollYProgress, [0, 1], [150, 0]);
+  const cardX = useTransform(scrollYProgress, [0, 1], ["-50vw", "0vw"]);
   const cardRotateX = useTransform(scrollYProgress, [0, 1], [15, 0]);
-  const cardScale = useTransform(scrollYProgress, [0, 1], [0.9, 1]);
+  const cardScale = useTransform(scrollYProgress, [0, 1], [0.7, 1]);
   const cardOpacity = useTransform(scrollYProgress, [0, 0.8], [0, 1]);
   
   const headerY = useTransform(scrollYProgress, [0, 0.5], [60, 0]);
@@ -42,16 +42,16 @@ export function BeforeAfter() {
 
         {/* Single large comparison card with 3D reveal */}
         <motion.div
-          style={{ y: cardY, rotateX: cardRotateX, scale: cardScale, opacity: cardOpacity }}
+          style={{ x: cardX, rotateX: cardRotateX, scale: cardScale, opacity: cardOpacity }}
           className="glass3d p-4 md:p-6 rounded-3xl border border-[#8B5E3C]/20 shadow-2xl shadow-black/50 transform-gpu max-w-5xl mx-auto overflow-hidden"
         >
           <div className="w-full h-[50vh] md:h-[70vh] rounded-2xl overflow-hidden bg-[#1A0E08]">
-            <ImageComparisonSlider
-              leftImage="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&q=80"
-              rightImage="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&q=80&monochrome=101010"
-              altLeft="Original"
-              altRight="Processed"
-            />
+              <ImageComparisonSlider
+                leftImage="/images/car_original.jpg"
+                rightImage="/images/car_removed.png"
+                altLeft="Original Photo"
+                altRight="Background Removed"
+              />
           </div>
 
           {/* Bottom info strip */}
