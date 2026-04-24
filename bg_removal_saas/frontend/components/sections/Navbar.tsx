@@ -22,7 +22,7 @@ export function Navbar() {
   }, [supabase]);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -35,40 +35,46 @@ export function Navbar() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 w-full z-50 px-6 md:px-10 py-4 nav-glass ${scrolled ? 'scrolled' : ''}`}
+        className={`fixed top-0 w-full z-50 px-6 md:px-10 py-4 transition-all duration-500 ${scrolled ? 'nav-glass py-3' : 'bg-transparent'}`}
       >
-        <div className="max-w-[1280px] mx-auto flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="group flex items-center gap-1.5">
-            <span className="font-display text-lg font-bold tracking-tight text-white">VCranks</span>
-            <span className="font-display text-lg font-bold italic text-[#C4956A] group-hover:text-[#E8B98A] transition-colors duration-300">AI</span>
-          </Link>
+        <div className="max-w-[1280px] mx-auto grid grid-cols-2 md:grid-cols-3 items-center">
+          
+          {/* Logo (Left, 1/3) */}
+          <div className="flex justify-start">
+            <Link href="/" className="group flex items-center gap-1.5 focus:outline-none">
+              <span className="font-display text-lg font-bold tracking-tight text-white">VCranks</span>
+              <span className="font-display text-lg font-bold italic text-[#C4956A] group-hover:text-[#E8B98A] transition-colors duration-300">AI</span>
+            </Link>
+          </div>
 
-          {/* User's Custom NavHeader */}
-          <div className="hidden md:block">
+          {/* User's Custom NavHeader (Center, 1/3) */}
+          <div className="hidden md:flex justify-center">
              <NavHeader session={session} handleSignOut={handleSignOut} />
           </div>
 
-          {/* Desktop Auth */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* Desktop Auth (Right, 1/3) */}
+          <div className="hidden md:flex justify-end items-center gap-6 line-clamp-1">
             {!session ? (
               <>
-                <Link href="/login" className="text-xs font-semibold tracking-[0.08em] uppercase text-[#BFA899] hover:text-white transition-colors duration-300 px-4 py-2">Sign In</Link>
-                <Link href="/register" className="glass3d px-6 py-2.5 rounded-full border border-[#8B5E3C]/40 text-white text-xs font-bold tracking-[0.08em] uppercase hover:bg-white/10 transition-all duration-300 shadow-lg">
+                <Link href="/login" className="text-[10px] sm:text-xs font-semibold tracking-widest uppercase text-[#BFA899] hover:text-white transition-colors duration-300">Sign In</Link>
+                <Link href="/register" className="glass3d px-6 py-2.5 rounded-full border border-[#8B5E3C]/30 text-white text-[10px] font-bold tracking-widest uppercase hover:bg-[#8B5E3C]/20 transition-all duration-300 shadow-[0_0_15px_rgba(139,94,60,0.15)] flex-shrink-0">
                   Get Started
                 </Link>
               </>
             ) : (
-              <button onClick={handleSignOut} className="text-xs font-semibold tracking-[0.08em] uppercase text-[#BFA899] hover:text-[#E85B5B] transition-colors duration-300 px-4 py-2">
+              <button onClick={handleSignOut} className="text-[10px] sm:text-xs font-semibold tracking-widest uppercase text-[#BFA899] hover:text-[#E85B5B] transition-colors duration-300">
                 Sign Out
               </button>
             )}
           </div>
 
           {/* Mobile Toggle */}
-          <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden w-9 h-9 flex items-center justify-center text-[#BFA899] hover:text-white transition-colors">
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          <div className="md:hidden flex justify-end">
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="w-9 h-9 flex items-center justify-center text-[#BFA899] hover:text-white transition-colors">
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+
         </div>
       </motion.header>
 
@@ -84,7 +90,7 @@ export function Navbar() {
                 <Link href={link.href} onClick={() => setMobileOpen(false)} className="text-3xl font-display font-bold text-white hover:text-[#C4956A] transition-colors">{link.label}</Link>
               </motion.div>
             ))}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.5 }} className="flex flex-col gap-4 mt-8">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.5 }} className="flex flex-col gap-4 mt-8 w-full max-w-[200px]">
               {!session ? (
                 <>
                   <Link href="/login" onClick={() => setMobileOpen(false)} className="glass3d px-8 py-3 border border-[#8B5E3C]/20 rounded-full text-center text-sm font-semibold text-white">Sign In</Link>
