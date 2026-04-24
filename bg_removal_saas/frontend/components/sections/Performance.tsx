@@ -56,13 +56,13 @@ export function Performance() {
           <div
             key={i}
             ref={(el) => { cardsRef.current[i] = el; }}
-            className={`absolute w-full px-6 flex justify-center items-center ${i === 0 ? 'z-10' : 'z-20'}`}
+            className={`absolute w-full h-[100vh] mt-0 flex justify-center items-center ${i === 0 ? 'z-10' : 'z-20 rounded-t-[80px] shadow-[0_-20px_60px_rgba(0,0,0,0.8)] border-t border-[#8B5E3C]/20 bg-[#0C0806]'}`}
             style={{ 
               opacity: i === 0 ? 1 : 0, 
               transform: i === 0 ? 'translateY(0vh)' : 'translateY(100vh)' 
             }}
           >
-            <div className="w-full max-w-4xl glass3d p-12 md:p-20 border border-[#8B5E3C]/10 backdrop-blur-3xl bg-black/30 shadow-[0_0_80px_rgba(0,0,0,0.8)] relative overflow-hidden">
+            <div className="w-full max-w-4xl px-6 md:px-20 relative overflow-hidden">
               
               <div className="absolute top-0 right-0 text-[18rem] md:text-[24rem] font-display font-extrabold text-[#C4956A] opacity-[0.02] select-none z-0 transform translate-x-1/4 -translate-y-1/2 leading-none pointer-events-none mix-blend-screen">
                 P

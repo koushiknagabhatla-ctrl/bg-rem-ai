@@ -122,13 +122,13 @@ export function TextReveal({ children, className, delay = 0 }: { children: strin
           <motion.span
             className="inline-block"
             variants={{
-              hidden: { y: '105%', rotate: 3 },
+              hidden: { y: '120%', rotate: 2 },
               visible: { y: 0, rotate: 0 },
             }}
             transition={{
-              duration: 0.7,
-              delay: delay + i * 0.04,
-              ease: [0.22, 1, 0.36, 1],
+              duration: 1.4,
+              delay: delay + i * 0.06,
+              ease: [0.16, 1, 0.3, 1],
             }}
           >
             {word}
@@ -154,13 +154,13 @@ export function HeadingReveal({ children, className, delay = 0 }: { children: st
           <motion.span
             className="inline-block"
             variants={{
-              hidden: { y: '120%' },
-              visible: { y: 0 },
+              hidden: { y: '120%', rotate: 2 },
+              visible: { y: 0, rotate: 0 },
             }}
             transition={{
-              duration: 0.6,
-              delay: delay + i * 0.025,
-              ease: [0.22, 1, 0.36, 1],
+              duration: 1.2,
+              delay: delay + i * 0.035,
+              ease: [0.16, 1, 0.3, 1],
             }}
           >
             {char === ' ' ? '\u00A0' : char}

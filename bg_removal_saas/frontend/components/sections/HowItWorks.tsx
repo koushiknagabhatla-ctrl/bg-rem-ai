@@ -51,13 +51,13 @@ export function HowItWorks() {
           <div
             key={i}
             ref={(el) => { cardsRef.current[i] = el; }}
-            className={`absolute w-full px-6 flex justify-center items-center ${i === 0 ? 'z-10' : 'z-20'}`}
+            className={`absolute w-full h-[100vh] mt-0 flex justify-center items-center ${i === 0 ? 'z-10' : 'z-20 rounded-l-[80px] shadow-[-20px_0_60px_rgba(0,0,0,0.8)] border-l border-[#8B5E3C]/20 bg-[#0C0806]'}`}
             style={{ 
               opacity: i === 0 ? 1 : 0, 
               transform: i === 0 ? 'translateX(0vw)' : 'translateX(100vw)' 
             }}
           >
-            <div className="w-full max-w-5xl glass3d p-16 md:p-24 border border-[#8B5E3C]/10 backdrop-blur-3xl bg-black/30 flex flex-col items-center text-center shadow-[0_0_80px_rgba(0,0,0,0.8)] relative overflow-hidden">
+            <div className="w-full max-w-5xl px-6 md:px-24 flex flex-col items-center text-center relative overflow-hidden">
               
               <div className="absolute top-0 right-0 text-[18rem] md:text-[24rem] font-display font-extrabold text-[#C4956A] opacity-[0.02] select-none z-0 transform -translate-y-1/4 translate-x-[10%] leading-none pointer-events-none mix-blend-screen">
                 0{i + 1}

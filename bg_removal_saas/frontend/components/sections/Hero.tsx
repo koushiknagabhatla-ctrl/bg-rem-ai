@@ -16,9 +16,9 @@ function WordReveal({ text, delay = 0 }: { text: string; delay?: number }) {
         <span key={i} className="overflow-hidden inline-block mr-[0.3em]">
           <motion.span
             className="inline-block"
-            initial={{ y: '110%' }}
-            animate={mounted ? { y: 0 } : {}}
-            transition={{ duration: 1.2, delay: delay + i * 0.06, ease }}
+            initial={{ y: '150%', rotate: 2 }}
+            animate={mounted ? { y: 0, rotate: 0 } : {}}
+            transition={{ duration: 1.5, delay: delay + i * 0.08, ease: [0.16, 1, 0.3, 1] }}
           >
             {word}
           </motion.span>
@@ -67,27 +67,27 @@ export function Hero() {
           </span>
         </h1>
 
-        {/* Subheadline */}
+        {/* Subheadline (Staggered Load) */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={mounted ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1.2, delay: 0.8, ease }}
+          transition={{ duration: 1.5, delay: 0.8, ease: [0.16, 1, 0.3, 1] }} // Expo.out equivalent
           className="text-lg md:text-xl text-[#BFA899] max-w-2xl leading-relaxed mb-14 font-light"
         >
           Zero masking. Zero pixelation. Enterprise-grade AI processing, powered by a custom neural architecture reflecting true cinematic quality.
         </motion.p>
 
-        {/* CTA Buttons */}
+        {/* The 'Landing' CTA Effect */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={mounted ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1, delay: 1, ease }}
+          initial={{ opacity: 0, scale: 1.08, y: 40 }}
+          animate={mounted ? { opacity: 1, scale: 1, y: 0 } : {}}
+          transition={{ duration: 1.5, delay: 1, ease: [0.16, 1, 0.3, 1] }} 
           className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full sm:w-auto z-20"
         >
-          <Link href="/register" className="glass3d relative overflow-hidden group px-10 py-5 w-full sm:w-auto rounded-full text-white font-bold text-xs tracking-[0.2em] uppercase transition-all duration-500 text-center flex items-center justify-center border border-[#8B5E3C]/40 shadow-[0_0_30px_rgba(139,94,60,0.15)] hover:shadow-[0_0_40px_rgba(232,185,138,0.25)] hover:scale-105">
+          <Link href="/register" className="glass3d relative overflow-hidden group px-10 py-5 w-full sm:w-auto rounded-full text-white font-bold text-xs tracking-[0.2em] uppercase transition-all duration-700 text-center flex items-center justify-center border border-[#8B5E3C]/40 shadow-[0_0_30px_rgba(139,94,60,0.15)] hover:shadow-[0_0_40px_rgba(232,185,138,0.25)] hover:scale-105">
             <span className="relative z-10">Start for Free</span>
           </Link>
-          <a href="#demo" className="px-10 py-5 rounded-full border border-[#8B5E3C]/20 text-[#D4A574] font-semibold text-xs tracking-[0.2em] uppercase hover:bg-[#8B5E3C]/5 hover:border-[#8B5E3C]/50 transition-all duration-500 w-full sm:w-auto text-center hover:scale-105">
+          <a href="#demo" className="px-10 py-5 rounded-full border border-[#8B5E3C]/20 text-[#D4A574] font-semibold text-xs tracking-[0.2em] uppercase hover:bg-[#8B5E3C]/5 hover:border-[#8B5E3C]/50 transition-all duration-700 w-full sm:w-auto text-center hover:scale-105">
             See It Work
           </a>
         </motion.div>
