@@ -50,11 +50,11 @@ export function Testimonials() {
       ease: "none",
       scrollTrigger: {
         trigger: container.current,
+        start: "center center", 
         pin: true,
-        scrub: 1,
-        // Calculate dynamic scrolling distance based on absolute track width
-        end: () => "+=" + (track.scrollWidth - track.parentElement!.offsetWidth),
-        invalidateOnRefresh: true, // Allows native recalculation on window resize
+        scrub: 1.2,
+        end: () => "+=" + (track.scrollWidth - track.parentElement!.offsetWidth + 500),
+        invalidateOnRefresh: true, 
       }
     });
   }, { scope: container });

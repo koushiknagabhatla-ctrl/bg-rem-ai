@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
+import { LiquidButton } from '@/components/ui/liquid-glass-button';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -82,11 +83,12 @@ export function Hero() {
           initial={{ opacity: 0, scale: 1.08, y: 40 }}
           animate={mounted ? { opacity: 1, scale: 1, y: 0 } : {}}
           transition={{ duration: 1.5, delay: 1, ease: [0.16, 1, 0.3, 1] }} 
-          className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full sm:w-auto z-20"
+          className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full sm:w-auto z-20 mt-8"
         >
-          <Link href="/register" className="glass3d relative overflow-hidden group px-10 py-5 w-full sm:w-auto rounded-full text-white font-bold text-xs tracking-[0.2em] uppercase transition-all duration-700 text-center flex items-center justify-center border border-[#8B5E3C]/40 shadow-[0_0_30px_rgba(139,94,60,0.15)] hover:shadow-[0_0_40px_rgba(232,185,138,0.25)] hover:scale-105">
-            <span className="relative z-10">Start for Free</span>
-          </Link>
+          <LiquidButton size="xxl" asChild>
+            <Link href="/register">Start for Free</Link>
+          </LiquidButton>
+          
           <a href="#demo" className="px-10 py-5 rounded-full border border-[#8B5E3C]/20 text-[#D4A574] font-semibold text-xs tracking-[0.2em] uppercase hover:bg-[#8B5E3C]/5 hover:border-[#8B5E3C]/50 transition-all duration-700 w-full sm:w-auto text-center hover:scale-105">
             See It Work
           </a>

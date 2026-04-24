@@ -27,9 +27,9 @@ export function BeforeAfter() {
 
     const proxy = { pos: 80 }; // Start slider at 80% 
 
-    // Sequence 1: Frame locks in center and zooms in massively
+    // Sequence 1: Frame locks in center and zooms slightly without overpowering screen
     tl.to(".slider-container", {
-      scale: 1.4,
+      scale: 1.15,
       ease: "power2.inOut",
       duration: 3
     })
@@ -65,15 +65,15 @@ export function BeforeAfter() {
   }, { scope: sectionRef });
 
   return (
-    <section ref={sectionRef} id="demo" className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-transparent z-10 px-4 md:px-16">
-      <div className="w-full max-w-[1280px] mx-auto relative z-10">
+    <section ref={sectionRef} id="demo" className="relative h-[110vh] w-full flex items-center justify-center overflow-hidden bg-transparent z-10 px-4 md:px-16">
+      <div className="w-full max-w-[1280px] mx-auto relative z-10 flex flex-col items-center justify-center">
         
         {/* Header Phase */}
-        <div className="header-content mb-12 md:mb-20 text-center relative z-20">
+        <div className="header-content mb-8 md:mb-12 text-center relative z-20">
           <span className="font-mono text-xs md:text-sm tracking-[0.4em] uppercase text-[#E8B98A] mb-4 md:mb-6 block drop-shadow-xl">
             Product Showcase
           </span>
-          <h2 className="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight max-w-4xl mx-auto mb-4 md:mb-6">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-7xl font-extrabold text-white leading-tight max-w-4xl mx-auto mb-4 md:mb-6">
             Micro-level precision. <br className="hidden md:block" />
             <span className="text-[#8B5E3C] italic font-medium drop-shadow-xl">Even on complex subjects.</span>
           </h2>
@@ -84,12 +84,12 @@ export function BeforeAfter() {
 
         {/* 
           Slider Engine Block: 
-          Uses Aspect-[9/16] and max-w-[400px] constraint to ensure the vertical portrait layout is perfect! 
+          Uses Aspect-[9/16] and tighter maximum bounds to prevent overpowering the screen 
         */}
-        <div className="slider-container glass3d p-2 md:p-4 rounded-3xl md:rounded-[40px] border border-[#8B5E3C]/20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] max-w-[400px] mx-auto will-change-transform z-30">
+        <div className="slider-container glass3d p-2 md:p-3 rounded-2xl md:rounded-3xl border border-[#8B5E3C]/20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] w-full max-w-[320px] max-h-[60vh] mx-auto will-change-transform z-30">
           
           {/* Strictly enforced aspect-[9/16] portrait container */}
-          <div className="w-full aspect-[9/16] rounded-2xl md:rounded-[30px] overflow-hidden bg-[#0A0604] border border-white/5 relative">
+          <div className="w-full h-full aspect-[9/16] rounded-xl md:rounded-2xl overflow-hidden bg-[#0A0604] border border-white/5 relative">
               <ImageComparisonSlider
                 ref={sliderRef}
                 initialPosition={80}

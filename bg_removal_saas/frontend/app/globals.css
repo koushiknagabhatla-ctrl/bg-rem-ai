@@ -129,8 +129,8 @@ body {
 
 /* ═══════════ LIQUID GLASS 3D (Curated.media Aesthetic) ═══════════ */
 .glass3d {
-  --filter-glass3d: blur(16px) brightness(1.05) saturate(1.2);
-  --color-glass3d: rgba(255, 255, 255, 0.02);
+  --filter-glass3d: blur(24px) brightness(1.15) saturate(1.4);
+  --color-glass3d: rgba(255, 255, 255, 0.05);
   --noise-glass3d: url("https://www.transparenttextures.com/patterns/cartographer.png");
 
   position: relative;

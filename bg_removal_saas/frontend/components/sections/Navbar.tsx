@@ -7,6 +7,7 @@ import { createBrowserSupabaseClient } from '@/lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { NavHeader } from '@/components/ui/nav-header';
+import { LiquidButton } from '@/components/ui/liquid-glass-button';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -72,16 +73,16 @@ export function Navbar() {
             ) : !session ? (
               <>
                 <Link href="/login" className="text-[11px] font-semibold tracking-widest uppercase text-[#BFA899] hover:text-white transition-colors duration-300">Sign In</Link>
-                <Link href="/register" className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#8B5E3C] to-[#C4956A] text-white text-[11px] font-bold tracking-widest uppercase hover:shadow-[0_0_20px_rgba(196,149,106,0.3)] transition-all duration-300 hover:scale-105">
-                  Get Started
-                </Link>
+                <LiquidButton size="lg" asChild>
+                  <Link href="/register">Get Started</Link>
+                </LiquidButton>
               </>
             ) : (
               <div className="flex items-center gap-4">
                 {!isToolPage && (
-                  <Link href="/tool" className="px-5 py-2 rounded-full bg-[#8B5E3C]/20 border border-[#8B5E3C]/30 text-[11px] font-bold tracking-widest uppercase text-[#E8B98A] hover:bg-[#8B5E3C]/30 transition-all duration-300">
-                    Studio
-                  </Link>
+                  <LiquidButton size="sm" asChild>
+                    <Link href="/tool">Studio</Link>
+                  </LiquidButton>
                 )}
                 <button onClick={handleSignOut} className="text-[11px] font-semibold tracking-widest uppercase text-[#BFA899] hover:text-red-400 transition-colors duration-300">
                   Sign Out
@@ -116,7 +117,9 @@ export function Navbar() {
               {!session ? (
                 <>
                   <Link href="/login" onClick={() => setMobileOpen(false)} className="glass3d px-8 py-3 border border-[#8B5E3C]/20 rounded-full text-center text-sm font-semibold text-white">Sign In</Link>
-                  <Link href="/register" onClick={() => setMobileOpen(false)} className="px-8 py-3 bg-gradient-to-r from-[#8B5E3C] to-[#C4956A] rounded-full text-center text-sm font-bold text-white shadow-lg shadow-[#8B5E3C]/20">Get Started</Link>
+                  <LiquidButton size="xl" asChild onClick={() => setMobileOpen(false)}>
+                    <Link href="/register">Get Started</Link>
+                  </LiquidButton
                 </>
               ) : (
                 <button onClick={() => { handleSignOut(); setMobileOpen(false); }} className="glass3d px-8 py-3 border border-[#8B5E3C]/20 rounded-full text-sm font-semibold text-white">Sign Out</button>

@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import Link from 'next/link';
+import { LiquidButton } from '@/components/ui/liquid-glass-button';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -62,12 +63,9 @@ export function FinalCTA() {
             50 free high-resolution extractions. No credit card required. Start building in seconds.
           </motion.p>
 
-          <Link
-            href="/register"
-            className="inline-flex items-center justify-center px-12 py-5 rounded-full bg-gradient-to-r from-[#8B5E3C] to-[#C4956A] text-white font-bold text-sm tracking-widest uppercase shadow-[0_0_20px_rgba(139,94,60,0.3)] hover:shadow-[0_0_40px_rgba(196,149,106,0.5)] transition-all duration-700 hover:scale-105"
-          >
-            Begin Free Trial
-          </Link>
+          <LiquidButton size="xxl" asChild>
+            <Link href="/register">Begin Free Trial</Link>
+          </LiquidButton>
         </motion.div>
       </motion.div>
     </section>
