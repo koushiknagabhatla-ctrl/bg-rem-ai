@@ -52,7 +52,7 @@ export function Preloader({ children }: { children: React.ReactNode }) {
 
             <div className="flex flex-col items-center gap-10 w-full max-w-sm px-6 relative z-10">
               <span className="font-mono text-[10px] tracking-[0.5em] uppercase text-[#8B5E3C]">
-                Neural Initialization
+            
               </span>
 
               <div className="h-10 overflow-hidden relative w-full flex justify-center">

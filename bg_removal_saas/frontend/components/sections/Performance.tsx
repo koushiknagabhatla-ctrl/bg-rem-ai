@@ -1,9 +1,12 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { Activity, Clock, Cpu, Zap } from 'lucide-react';
-import { HeadingReveal, TextReveal } from '@/components/ui/scroll-reveal'; // Text reveal animations
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const stats = [
   { icon: Clock, value: 'Instant', label: 'Processing', desc: 'Photos process so fast you won’t even have time to blink. Your flow state remains unbroken.' },
@@ -12,70 +15,75 @@ const stats = [
   { icon: Cpu, value: 'Infinite', label: 'Scale', desc: 'Whether you upload one photo or forty thousand, our distributed engine handles it without breaking a sweat.' },
 ];
 
-function RevealCard({ stat, index }: { stat: typeof stats[0], index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: cardRef, offset: ["0 1", "0.6 0.8"] });
-
-  const y = useTransform(scrollYProgress, [0, 1], [180, 0]);
-  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const rotateX = useTransform(scrollYProgress, [0, 1], [40, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [0.6, 1]);
-
-  return (
-    <motion.div
-      ref={cardRef}
-      style={{ y, opacity, rotateX, scale }}
-      className="glass3d p-10 border border-[#8B5E3C]/15 group hover:border-[#8B5E3C]/40 transition-colors duration-700 transform-gpu relative overflow-hidden flex flex-col justify-between"
-    >
-      <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#8B5E3C]/5 rounded-full blur-[40px] group-hover:bg-[#C4956A]/15 transition-colors duration-1000" />
-      
-      <div>
-        <stat.icon className="w-10 h-10 text-[#C4956A] mb-8 drop-shadow-md" strokeWidth={1.5} />
-        <span className="font-display text-4xl block font-extrabold text-white mb-2 drop-shadow-sm">{stat.value}</span>
-        <h3 className="text-sm font-bold text-[#E8B98A] tracking-[0.25em] uppercase mb-6">{stat.label}</h3>
-      </div>
-      
-      <p className="text-sm text-[#BFA899] font-light leading-relaxed relative z-10">{stat.desc}</p>
-    </motion.div>
-  );
-}
-
 export function Performance() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"]
-  });
+  const container = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  const headerY = useTransform(scrollYProgress, [0, 0.4], [150, 0]);
-  const headerOpacity = useTransform(scrollYProgress, [0, 0.25], [0, 1]);
+  useGSAP(() => {
+    ScrollTrigger.create({
+      trigger: container.current,
+      start: "top top",
+      end: "+=400%", // 4 cards
+      pin: true,
+      animation: gsap.timeline()
+        .to(cardsRef.current[0], { opacity: 0, scale: 0.9, y: -100, duration: 1 }, 1)
+        .fromTo(cardsRef.current[1], { y: '100vh', opacity: 0, scale: 0.8 }, { y: '0vh', opacity: 1, scale: 1, duration: 1 }, 1)
+        
+        .to(cardsRef.current[1], { opacity: 0, scale: 0.9, y: -100, duration: 1 }, 2)
+        .fromTo(cardsRef.current[2], { y: '100vh', opacity: 0, scale: 0.8 }, { y: '0vh', opacity: 1, scale: 1, duration: 1 }, 2)
+        
+        .to(cardsRef.current[2], { opacity: 0, scale: 0.9, y: -100, duration: 1 }, 3)
+        .fromTo(cardsRef.current[3], { y: '100vh', opacity: 0, scale: 0.8 }, { y: '0vh', opacity: 1, scale: 1, duration: 1 }, 3),
+      scrub: 1, // Fluid cinematic scrub
+    });
+  }, { scope: container });
 
   return (
-    <section ref={sectionRef} className="py-32 md:py-56 px-6 md:px-16 overflow-hidden [perspective:2500px]">
-      <div className="max-w-[1280px] mx-auto">
-        
-        {/* Header with character scale reveal inside the scrub */}
-        <motion.div style={{ y: headerY, opacity: headerOpacity }} className="mb-24 md:mb-40 transform-gpu flex flex-col items-start md:items-center md:text-center">
-          <span className="font-mono text-[11px] tracking-[0.5em] uppercase text-[#E8B98A] mb-8 block drop-shadow-[0_0_10px_rgba(232,185,138,0.5)]">
-            Experience
-          </span>
-          <h2 className="font-display text-5xl md:text-7xl lg:text-8xl font-extrabold text-white max-w-4xl leading-tight drop-shadow-2xl">
-            <HeadingReveal>Magic disguised</HeadingReveal>
-            <br />
-            <span className="italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#C4956A] to-[#8B5E3C] drop-shadow-none">
-              <HeadingReveal delay={0.25}>as technology.</HeadingReveal>
-            </span>
-          </h2>
-        </motion.div>
+    <section ref={container} className="h-screen w-full overflow-hidden bg-transparent">
+      
+      {/* Background Title */}
+      <div className="absolute inset-0 flex flex-col justify-start pt-[10vh] items-center pointer-events-none z-[1] select-none">
+        <span className="font-mono text-[12px] tracking-[0.5em] uppercase text-[#E8B98A] mb-4">
+          Experience
+        </span>
+        <h2 className="font-display text-4xl md:text-[6rem] font-extrabold text-[#C4956A]/10 leading-none text-center">
+          MAGIC DISGUISED
+        </h2>
+      </div>
 
-        {/* Deep 3D Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6 mt-10">
-          {stats.map((s, i) => (
-            <div key={i} className="h-full pt-0" style={{ marginTop: i % 2 !== 0 ? '4rem' : '0' }}>
-              <RevealCard stat={s} index={i} />
+      <div className="relative w-full h-full flex items-center justify-center">
+        {stats.map((stat, i) => (
+          <div
+            key={i}
+            ref={(el) => { cardsRef.current[i] = el; }}
+            className={`absolute w-full px-6 flex justify-center items-center ${i === 0 ? 'z-10' : 'z-20'}`}
+            style={{ 
+              opacity: i === 0 ? 1 : 0, 
+              transform: i === 0 ? 'translateY(0vh)' : 'translateY(100vh)' 
+            }}
+          >
+            <div className="w-full max-w-4xl glass3d p-12 md:p-20 border border-[#8B5E3C]/15 backdrop-blur-2xl bg-[#0C0806]/80 shadow-[0_0_80px_rgba(0,0,0,0.8)] relative">
+              
+              <div className="absolute top-0 right-0 text-[18rem] md:text-[24rem] font-display font-extrabold text-[#C4956A] opacity-[0.03] select-none z-0 transform translate-x-1/4 -translate-y-1/2 leading-none">
+                P
+              </div>
+              
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-12 relative z-10">
+                <div className="flex-shrink-0">
+                  <stat.icon className="w-16 h-16 text-[#C4956A] mb-8 drop-shadow-md" strokeWidth={1.5} />
+                  <span className="font-display text-5xl md:text-7xl block font-extrabold text-white mb-2 drop-shadow-sm">{stat.value}</span>
+                  <h3 className="text-sm font-bold text-[#E8B98A] tracking-[0.3em] uppercase">{stat.label}</h3>
+                </div>
+                
+                <div className="flex-1 border-tl md:border-l border-[#8B5E3C]/20 pt-8 md:pt-0 md:pl-12">
+                  <p className="text-2xl md:text-3xl text-[#BFA899] font-light leading-relaxed">
+                    {stat.desc}
+                  </p>
+                </div>
+              </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </section>
   );

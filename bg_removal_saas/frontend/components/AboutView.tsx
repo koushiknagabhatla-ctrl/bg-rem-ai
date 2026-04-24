@@ -133,7 +133,7 @@ export function AboutView() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
-                { icon: <Cpu />, title: "Custom Neural Network", desc: "MobileNetV3-Small U-Net with CBAM attention. Trained on P3M-10K with progressive resolution." },
+                { icon: <Cpu />, title: "Bg Removal", desc: "MobileNetV3-Small U-Net with CBAM attention. Trained on P3M-10K with progressive resolution." },
                 { icon: <Zap />, title: "INT8 Quantization", desc: "4x faster inference, zero quality loss. ONNX format optimized for extreme CPU execution speed." },
                 { icon: <Lock />, title: "HMAC-SHA256 Security", desc: "Every request cryptographically signed. Images processed completely in-memory, never written to disk." },
                 { icon: <Target />, title: "Edge Deployment", desc: "High-performance processing servers behind global edge networks for sub-second response worldwide." },

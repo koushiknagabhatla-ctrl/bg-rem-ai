@@ -1,104 +1,97 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { Star, Quote } from 'lucide-react';
-import { HeadingReveal, TextReveal } from '@/components/ui/scroll-reveal'; // Using the text reveal utility
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const testimonials = [
-  { quote: 'It feels like having an invisible retoucher on staff. The precision on difficult edges like flyaway hair is simply breathtaking. We’ve stopped worrying about complex shoots.', name: 'Sarah Jenkins', role: 'Creative Director', stars: 5 },
-  { quote: 'I used to dread shooting products on complex backgrounds. VCranks completely isolates the subject perfectly, preserving the soft natural lighting and transparent details without harsh cuts.', name: 'Marcus Wei', role: 'Lead Photographer', stars: 5 },
-  { quote: 'The speed is what makes it magical. We process thousands of high-res images directly in the browser and the cutouts are flawless every single time. It changed our entire workflow.', name: 'Priya Sharma', role: 'Studio Manager', stars: 5 },
-  { quote: 'Finally, a tool that actually understands depth and light. Glass bottles, mesh fabrics, smoke — it doesn’t matter. It isolates them beautifully, keeping every subtle reflection intact.', name: 'Tomás Rivera', role: 'Visual Artist', stars: 5 },
+  { quote: 'We integrated the VCranks API into our CMS upload pipeline. It completely eliminated thousands of hours of manual catalog processing.', name: 'Sarah Jenkins', role: 'Creative Director, NeoBrand', stars: 5 },
+  { quote: 'The semantic isolation on stray hair and transparent fabrics is unmatched. Better than Adobe\'s native tools, and infinitely faster via the web.', name: 'Marcus Wei', role: 'Lead Photographer', stars: 5 },
+  { quote: 'Sub-second processing at full resolution? We ran 40,000 SKU images through the API in a single afternoon. Insane throughput.', name: 'Priya Sharma', role: 'Head of Ops, LuxeRetail', stars: 5 },
+  { quote: 'The edge-case handling is what sold us. Glass bottles, mesh fabric, smoke — it just handles everything without artifacts.', name: 'Tomás Rivera', role: 'Product Designer', stars: 5 },
 ];
 
-function CinematicTestimonialCard({ t, index, scrollYProgress }: { t: typeof testimonials[0], index: number, scrollYProgress: any }) {
-  // We divide the overall section progress (0 to 1) into 4 distinct chunks, one for each card
-  const start = index * 0.2;
-  const end = start + 0.35; // Slight overlap for smooth cinematic flow
-
-  const y = useTransform(scrollYProgress, [start, end], [300, 0]);
-  const opacity = useTransform(scrollYProgress, [start, end - 0.1], [0, 1]);
-  const rotateX = useTransform(scrollYProgress, [start, end], [45, 0]);
-  // Incredible cinematic 3D perspective — pulling them from deep inside the screen to the front
-  const scale = useTransform(scrollYProgress, [start, end], [0.4, 1]);
-  const rotateY = useTransform(scrollYProgress, [start, end], [index % 2 === 0 ? -15 : 15, 0]);
-
-  return (
-    <motion.div
-      style={{ y, opacity, rotateX, scale, rotateY }}
-      className="glass3d p-10 md:p-12 flex flex-col justify-between h-full border border-[#8B5E3C]/15 transform-gpu group hover:border-[#8B5E3C]/40 transition-all duration-700 hover:shadow-[0_0_50px_rgba(196,149,106,0.15)] relative overflow-hidden"
-    >
-      <div className="absolute -inset-x-0 -top-40 h-[200%] bg-gradient-to-b from-transparent via-white/5 to-transparent -rotate-45 translate-x-[-150%] group-hover:translate-x-[150%] transition-transform duration-[1500ms] ease-in-out pointer-events-none" />
-
-      <div className="flex items-center justify-between mb-8 relative z-10">
-        <div className="flex gap-1.5">
-          {Array.from({ length: t.stars }).map((_, j) => (
-            <Star key={j} className="w-4 h-4 text-[#E8B98A] fill-[#E8B98A]" />
-          ))}
-        </div>
-        <Quote className="w-8 h-8 text-[#8B5E3C]/20 group-hover:text-[#8B5E3C]/40 transition-colors duration-500" />
-      </div>
-
-      <p className="text-xl md:text-2xl font-display font-medium text-white/95 leading-relaxed mb-10 flex-1 relative z-10 drop-shadow-md">
-        &ldquo;{t.quote}&rdquo;
-      </p>
-
-      <div className="flex items-center gap-5 pt-6 border-t border-[#8B5E3C]/15 relative z-10">
-        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#8B5E3C] to-[#C4956A] flex items-center justify-center text-white font-display font-bold text-lg shadow-[0_0_15px_rgba(196,149,106,0.4)]">
-          {t.name.charAt(0)}
-        </div>
-        <div>
-          <p className="text-base font-semibold text-white tracking-wide drop-shadow-sm">{t.name}</p>
-          <p className="text-sm font-mono text-[#E8B98A]/70 mt-1">{t.role}</p>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 export function Testimonials() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    // Extremely tall offset so the user has to scroll deep into the section to reveal all 4
-    offset: ["0 1", "1 0.7"] 
-  });
+  const container = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  const headerY = useTransform(scrollYProgress, [0, 0.2], [100, 0]);
-  const headerOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
+  useGSAP(() => {
+    // Pin the entire container covering the screen
+    ScrollTrigger.create({
+      trigger: container.current,
+      start: "top top",
+      end: "+=400%", // Scroll depth determined by 4 panels
+      pin: true,
+      animation: gsap.timeline() // Create staggered intro/outro GSAP timeline
+        .to(cardsRef.current[0], { opacity: 0, scale: 0.9, y: -50, duration: 1 }, 1) // Phase 1: Card 0 leaves
+        .fromTo(cardsRef.current[1], { y: '100vh', opacity: 0, scale: 1.1 }, { y: '0vh', opacity: 1, scale: 1, duration: 1 }, 1) // Phase 1: Card 1 enters
+        .to(cardsRef.current[1], { opacity: 0, scale: 0.9, y: -50, duration: 1 }, 2) // Phase 2: Card 1 leaves
+        .fromTo(cardsRef.current[2], { y: '100vh', opacity: 0, scale: 1.1 }, { y: '0vh', opacity: 1, scale: 1, duration: 1 }, 2) // Phase 2: Card 2 enters
+        .to(cardsRef.current[2], { opacity: 0, scale: 0.9, y: -50, duration: 1 }, 3) // Phase 3: Card 2 leaves
+        .fromTo(cardsRef.current[3], { y: '100vh', opacity: 0, scale: 1.1 }, { y: '0vh', opacity: 1, scale: 1, duration: 1 }, 3), // Phase 3: Card 3 enters
+      scrub: 1, // Buttery smooth interpolation like Oryzo
+    });
+  }, { scope: container });
 
   return (
-    <section ref={sectionRef} className="py-40 md:py-64 px-6 md:px-16 relative overflow-hidden [perspective:2500px]">
-      <div className="max-w-[1280px] mx-auto">
-        <motion.div
-          style={{ y: headerY, opacity: headerOpacity }}
-          className="text-center mb-32 transform-gpu"
-        >
-          <span className="font-mono text-[11px] tracking-[0.5em] uppercase text-[#E8B98A] mb-6 block drop-shadow-[0_0_10px_rgba(232,185,138,0.5)]">
-            Community
-          </span>
-          <h2 className="font-display text-5xl md:text-7xl lg:text-8xl font-extrabold text-white max-w-5xl mx-auto leading-tight drop-shadow-2xl">
-            Adored by top-tier <br/>
-            <span className="italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#C4956A] to-[#8B5E3C] drop-shadow-none">creative visionaries.</span>
-          </h2>
-        </motion.div>
+    <section ref={container} className="h-screen w-full overflow-hidden bg-transparent">
+      
+      {/* Intro Background Text — Stays behind the cards */}
+      <div className="absolute inset-0 flex flex-col justify-start pt-[10vh] items-center pointer-events-none z-[1] select-none">
+        <span className="font-mono text-[12px] tracking-[0.5em] uppercase text-[#E8B98A] mb-4">
+          Community
+        </span>
+        <h2 className="font-display text-6xl md:text-[8rem] font-extrabold text-[#C4956A]/10 leading-none text-center">
+          TRUSTED BY
+        </h2>
+      </div>
 
-        {/* Instead of a tight grid that shows them all at once, we use a staggered offset grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 pt-10">
-          <div className="flex flex-col gap-10 md:gap-32">
-            {/* Left column items */}
-            {testimonials.filter((_, i) => i % 2 === 0).map((t, i) => (
-              <CinematicTestimonialCard key={i * 2} t={t} index={i * 2} scrollYProgress={scrollYProgress} />
-            ))}
+      <div className="relative w-full h-full max-w-[1280px] mx-auto px-6 md:px-16 flex items-center justify-center">
+        {testimonials.map((t, i) => (
+          <div
+            key={i}
+            ref={(el) => { cardsRef.current[i] = el; }}
+            className={`absolute w-full px-6 flex justify-center items-center ${i === 0 ? 'z-10' : 'z-20'}`}
+            style={{ 
+              opacity: i === 0 ? 1 : 0, 
+              transform: i === 0 ? 'translateY(0vh)' : 'translateY(100vh)' 
+            }}
+          >
+            <div className="w-full max-w-4xl glass3d p-12 md:p-24 border border-[#8B5E3C]/15 relative overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.8)] backdrop-blur-2xl bg-[#0C0806]/80">
+              
+              <div className="absolute top-0 right-0 opacity-[0.02] transform translate-x-1/4 -translate-y-1/4">
+                <Quote className="w-[400px] h-[400px] text-[#C4956A]" />
+              </div>
+
+              <div className="flex items-center justify-between mb-8 relative z-10">
+                <div className="flex gap-2">
+                  {Array.from({ length: t.stars }).map((_, j) => (
+                    <Star key={j} className="w-5 h-5 text-[#E8B98A] fill-[#E8B98A]" />
+                  ))}
+                </div>
+                <Quote className="w-10 h-10 text-[#8B5E3C]/30" />
+              </div>
+
+              <p className="text-3xl md:text-5xl font-display font-medium text-white/95 leading-tight mb-16 flex-1 relative z-10 drop-shadow-lg">
+                &ldquo;{t.quote}&rdquo;
+              </p>
+
+              <div className="flex items-center gap-6 pt-8 border-t border-[#8B5E3C]/15 relative z-10">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#8B5E3C] to-[#C4956A] flex items-center justify-center text-white font-display font-bold text-2xl shadow-lg">
+                  {t.name.charAt(0)}
+                </div>
+                <div>
+                  <p className="text-xl font-bold text-white tracking-wide">{t.name}</p>
+                  <p className="text-base font-mono text-[#E8B98A]/80 mt-1">{t.role}</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col gap-10 md:gap-32 md:mt-48">
-            {/* Right column items - physically offset to allow true one-by-one staggering */}
-            {testimonials.filter((_, i) => i % 2 !== 0).map((t, i) => (
-              <CinematicTestimonialCard key={i * 2 + 1} t={t} index={i * 2 + 1} scrollYProgress={scrollYProgress} />
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
     </section>
   );

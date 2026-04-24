@@ -1,8 +1,12 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
-import { HeadingReveal, TextReveal } from '@/components/ui/scroll-reveal'; // Text reveal animations
+import { HeadingReveal, TextReveal } from '@/components/ui/scroll-reveal';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const values = [
   { label: 'Obsessive Detail', value: 'We don’t just erase backgrounds. We evaluate every single pixel to ensure your subject remains perfectly untouched, exactly as you captured it.' },
@@ -11,98 +15,84 @@ const values = [
   { label: 'Infinite Capacity', value: 'A one-time hobbyist or a massive e-comm studio uploading fifty-thousand shots tonight? It doesn’t matter. It all just works.' },
 ];
 
-function ContinuousValueCard({ v, index }: { v: typeof values[0], index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: cardRef, offset: ["0 1", "0.6 0.8"] });
-
-  const y = useTransform(scrollYProgress, [0, 1], [150, 0]);
-  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const rotateX = useTransform(scrollYProgress, [0, 1], [30, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [0.75, 1]);
-
-  return (
-    <motion.div
-      ref={cardRef}
-      style={{ y, opacity, rotateX, scale }}
-      className="glass3d p-10 border border-[#8B5E3C]/10 group hover:border-[#8B5E3C]/30 transition-colors duration-700 transform-gpu"
-    >
-      <span className="font-mono text-[11px] tracking-[0.3em] uppercase text-[#C4956A] mb-5 block group-hover:text-white transition-colors duration-500">{v.label}</span>
-      <p className="text-lg text-[#BFA899]/90 font-light leading-relaxed">
-        {/* We use TextReveal locally for a slight stagger effect on the text itself */}
-        <TextReveal delay={0.1}>{v.value}</TextReveal>
-      </p>
-    </motion.div>
-  );
-}
-
 export function AboutSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"]
-  });
+  const container = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  const headerY = useTransform(scrollYProgress, [0, 0.4], [150, 0]);
-  const headerOpacity = useTransform(scrollYProgress, [0, 0.25], [0, 1]);
-  const leftY = useTransform(scrollYProgress, [0.1, 0.6], [200, 0]);
-  const leftRotate = useTransform(scrollYProgress, [0.1, 0.6], [-10, 0]);
-  const leftScale = useTransform(scrollYProgress, [0.1, 0.6], [0.8, 1]);
+  useGSAP(() => {
+    ScrollTrigger.create({
+      trigger: container.current,
+      start: "top top",
+      end: "+=400%", // 4 items
+      pin: true,
+      animation: gsap.timeline()
+        .to(cardsRef.current[0], { opacity: 0, scale: 0.9, x: 100, duration: 1 }, 1)
+        .fromTo(cardsRef.current[1], { x: '100vw', opacity: 0, scale: 0.8 }, { x: '0vw', opacity: 1, scale: 1, duration: 1 }, 1)
+        
+        .to(cardsRef.current[1], { opacity: 0, scale: 0.9, x: 100, duration: 1 }, 2)
+        .fromTo(cardsRef.current[2], { x: '100vw', opacity: 0, scale: 0.8 }, { x: '0vw', opacity: 1, scale: 1, duration: 1 }, 2)
+        
+        .to(cardsRef.current[2], { opacity: 0, scale: 0.9, x: 100, duration: 1 }, 3)
+        .fromTo(cardsRef.current[3], { x: '100vw', opacity: 0, scale: 0.8 }, { x: '0vw', opacity: 1, scale: 1, duration: 1 }, 3),
+      scrub: 1, // Fluid cinematic scrub
+    });
+  }, { scope: container });
 
   return (
-    <section ref={sectionRef} id="about" className="py-32 md:py-56 px-6 md:px-16 relative overflow-hidden [perspective:2500px]">
-      <div className="max-w-[1280px] mx-auto relative z-10">
+    <section ref={container} id="about" className="h-screen w-full overflow-hidden bg-transparent">
+      
+      <div className="relative w-full h-full max-w-[1280px] mx-auto px-6 flex flex-col md:flex-row items-center">
         
-        {/* Section Header */}
-        <motion.div style={{ y: headerY, opacity: headerOpacity }} className="mb-32 transform-gpu">
-          <span className="font-mono text-[11px] tracking-[0.5em] uppercase text-[#E8B98A] mb-6 block drop-shadow-[0_0_10px_rgba(232,185,138,0.5)]">
-            Our Foundation
-          </span>
-          <h2 className="font-display text-5xl md:text-7xl lg:text-8xl font-extrabold text-white leading-tight max-w-4xl mb-8 drop-shadow-2xl">
-            <HeadingReveal>Built different.</HeadingReveal><br/>
-            <span className="italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#C4956A] to-[#8B5E3C] drop-shadow-none">
-              <HeadingReveal delay={0.25}>On purpose.</HeadingReveal>
+        {/* Left Side: Fixed Philosophy Text */}
+        <div className="w-full lg:w-[45%] h-full flex flex-col justify-center relative z-[5] lg:pt-0 pt-32">
+          <div>
+            <span className="font-mono text-[11px] tracking-[0.5em] uppercase text-[#E8B98A] mb-6 block drop-shadow-[0_0_10px_rgba(232,185,138,0.5)]">
+              Our Foundation
             </span>
-          </h2>
-          <div className="text-xl md:text-2xl text-[#BFA899] font-light max-w-2xl leading-relaxed drop-shadow-sm">
-            <TextReveal delay={0.5}>
-              We grew exhausted by tools that degraded our images. So we engineered a platform that treats every single pixel with obsessive respect.
-            </TextReveal>
-          </div>
-        </motion.div>
-
-        {/* Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
-          
-          {/* Left: Mission Statement in massive glass card */}
-          <motion.div style={{ y: leftY, rotateY: leftRotate, scale: leftScale }} className="transform-gpu sticky top-40">
-            <div className="glass3d p-12 md:p-16 lg:p-20 border border-[#8B5E3C]/20 relative overflow-hidden shadow-[0_0_80px_rgba(139,94,60,0.15)] group hover:border-[#8B5E3C]/40 transition-colors duration-1000">
-              
-              <div className="absolute -top-16 -right-16 opacity-[0.02] pointer-events-none select-none group-hover:opacity-[0.04] transition-opacity duration-1000">
-                <span className="font-display text-[16rem] font-extrabold text-[#C4956A]">V</span>
-              </div>
-              
-              <span className="font-mono text-[11px] tracking-[0.4em] uppercase text-[#C4956A] mb-10 block">The Catalyst</span>
-              <h3 className="font-display text-4xl md:text-5xl font-bold text-white mb-10 leading-tight">
-                Created by creators who <br/> demanded <span className="italic text-[#C4956A]">perfection.</span>
-              </h3>
-              
-              <p className="text-lg md:text-xl text-[#BFA899] font-light leading-relaxed mb-8">
-                Every tool we used failed on the edges. Hair vanished, glass reflections were eaten alive, and transparent fabrics morphed into opaque blocks. It ruined the art.
-              </p>
-              <p className="text-lg md:text-xl text-[#BFA899] font-light leading-relaxed">
-                VCranks AI is the cure. We abandoned shortcuts and spent thousands of hours refining a custom approach just to get the hardest, most complex edges correct.
-              </p>
-              
+            <h2 className="font-display text-5xl md:text-7xl font-extrabold text-white leading-tight mb-8 drop-shadow-2xl">
+              <HeadingReveal>Built different.</HeadingReveal><br/>
+              <span className="italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#C4956A] to-[#8B5E3C]">
+                <HeadingReveal delay={0.25}>On purpose.</HeadingReveal>
+              </span>
+            </h2>
+            <div className="text-2xl text-[#BFA899] font-light leading-relaxed drop-shadow-sm mb-8">
+              <TextReveal delay={0.5}>
+                We grew exhausted by tools that degraded our images. So we engineered a platform that treats every single pixel with obsessive respect.
+              </TextReveal>
             </div>
-          </motion.div>
-
-          {/* Right: Values Grid with staggered physical margins for extreme one-by-one scale reveals */}
-          <div className="flex flex-col gap-10 md:gap-16 pt-10">
-            {values.map((v, i) => (
-              <ContinuousValueCard key={i} v={v} index={i} />
-            ))}
           </div>
         </div>
+
+        {/* Right Side: GSAP Scroll Pinned Cards */}
+        <div className="w-full lg:w-[55%] relative h-[50vh] md:h-full">
+          {values.map((v, i) => (
+            <div
+              key={i}
+              ref={(el) => { cardsRef.current[i] = el; }}
+              className={`absolute inset-0 w-full h-full flex flex-col justify-center lg:items-end lg:pr-16 ${i === 0 ? 'z-10' : 'z-20'}`}
+              style={{ 
+                opacity: i === 0 ? 1 : 0, 
+                transform: i === 0 ? 'translateX(0vw)' : 'translateX(100vw)' 
+              }}
+            >
+              <div className="w-full h-full flex flex-col justify-center relative">
+                
+                <div className="absolute top-1/2 -translate-y-1/2 left-0 text-[14rem] md:text-[20rem] font-display font-extrabold text-[#C4956A] opacity-[0.03] select-none z-0 tracking-tighter mix-blend-screen">
+                  0{i + 1}
+                </div>
+                
+                <div className="backdrop-blur-xl bg-[#0C0806]/80 p-10 md:p-16 border border-[#8B5E3C]/15 relative z-10 w-full shadow-[0_0_80px_rgba(0,0,0,0.8)]">
+                  <span className="font-mono text-[11px] tracking-[0.4em] uppercase text-[#C4956A] mb-8 block drop-shadow-md">{v.label}</span>
+                  <p className="text-2xl md:text-3xl text-[#BFA899] font-light leading-relaxed">
+                    {v.value}
+                  </p>
+                </div>
+                
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
     </section>
   );
