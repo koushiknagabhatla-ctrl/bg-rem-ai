@@ -1,22 +1,20 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useRef } from 'react';
 import Link from 'next/link';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
 export function Footer() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-50px' });
-
   return (
-    <footer ref={ref} className="bg-[#0C0806] px-6 md:px-16 pt-20 pb-10 border-t border-[#8B5E3C]/20">
+    <footer className="px-6 md:px-16 pt-20 pb-10 border-t border-[#8B5E3C]/10 relative">
       <div className="max-w-[1280px] mx-auto">
         {/* Top Row */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 1, ease }}
           className="grid grid-cols-1 md:grid-cols-3 gap-12 pb-16 border-b border-[#8B5E3C]/10"
         >
@@ -33,9 +31,9 @@ export function Footer() {
             <div>
               <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#D4A574] mb-4 block">Navigate</span>
               <div className="flex flex-col gap-3">
-                <Link href="/" className="text-sm text-[#BFA899] hover:text-[#E8B98A] transition-colors">Home</Link>
-                <Link href="/about" className="text-sm text-[#BFA899] hover:text-[#E8B98A] transition-colors">About</Link>
-                <Link href="/tool" className="text-sm text-[#BFA899] hover:text-[#E8B98A] transition-colors">Workspace</Link>
+                <a href="#hero" className="text-sm text-[#BFA899] hover:text-[#E8B98A] transition-colors">Home</a>
+                <a href="#about" className="text-sm text-[#BFA899] hover:text-[#E8B98A] transition-colors">About</a>
+                <a href="#demo" className="text-sm text-[#BFA899] hover:text-[#E8B98A] transition-colors">Demo</a>
               </div>
             </div>
             <div>
@@ -67,7 +65,8 @@ export function Footer() {
         {/* Bottom Bar */}
         <motion.div
           initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.3 }}
           className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4"
         >

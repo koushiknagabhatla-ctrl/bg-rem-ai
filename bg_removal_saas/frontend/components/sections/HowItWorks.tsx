@@ -1,7 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import React from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 import { UploadCloud, Cpu, Download } from 'lucide-react';
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -13,50 +14,58 @@ const steps = [
 ];
 
 export function HowItWorks() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const headerY = useTransform(scrollYProgress, [0, 0.4], [80, 0]);
+  const headerOpacity = useTransform(scrollYProgress, [0, 0.25], [0, 1]);
+  const lineScale = useTransform(scrollYProgress, [0.15, 0.6], [0, 1]);
+
   return (
-    <section className="py-32 md:py-48 px-6 md:px-16 bg-[#120906] relative overflow-hidden [perspective:2000px]">
+    <section ref={sectionRef} className="py-32 md:py-48 px-6 md:px-16 relative overflow-hidden [perspective:2000px]">
       <div className="max-w-[1280px] mx-auto z-10 relative">
         <motion.div
-          initial={{ opacity: 0, y: 80, rotateX: 10 }}
-          whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1.2, ease }}
+          style={{ y: headerY, opacity: headerOpacity }}
           className="text-center mb-32 transform-gpu"
         >
-          <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-[#E8B98A] mb-4 block drop-shadow-md">The Mechanism</span>
-          <h2 className="font-display text-5xl md:text-7xl font-extrabold text-white drop-shadow-xl">
+          <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-[#E8B98A] mb-4 block">The Mechanism</span>
+          <h2 className="font-display text-5xl md:text-7xl font-extrabold text-white">
             Three steps to <span className="italic font-medium text-[#C4956A]">clarity.</span>
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 relative">
           {/* Connecting line (desktop only) */}
           <motion.div
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1.5, delay: 0.5, ease }}
-            className="hidden md:block absolute top-[4.5rem] left-[16.66%] right-[16.66%] h-px bg-gradient-to-r from-transparent via-[#8B5E3C]/40 to-transparent origin-left z-0"
+            style={{ scaleX: lineScale }}
+            className="hidden md:block absolute top-[5.5rem] left-[16.66%] right-[16.66%] h-px bg-gradient-to-r from-transparent via-[#8B5E3C]/40 to-transparent origin-left z-[1]"
           />
 
           {steps.map((step, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 80, rotateX: 15, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
-              viewport={{ once: true, margin: "-50px" }}
+              initial={{ opacity: 0, y: 80, rotateX: 15 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 1.2, delay: 0.1 + i * 0.15, ease }}
               className="flex flex-col items-center text-center group transform-gpu z-10"
             >
-              {/* Number Circle using glass3d visually */}
-              <div className="relative mb-10 group-hover:-translate-y-2 transition-transform duration-500 ease-out">
-                <div className="glass3d w-28 h-28 rounded-[2rem] flex items-center justify-center text-[#BFA899] group-hover:text-white group-hover:bg-[#8B5E3C]/20 border border-[#8B5E3C]/20 transition-all duration-500 shadow-xl shadow-[#0C0806]/50">
-                  {React.cloneElement(step.icon as React.ReactElement, { className: 'w-8 h-8' })}
-                </div>
-                <span className="absolute -top-3 -right-3 font-mono text-xs font-bold text-[#1A0E08] bg-[#E8B98A] px-3 py-1.5 rounded-full shadow-lg border border-[#1A0E08]/20">{step.num}</span>
+              {/* Number ABOVE the glass card - high z-index, sits on top */}
+              <div className="relative z-30 mb-[-1.5rem]">
+                <span className="font-mono text-[11px] font-bold text-[#1A0E08] bg-[#E8B98A] px-4 py-2 rounded-full shadow-lg shadow-[#E8B98A]/20 border border-[#D4A574]/50">
+                  {step.num}
+                </span>
               </div>
 
-              <h3 className="font-display text-3xl font-bold text-white mb-4 tracking-tight drop-shadow-md">{step.title}</h3>
+              {/* Glass Icon Card */}
+              <div className="glass3d w-32 h-32 rounded-[2rem] flex items-center justify-center text-[#BFA899] group-hover:text-white group-hover:bg-[#8B5E3C]/10 border border-[#8B5E3C]/20 transition-all duration-500 shadow-xl shadow-black/30 mb-10 group-hover:-translate-y-2 relative z-10">
+                {React.cloneElement(step.icon as React.ReactElement, { className: 'w-9 h-9' })}
+              </div>
+
+              <h3 className="font-display text-3xl font-bold text-white mb-4 tracking-tight">{step.title}</h3>
               <p className="text-base text-[#BFA899] font-light leading-relaxed max-w-xs">{step.desc}</p>
             </motion.div>
           ))}

@@ -1,45 +1,66 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { motion } from "framer-motion";
+import { usePathname, useRouter } from 'next/navigation';
+
+type NavItem = { label: string; href: string; scrollTo?: string };
 
 export function NavHeader({ session, handleSignOut }: { session: any, handleSignOut: () => void }) {
   const [position, setPosition] = useState({ left: 0, width: 0, opacity: 0 });
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const items: NavItem[] = [
+    { label: 'Home', href: '/', scrollTo: 'hero' },
+    { label: 'About', href: '/', scrollTo: 'about' },
+    { label: 'Workspace', href: session ? '/tool' : '/login', scrollTo: session ? 'tool-section' : undefined },
+  ];
+
+  const handleNav = (item: NavItem) => {
+    if (item.scrollTo && pathname === '/') {
+      const el = document.getElementById(item.scrollTo);
+      if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+    }
+    if (item.scrollTo && pathname !== '/') {
+      router.push('/#' + item.scrollTo);
+      return;
+    }
+    router.push(item.href);
+  };
 
   return (
     <ul
       className="relative mx-auto flex w-fit rounded-full glass3d p-1 border border-[#8B5E3C]/20"
       onMouseLeave={() => setPosition((pv) => ({ ...pv, opacity: 0 }))}
     >
-      <Tab setPosition={setPosition} href="/">Home</Tab>
-      <Tab setPosition={setPosition} href="/about">About</Tab>
-      <Tab setPosition={setPosition} href={session ? '/tool' : '/login'}>Workspace</Tab>
+      {items.map((item) => (
+        <Tab key={item.label} setPosition={setPosition} onClick={() => handleNav(item)}>
+          {item.label}
+        </Tab>
+      ))}
 
       <Cursor position={position} />
     </ul>
   );
 }
 
-const Tab = ({ children, setPosition, href }: { children: React.ReactNode; setPosition: any; href: string }) => {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const pathname = usePathname();
-  const isActive = pathname === href;
+const Tab = ({ children, setPosition, onClick }: { children: React.ReactNode; setPosition: any; onClick: () => void }) => {
+  const ref = useRef<HTMLLIElement>(null);
 
   return (
-    <Link
+    <li
       ref={ref}
-      href={href}
+      onClick={onClick}
       onMouseEnter={() => {
         if (!ref.current) return;
         const { width } = ref.current.getBoundingClientRect();
         setPosition({ width, opacity: 1, left: ref.current.offsetLeft });
       }}
-      className={`relative z-10 block px-4 py-2 text-[10px] sm:text-xs font-semibold tracking-widest uppercase transition-colors duration-300 md:px-6 md:py-2.5 ${isActive ? 'text-white' : 'text-[#BFA899] hover:text-white'}`}
+      className="relative z-10 block px-4 py-2 text-[10px] sm:text-xs font-semibold tracking-widest uppercase transition-colors duration-300 md:px-6 md:py-2.5 text-[#BFA899] hover:text-white cursor-pointer select-none"
     >
       {children}
-    </Link>
+    </li>
   );
 };
 

@@ -12,9 +12,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-body antialiased bg-[#0C0806]">
-        {/* Animated Motion Background mapped to the entire layout */}
-        <div className="fixed inset-0 z-[-1] gradient-hero opacity-80 pointer-events-none" />
-        
         <SmoothScrollProvider>
           <Navbar />
           {children}

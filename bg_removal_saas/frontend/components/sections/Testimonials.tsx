@@ -1,8 +1,8 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
-import { Star } from 'lucide-react';
+import { Star, Quote } from 'lucide-react';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -14,20 +14,24 @@ const testimonials = [
 ];
 
 export function Testimonials() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-80px' });
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const headerY = useTransform(scrollYProgress, [0, 0.3], [60, 0]);
+  const headerOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
 
   return (
-    <section ref={ref} className="py-28 md:py-40 px-6 md:px-16 bg-[#0C0806] gradient-warm">
+    <section ref={sectionRef} className="py-32 md:py-48 px-6 md:px-16 relative overflow-hidden [perspective:2000px]">
       <div className="max-w-[1280px] mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1, ease }}
-          className="text-center mb-24"
+          style={{ y: headerY, opacity: headerOpacity }}
+          className="text-center mb-24 transform-gpu"
         >
-          <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-[#C4956A] mb-4 block">Testimonials</span>
-          <h2 className="font-display text-4xl md:text-5xl font-extrabold text-white max-w-3xl mx-auto">
+          <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-[#E8B98A] mb-4 block">Testimonials</span>
+          <h2 className="font-display text-5xl md:text-7xl font-extrabold text-white max-w-4xl mx-auto">
             Relied upon by demanding <span className="italic font-medium text-[#8B5E3C]">creative pipelines.</span>
           </h2>
         </motion.div>
@@ -36,24 +40,30 @@ export function Testimonials() {
           {testimonials.map((t, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 50 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.2 + i * 0.1, ease }}
-              className="glass3d p-10 md:p-12 flex flex-col justify-between h-full"
+              initial={{ opacity: 0, y: 80, rotateX: 12, scale: 0.92 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 1.2, delay: i * 0.12, ease }}
+              className="glass3d p-10 md:p-12 flex flex-col justify-between h-full border border-[#8B5E3C]/15 transform-gpu group hover:border-[#8B5E3C]/30 transition-colors duration-500"
             >
-              {/* Stars */}
-              <div className="flex gap-1.5 mb-8">
-                {Array.from({ length: t.stars }).map((_, j) => (
-                  <Star key={j} className="w-4 h-4 text-[#E8B98A] fill-[#E8B98A]" />
-                ))}
+              {/* Quote Icon + Stars */}
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex gap-1.5">
+                  {Array.from({ length: t.stars }).map((_, j) => (
+                    <Star key={j} className="w-4 h-4 text-[#E8B98A] fill-[#E8B98A]" />
+                  ))}
+                </div>
+                <Quote className="w-8 h-8 text-[#8B5E3C]/20 group-hover:text-[#8B5E3C]/40 transition-colors duration-500" />
               </div>
 
+              {/* Quote Text with word-fade */}
               <p className="text-xl md:text-2xl font-display font-medium text-white/90 leading-snug mb-10 flex-1">
                 &ldquo;{t.quote}&rdquo;
               </p>
 
-              <div className="flex items-center gap-5 pt-6 border-t border-[#8B5E3C]/20">
-                <div className="w-12 h-12 rounded-full bg-[#1A0E08] border border-[#8B5E3C]/30 flex items-center justify-center text-[#D4A574] font-display font-bold text-lg">
+              {/* Author */}
+              <div className="flex items-center gap-5 pt-6 border-t border-[#8B5E3C]/15">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#8B5E3C] to-[#C4956A] flex items-center justify-center text-white font-display font-bold text-lg shadow-lg shadow-[#8B5E3C]/20">
                   {t.name.charAt(0)}
                 </div>
                 <div>
