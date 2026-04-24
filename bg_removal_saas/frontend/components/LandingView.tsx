@@ -1,23 +1,13 @@
 'use client';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useAnimation, useInView } from 'framer-motion';
 import Link from 'next/link';
-import { useRef } from 'react';
-import { ArrowDown, Shield, Zap, Eye, Brain, CloudLightning, Sliders, ArrowUpRight } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowDown, Shield, Zap, Eye, Brain, CloudLightning, Sliders, ArrowUpRight, CheckCircle2 } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { ImageComparisonSlider } from '@/components/ui/image-comparison-slider';
 import { CinematicIntro } from '@/components/ui/intro-sequence';
 
-/* ─── Premium Easing & Variants ─── */
-const premiumEase = [0.16, 1, 0.3, 1] as const; // Very snappy, elegant curve typical of Awwwards sites
-
-const revealVariant = {
-  hidden: { y: '100%', opacity: 0 },
-  visible: (custom: number) => ({
-    y: 0,
-    opacity: 1,
-    transition: { delay: custom * 0.1 + 1.5, duration: 1.2, ease: premiumEase }
-  })
-};
+const premiumEase = [0.16, 1, 0.3, 1] as const;
 
 /* ─── Cinematic Label ─── */
 function SectionLabel({ num, label }: { num: string; label: string }) {
@@ -30,50 +20,138 @@ function SectionLabel({ num, label }: { num: string; label: string }) {
   );
 }
 
-/* ─── Animated Text Reveal ─── */
-function TextReveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+/* ─── Horizontal Scroll Gallery (Coffee-Tech Inspired) ─── */
+function HorizontalGallery() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: containerRef });
+  // Map vertical scroll (0 to 1) into horizontal translation
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-66.66%"]);
+
   return (
-    <span className="block overflow-hidden pb-4">
-      <motion.span
-        className="block"
-        custom={delay}
-        variants={revealVariant}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.8 }}
-      >
-        {children}
-      </motion.span>
-    </span>
+    <section ref={containerRef} className="relative h-[300vh] bg-ink">
+      <div className="sticky top-0 h-screen w-full flex items-center overflow-hidden overflow-x-hidden">
+        <motion.div style={{ x }} className="flex gap-12 px-12 md:px-32 h-[70vh]">
+          {/* Gallery Card 1 */}
+          <div className="w-[85vw] md:w-[60vw] h-full flex-shrink-0 flex flex-col md:flex-row gap-8 items-center bg-cream/5 rounded-[2rem] p-8 md:p-12 border border-cream/10">
+            <div className="flex-1 w-full relative h-[40vh] md:h-full rounded-2xl overflow-hidden bg-black shadow-2xl">
+              <ImageComparisonSlider
+                leftImage="https://images.unsplash.com/photo-1512418490979-9ce98fdb4542?w=1000&q=80"
+                rightImage="https://images.unsplash.com/photo-1512418490979-9ce98fdb4542?w=1000&q=80&monochrome=dddddd"
+                altLeft="Subject" altRight="Extracted"
+              />
+            </div>
+            <div className="w-full md:w-[35%] flex flex-col justify-center">
+              <span className="text-[10px] font-bold tracking-[0.4em] uppercase text-cream/40 mb-4 block">01 // Portrait</span>
+              <h3 className="text-4xl md:text-5xl font-serif font-bold text-cream mb-6">Subject Isolation.</h3>
+              <p className="text-cream/60 font-medium leading-relaxed">
+                Aggressive neural modeling ensures zero detail loss on human subjects. From stray hairs to transparent fabrics, the AI semantically understands depth.
+              </p>
+            </div>
+          </div>
+
+          {/* Gallery Card 2 */}
+          <div className="w-[85vw] md:w-[60vw] h-full flex-shrink-0 flex flex-col md:flex-row gap-8 items-center bg-cream/5 rounded-[2rem] p-8 md:p-12 border border-cream/10">
+            <div className="flex-1 w-full relative h-[40vh] md:h-full rounded-2xl overflow-hidden bg-black shadow-2xl">
+              <ImageComparisonSlider
+                leftImage="https://images.unsplash.com/photo-1549416878-b9ca95e26903?w=1000&q=80"
+                rightImage="https://images.unsplash.com/photo-1549416878-b9ca95e26903?w=1000&q=80&monochrome=dddddd"
+                altLeft="Product" altRight="Extracted"
+              />
+            </div>
+            <div className="w-full md:w-[35%] flex flex-col justify-center">
+              <span className="text-[10px] font-bold tracking-[0.4em] uppercase text-cream/40 mb-4 block">02 // Objects</span>
+              <h3 className="text-4xl md:text-5xl font-serif font-bold text-cream mb-6">E-Commerce Ready.</h3>
+              <p className="text-cream/60 font-medium leading-relaxed">
+                Hard edges and metallic reflections are preserved perfectly. VCranks eliminates hours of manual pen-tool clipping for product listings.
+              </p>
+            </div>
+          </div>
+
+          {/* Gallery Card 3 */}
+          <div className="w-[85vw] md:w-[60vw] h-full flex-shrink-0 flex flex-col md:flex-row gap-8 items-center bg-cream/5 rounded-[2rem] p-8 md:p-12 border border-cream/10">
+            <div className="flex-1 w-full relative h-[40vh] md:h-full rounded-2xl overflow-hidden bg-black shadow-2xl">
+              <ImageComparisonSlider
+                leftImage="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1000&q=80"
+                rightImage="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1000&q=80&monochrome=dddddd"
+                altLeft="Complex" altRight="Extracted"
+              />
+            </div>
+            <div className="w-full md:w-[35%] flex flex-col justify-center">
+              <span className="text-[10px] font-bold tracking-[0.4em] uppercase text-cream/40 mb-4 block">03 // Complex</span>
+              <h3 className="text-4xl md:text-5xl font-serif font-bold text-cream mb-6">Foliage & Mesh.</h3>
+              <p className="text-cream/60 font-medium leading-relaxed">
+                Tackling the impossible. Our model processes sub-pixel transparencies and complex meshes like plant leaves and chainlink without ghosting artifacts.
+              </p>
+            </div>
+          </div>
+
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Oryzo Tech Grid Card ─── */
+function TechGridCard({ icon, title, desc, delay = 0 }: { icon: React.ReactNode, title: string, desc: string, delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 30 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+      transition={{ duration: 0.8, delay: delay * 0.1, ease: premiumEase }}
+      className="relative p-10 border border-ink/10 bg-cream/50 overflow-hidden group hover:scale-[1.02] transition-transform duration-500 rounded-3xl"
+    >
+      {/* Oryzo-style hover glow effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-ink/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+      
+      <div className="relative z-10">
+        <div className="w-12 h-12 rounded-xl border border-ink/10 flex items-center justify-center text-ink mb-16 bg-cream shadow-sm">
+          {icon}
+        </div>
+        <h3 className="text-2xl font-serif font-bold text-ink mb-4">{title}</h3>
+        <p className="text-sm font-medium text-ink/60 leading-relaxed">{desc}</p>
+      </div>
+    </motion.div>
   );
 }
 
 export function LandingView() {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  
-  // Parallax effects for the Hero section
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    // Delay setting mounted to ensure Framer Motion hydration strictly after layout
+    const timer = setTimeout(() => setIsMounted(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <CinematicIntro>
-      <main className="w-full bg-cream selection:bg-ink selection:text-cream font-sans">
+      <main className="w-full bg-cream selection:bg-ink selection:text-cream font-sans overflow-hidden">
         
         {/* ═══════════════════════════════════════
             HERO — Minimalist, Typography-led
         ═══════════════════════════════════════ */}
-        <section ref={heroRef} className="relative w-full min-h-screen flex flex-col justify-center px-6 md:px-12 pt-32 pb-20">
-          <motion.div 
-            style={{ y: heroY, opacity: heroOpacity }}
-            className="w-full max-w-[1600px] mx-auto z-10"
-          >
+        <section className="relative w-full min-h-screen flex flex-col justify-center px-6 md:px-12 pt-32 pb-20 overflow-hidden">
+          
+          {/* Subtle tech background lines (Oryzo derived) */}
+          <div className="absolute inset-0 pointer-events-none opacity-[0.03]">
+            <div className="h-full w-px bg-ink absolute left-1/4" />
+            <div className="h-full w-px bg-ink absolute left-[90%]" />
+            <div className="w-full h-px bg-ink absolute top-1/4" />
+          </div>
+
+          <div className="w-full max-w-[1600px] mx-auto z-10">
             {/* Tagline */}
             <motion.div 
-              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 1.8, ease: premiumEase }}
+              initial={{ opacity: 0, y: 20 }} 
+              animate={isMounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} 
+              transition={{ duration: 1.2, delay: 0.2, ease: premiumEase }}
               className="mb-8 md:mb-12"
             >
-              <span className="flex items-center gap-3 w-fit px-4 py-2 rounded-full border border-ink/10 bg-cream/50 backdrop-blur-sm text-[10px] font-bold tracking-[0.3em] uppercase text-ink/80">
+              <span className="flex items-center gap-3 w-fit px-4 py-2 rounded-full border border-ink/10 bg-cream/50 backdrop-blur-sm text-[10px] font-bold tracking-[0.3em] uppercase text-ink/80 shadow-sm">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-ink opacity-40"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-ink"></span>
@@ -82,28 +160,36 @@ export function LandingView() {
               </span>
             </motion.div>
 
-            {/* Massive Awwwards-style Typography */}
-            <h1 className="text-[clamp(4rem,12vw,14rem)] leading-[0.85] tracking-[-0.04em] font-serif font-bold text-ink mb-12 lg:mb-16">
-              <TextReveal delay={0}>Flawless</TextReveal>
-              <div className="flex items-center gap-4 md:gap-12 flex-wrap">
-                <TextReveal delay={1}>
-                  <span className="italic font-light opacity-90 pr-4">background</span>
-                </TextReveal>
-              </div>
-              <TextReveal delay={2}>removal.</TextReveal>
+            {/* Massive Awwwards-style Typography (Forced Animation) */}
+            <h1 className="text-[clamp(4.5rem,13vw,16rem)] leading-[0.82] tracking-[-0.04em] font-serif font-bold text-ink mb-12 lg:mb-16">
+              <span className="block overflow-hidden pb-4">
+                <motion.span className="block" initial={{ y: '110%' }} animate={isMounted ? { y: 0 } : { y: '110%' }} transition={{ duration: 1.2, ease: premiumEase, delay: 0.3 }}>
+                  Flawless
+                </motion.span>
+              </span>
+              <span className="block overflow-hidden relative pb-4">
+                <motion.span className="block italic font-light opacity-90 pr-8 text-ink/80" initial={{ y: '110%' }} animate={isMounted ? { y: 0 } : { y: '110%' }} transition={{ duration: 1.2, ease: premiumEase, delay: 0.4 }}>
+                  background
+                </motion.span>
+              </span>
+              <span className="block overflow-hidden pb-4">
+                <motion.span className="block" initial={{ y: '110%' }} animate={isMounted ? { y: 0 } : { y: '110%' }} transition={{ duration: 1.2, ease: premiumEase, delay: 0.5 }}>
+                  removal.
+                </motion.span>
+              </span>
             </h1>
 
             {/* Supporting Text & Buttons */}
-            <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-12 w-full border-t border-ink/10 pt-10">
+            <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-12 w-full border-t border-ink/10 pt-12">
               <motion.p
-                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 2.3, ease: premiumEase }}
-                className="text-lg md:text-2xl text-ink/70 max-w-2xl font-medium leading-relaxed"
+                initial={{ opacity: 0, y: 20 }} animate={isMounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} transition={{ duration: 1.2, delay: 0.8, ease: premiumEase }}
+                className="text-xl md:text-3xl text-ink/70 max-w-2xl font-medium leading-relaxed tracking-tight"
               >
-                Zero manual masking. Zero pixelation. Upload your image and let our neural network deliver perfect, crisp edges instantly.
+                Zero manual masking. Zero pixelation. Enterprise-grade AI processing locally. Powering the next generation of creative pipelines.
               </motion.p>
 
               <motion.div
-                initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, delay: 2.5, ease: premiumEase }}
+                initial={{ opacity: 0, y: 20 }} animate={isMounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} transition={{ duration: 1.2, delay: 1, ease: premiumEase }}
                 className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
               >
                 <Link href="/register"
@@ -117,173 +203,90 @@ export function LandingView() {
               </motion.div>
             </div>
             
-          </motion.div>
-
-          {/* Scroll Indicator */}
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3.2 }}
-            className="absolute bottom-8 left-12 hidden md:flex items-center gap-4 text-[10px] font-bold tracking-[0.3em] uppercase text-ink/40"
-          >
-            <div className="w-[1px] h-12 bg-ink/20 overflow-hidden relative">
-              <motion.div animate={{ top: ["-100%", "100%"] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="absolute left-0 w-full h-1/2 bg-ink" />
-            </div>
-            Scroll to explore
-          </motion.div>
-        </section>
-
-        {/* ═══════════ S1 — COMPARE SECTION ═══════════ */}
-        <section className="py-32 md:py-48 px-6 md:px-12 bg-ink text-cream relative">
-          <div className="max-w-[1600px] mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-              
-              {/* Text Side */}
-              <div className="order-2 lg:order-1">
-                <ScrollReveal variant="fade-up">
-                  <div className="flex items-center gap-6 mb-12">
-                    <span className="text-[10px] font-bold tracking-[0.4em] uppercase text-cream/40 tabular-nums">01</span>
-                    <div className="w-16 h-[1px] bg-cream/10" />
-                    <span className="text-[10px] font-bold tracking-[0.4em] uppercase text-cream/70">The Quality</span>
-                  </div>
-                </ScrollReveal>
-
-                <ScrollReveal variant="fade-up" delay={0.1}>
-                  <h2 className="text-[clamp(3rem,6vw,5.5rem)] font-serif font-bold leading-[0.9] tracking-tight mb-8">
-                    Hair strands.<br />
-                    <span className="italic font-light text-cream/70">Glass edges.</span><br />
-                    No problem.
-                  </h2>
-                </ScrollReveal>
-
-                <ScrollReveal variant="fade-up" delay={0.2}>
-                  <p className="text-xl md:text-2xl text-cream/60 leading-relaxed mb-12 font-medium max-w-xl">
-                    Our architecture achieves semantic understanding of the foreground. Stop fighting the magic wand tool. Process intricate details in sub-seconds.
-                  </p>
-                </ScrollReveal>
-
-                <ScrollReveal variant="fade-up" delay={0.3}>
-                  <Link href="/register"
-                    className="inline-flex items-center gap-4 text-base font-bold text-cream tracking-wide group border-b border-cream/20 pb-2 hover:border-cream transition-colors duration-500">
-                    Test the model
-                    <ArrowUpRight className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
-                  </Link>
-                </ScrollReveal>
-              </div>
-
-              {/* Slider Side */}
-              <ScrollReveal variant="fade-up" delay={0.2} className="order-1 lg:order-2 w-full h-full">
-                <div className="rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-cream/10 bg-black aspect-[4/3] relative group">
-                  <ImageComparisonSlider
-                    leftImage="https://images.unsplash.com/photo-1549416878-b9ca95e26903?w=1000&q=80"
-                    rightImage="https://images.unsplash.com/photo-1549416878-b9ca95e26903?w=1000&q=80&monochrome=000000"
-                    altLeft="Original Output"
-                    altRight="Background Extracted"
-                  />
-                </div>
-              </ScrollReveal>
-
-            </div>
           </div>
         </section>
 
-        {/* ═══════════ S2 — THE PROCESS ═══════════ */}
+        {/* ═══════════ S1 — COFFEE-TECH HORIZONTAL GALLERY ═══════════ */}
+        <div className="w-full bg-ink flex flex-col items-center justify-center py-20 px-6">
+           <SectionLabel num="01" label="The Quality" />
+           <h2 className="text-3xl md:text-5xl text-cream font-serif text-center max-w-4xl leading-[1.2]">
+            Our architecture achieves <span className="italic text-cream/70">semantic understanding</span> of the foreground. Stop fighting the magic wand tool. 
+           </h2>
+        </div>
+
+        <HorizontalGallery />
+
+        {/* ═══════════ S2 — ORYZO TECH GRID ═══════════ */}
         <section className="py-32 md:py-48 px-6 md:px-12 bg-cream">
           <div className="max-w-[1600px] mx-auto">
-            <ScrollReveal variant="fade-up">
-              <SectionLabel num="02" label="Workflow" />
-            </ScrollReveal>
-            
-            <ScrollReveal variant="fade-up" delay={0.1}>
-              <h2 className="text-[clamp(3.5rem,8vw,7rem)] font-serif font-bold leading-[0.9] tracking-tight mb-24 md:mb-40 text-ink">
-                Built for <span className="italic font-light opacity-80">velocity.</span>
-              </h2>
-            </ScrollReveal>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
-              {[
-                { step: "01", title: "Upload", desc: "Drag and drop any image up to 20MB. Fully encrypted, entirely in-memory processing. We store absolutely nothing." },
-                { step: "02", title: "Analyze", desc: "The neural network runs inference via INT8 quantization, guaranteeing a semantic map of your image almost instantly." },
-                { step: "03", title: "Export", desc: "Direct download the high-resolution PNG with perfect alpha transparency, or quickly generate a solid backdrop context." }
-              ].map((item, i) => (
-                <ScrollReveal key={item.step} variant="fade-up" delay={i * 0.15}>
-                  <div className="flex flex-col border-t border-ink/10 pt-8 group cursor-default">
-                    <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-ink/40 mb-8 tabular-nums group-hover:text-ink transition-colors duration-500">{item.step}</span>
-                    <h3 className="text-3xl font-serif font-bold text-ink mb-6">{item.title}</h3>
-                    <p className="text-lg text-ink/70 font-medium leading-relaxed pr-4">{item.desc}</p>
-                  </div>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ═══════════ S3 — GRID FEATURES ═══════════ */}
-        <section className="py-32 md:py-48 px-6 md:px-12 bg-ink/5">
-          <div className="max-w-[1600px] mx-auto">
             <div className="mb-24 md:mb-32">
-               <ScrollReveal variant="fade-up">
-                <SectionLabel num="03" label="Performance" />
+              <ScrollReveal variant="fade-up">
+                <SectionLabel num="02" label="Performance" />
               </ScrollReveal>
               <ScrollReveal variant="fade-up" delay={0.1} className="max-w-4xl">
-                <h2 className="text-4xl md:text-6xl font-serif font-bold leading-[1.1] tracking-tight text-ink">
-                  A professional toolset engineered entirely without compromise.
+                <h2 className="text-4xl md:text-[5rem] font-serif font-bold leading-[0.95] tracking-tight text-ink mb-12">
+                  Engineered entirely <span className="italic opacity-80">without compromise.</span>
                 </h2>
+                <p className="text-xl md:text-2xl text-ink/60 font-medium leading-relaxed max-w-2xl">
+                  We bypassed third-party APIs and built a custom neural infrastructure aggressively optimized for edge computing and sub-second inference.
+                </p>
               </ScrollReveal>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                { icon: <Brain />, title: "U-Net Architecture", desc: "Trained aggressively on P3M-10K data." },
-                { icon: <Zap />, title: "INT8 Quantized", desc: "Bare-metal performance. Lightning fast." },
-                { icon: <Shield />, title: "Zero Cache", desc: "Crypto-signed URLs. RAM only." },
-                { icon: <Sliders />, title: "Full Resolution", desc: "Never downscaled. Pixel matching." },
-                { icon: <CloudLightning />, title: "Vercel Edge", desc: "Distributed globally. Zero latency." },
-                { icon: <Eye />, title: "Perfect Cut", desc: "Flawless hair, glass & motion." },
-              ].map((feature, i) => (
-                <ScrollReveal key={feature.title} variant="fade-up" delay={i * 0.1}>
-                  <div className="p-10 border border-ink/10 bg-cream group hover:bg-ink transition-colors duration-500 rounded-2xl h-full flex flex-col justify-between">
-                    <div className="w-12 h-12 rounded-full border border-ink/10 flex items-center justify-center text-ink mb-12 group-hover:bg-cream group-hover:text-ink transition-colors duration-500">
-                      {feature.icon}
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-ink mb-3 group-hover:text-cream transition-colors duration-500">{feature.title}</h3>
-                      <p className="text-sm font-medium text-ink/60 group-hover:text-cream/70 transition-colors duration-500">{feature.desc}</p>
-                    </div>
-                  </div>
-                </ScrollReveal>
-              ))}
+              <TechGridCard delay={1} icon={<Brain />} title="U-Net Architecture" desc="A specifically modified MobileNetV3-Small U-Net model trained aggressively on the P3M-10K data for human-centric semantic understanding." />
+              <TechGridCard delay={2} icon={<Zap />} title="INT8 Quantization" desc="The entire neural network runs via INT8 ONNX web inference. Bare-metal performance that doesn't melt your device." />
+              <TechGridCard delay={3} icon={<Shield />} title="Zero Storage Pipeline" desc="Images are processed via fully encrypted, in-memory buffers. We store absolutely nothing. Strict data sovereignty." />
+              <TechGridCard delay={4} icon={<Sliders />} title="Full Resolution Preservation" desc="Your images are never arbitrarily downscaled. The AI perfectly matches the extracted alpha mask to your original resolution." />
+              <TechGridCard delay={5} icon={<CloudLightning />} title="Vercel Edge Network" desc="Distributed globally. Our backend pipelines execute directly on Edge infrastructure ensuring virtually zero latency." />
+              <TechGridCard delay={6} icon={<Eye />} title="Perfect Edge Output" desc="Complex gradients, transparent glass, motion blur, and fine hair strands are extracted flawlessly without rigid pixel stepping." />
             </div>
           </div>
         </section>
 
-        {/* ═══════════ S4 — CTA CTA ═══════════ */}
-        <section className="py-40 md:py-64 px-6 md:px-12 bg-ink text-cream rounded-t-[3rem] md:rounded-t-[5rem] overflow-hidden">
-          <div className="max-w-[1200px] mx-auto text-center flex flex-col items-center">
+        {/* ═══════════ S3 — SHADER.SE FOOTER CTA ═══════════ */}
+        <section className="py-40 md:py-64 px-6 md:px-12 bg-ink text-cream relative overflow-hidden rounded-t-[3rem] md:rounded-t-[5rem]">
+          {/* Giant Shader.se text in background */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none opacity-[0.02]">
+            <span className="text-[25vw] font-serif font-bold whitespace-nowrap tracking-tighter">VCRANKS</span>
+          </div>
+
+          <div className="max-w-[1200px] mx-auto text-center flex flex-col items-center relative z-10">
             <ScrollReveal variant="fade-up" duration={1}>
-              <span className="px-6 py-2 rounded-full border border-cream/20 text-[10px] font-bold tracking-[0.4em] uppercase text-cream/70 mb-10 inline-block">
-                Start Now
+              <span className="px-6 py-2 rounded-full border border-cream/20 text-[10px] font-bold tracking-[0.4em] uppercase text-cream/70 mb-10 inline-block shadow-lg">
+                Your Studio Awaits
               </span>
-              <h2 className="text-[clamp(3.5rem,8vw,8rem)] font-serif font-bold leading-[0.9] tracking-tight mb-12">
-                Experience the <span className="italic font-light opacity-80">difference.</span>
+              <h2 className="text-[clamp(4rem,10vw,9rem)] font-serif font-bold leading-[0.85] tracking-tight mb-12">
+                Experience the <span className="italic font-light opacity-80 block md:inline mt-4 md:mt-0">difference.</span>
               </h2>
-              <p className="text-xl md:text-2xl text-cream/60 font-medium mb-16 max-w-2xl mx-auto">
+              <p className="text-xl md:text-3xl text-cream/60 font-medium mb-20 max-w-3xl mx-auto leading-relaxed">
                 No credit card required. Receive 50 free high-resolution extractions securely.
               </p>
-              <Link href="/register"
-                className="inline-flex items-center justify-center px-16 py-6 rounded-full bg-cream text-ink font-bold text-lg tracking-wide hover:scale-105 transition-transform duration-500 shadow-2xl">
-                Begin Free Trial
-              </Link>
+              
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+                <Link href="/register"
+                  className="w-full sm:w-auto inline-flex items-center justify-center px-16 py-6 border border-cream/20 rounded-full bg-cream text-ink font-bold text-lg tracking-wide hover:scale-[1.03] transition-all duration-500 shadow-[0_0_80px_rgba(255,255,255,0.1)]">
+                  Begin Free Trial
+                </Link>
+                <Link href="/login"
+                  className="w-full sm:w-auto inline-flex items-center justify-center px-12 py-6 rounded-full border border-cream/20 bg-transparent text-cream font-bold text-lg tracking-wide hover:bg-cream/5 transition-all duration-500">
+                  Client Sign In
+                </Link>
+              </div>
             </ScrollReveal>
           </div>
         </section>
 
-        {/* ═══════════ FOOTER ═══════════ */}
-        <footer className="bg-ink pb-8 px-6 md:px-12 pt-20">
-          <div className="max-w-[1600px] mx-auto border-t border-cream/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <span className="text-xl font-serif font-bold text-cream">VCranks <em className="text-cream/50">AI</em></span>
-            <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-cream/40">© 2026 VCranks AI. Developed by Koushik.</p>
+        {/* ═══════════ ACTUAL FOOTER ═══════════ */}
+        <footer className="bg-[#050505] pb-12 px-6 md:px-12 pt-20">
+          <div className="max-w-[1600px] mx-auto border-t border-white/5 pt-12 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-6">
+            <span className="text-2xl font-serif font-bold text-white">VCranks <em className="text-white/50">AI</em></span>
+            <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-white/30 text-center md:text-left">
+              © 2026 VCranks AI. Developed by Koushik. <br className="md:hidden" /> All Rights Reserved.
+            </p>
             <div className="flex items-center gap-8">
-              <Link href="/about" className="text-[11px] font-bold text-cream/60 hover:text-cream transition-colors duration-300 tracking-[0.2em] uppercase">About</Link>
-              <Link href="/login" className="text-[11px] font-bold text-cream/60 hover:text-cream transition-colors duration-300 tracking-[0.2em] uppercase">Client Login</Link>
+              <Link href="/about" className="text-[10px] font-bold text-white/50 hover:text-white transition-colors duration-300 tracking-[0.3em] uppercase">About Concept</Link>
+              <Link href="/login" className="text-[10px] font-bold text-white/50 hover:text-white transition-colors duration-300 tracking-[0.3em] uppercase">Client Portal</Link>
             </div>
           </div>
         </footer>
