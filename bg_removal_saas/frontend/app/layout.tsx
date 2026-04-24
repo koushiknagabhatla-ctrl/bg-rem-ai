@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Navbar } from '@/components/Navbar';
+import { SmoothScrollProvider } from '@/components/SmoothScrollProvider';
+import { CustomCursor } from '@/components/ui/custom-cursor';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -11,8 +13,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-sans antialiased bg-cream">
-        <Navbar />
-        <main>{children}</main>
+        <SmoothScrollProvider>
+          <CustomCursor />
+          <Navbar />
+          <main>{children}</main>
+        </SmoothScrollProvider>
       </body>
     </html>
   );

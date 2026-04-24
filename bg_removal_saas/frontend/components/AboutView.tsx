@@ -51,7 +51,7 @@ function LineReveal({ children, delay = 0 }: { children: string; delay?: number 
         initial={{ y: '130%' }}
         whileInView={{ y: 0 }}
         viewport={{ once: true, amount: 0.8 }}
-        transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1], delay }}>
+        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay }}>
         {children}
       </motion.span>
     </span>
@@ -86,7 +86,7 @@ export function AboutView() {
                   initial={{ y: '130%' }}
                   whileInView={{ y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1], delay: 0.25 }}>
+                  transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.25 }}>
                   of image editing.
                 </motion.span>
               </span>
