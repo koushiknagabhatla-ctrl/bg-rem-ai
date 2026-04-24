@@ -10,18 +10,16 @@ const config = {
   ],
   prefix: "",
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: { "2xl": "1400px" },
-    },
+    container: { center: true, padding: "2rem", screens: { "2xl": "1400px" } },
     extend: {
       fontFamily: {
         sans: ["'Inter'", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
-        display: ["'Inter'", "sans-serif"],
-        tech: ["'Space Grotesk'", "monospace"],
+        serif: ["'Playfair Display'", "Georgia", "serif"],
       },
       colors: {
+        cream: { DEFAULT: '#E6E4DC', light: '#F2F0E8', dark: '#D4D2CA' },
+        warm: { DEFAULT: '#A85334', light: '#C47A5C' },
+        ink: { DEFAULT: '#1a1a1a', light: '#8B8680', muted: '#B5B0A8' },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -35,11 +33,7 @@ const config = {
         popover: { DEFAULT: "hsl(var(--popover))", foreground: "hsl(var(--popover-foreground))" },
         card: { DEFAULT: "hsl(var(--card))", foreground: "hsl(var(--card-foreground))" },
       },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
+      borderRadius: { lg: "var(--radius)", md: "calc(var(--radius) - 2px)", sm: "calc(var(--radius) - 4px)" },
       keyframes: {
         "accordion-down": { from: { height: "0" }, to: { height: "var(--radix-accordion-content-height)" } },
         "accordion-up": { from: { height: "var(--radix-accordion-content-height)" }, to: { height: "0" } },

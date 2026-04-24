@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabase';
 import { motion } from 'framer-motion';
-import { Zap, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 export function Navbar() {
   const supabase = createBrowserSupabaseClient();
@@ -23,7 +23,7 @@ export function Navbar() {
   }, [supabase]);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -33,7 +33,6 @@ export function Navbar() {
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/about', label: 'About' },
-    { href: '/#pricing', label: 'Pricing' },
   ];
 
   return (
@@ -41,87 +40,77 @@ export function Navbar() {
       <motion.header
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 w-full z-50 px-4 md:px-6 py-3 ${scrolled ? 'liquid-glass-nav scrolled' : 'liquid-glass-nav'}`}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className={`fixed top-0 w-full z-50 px-6 md:px-10 py-4 ${scrolled ? 'liquid-glass-nav scrolled' : 'liquid-glass-nav'}`}
       >
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
+        <div className="max-w-[1400px] mx-auto flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-xl bg-indigo-500 flex items-center justify-center group-hover:scale-105 transition-transform">
-              <Zap className="w-4 h-4 text-white" />
-            </div>
-            <span className="font-bold text-[15px] tracking-tight text-black">VCranks AI</span>
+          <Link href="/" className="group">
+            <span className="text-lg font-serif font-semibold tracking-tight text-ink">VCranks</span>
+            <span className="text-lg font-serif font-semibold italic text-ink-light ml-1">AI</span>
           </Link>
 
-          {/* Center nav — liquid glass pill */}
+          {/* Center nav */}
           <nav
-            className="hidden md:flex items-center relative liquid-glass rounded-full px-1.5 py-1.5"
+            className="hidden md:flex items-center relative liquid-glass rounded-full px-1 py-1"
             onMouseLeave={() => setCursorPos(pv => ({ ...pv, opacity: 0 }))}
           >
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href || (link.href === '/about' && pathname === '/about');
-              return (
-                <NavTab key={link.label} href={link.href} isActive={isActive} setCursorPos={setCursorPos}>
-                  {link.label}
-                </NavTab>
-              );
-            })}
-            {/* Animated cursor */}
+            {navLinks.map((link) => (
+              <NavTab key={link.label} href={link.href} isActive={pathname === link.href} setCursorPos={setCursorPos}>
+                {link.label}
+              </NavTab>
+            ))}
             <motion.div
               animate={cursorPos}
-              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-              className="absolute z-0 h-8 rounded-full bg-black/[0.05]"
+              transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+              className="absolute z-0 h-8 rounded-full bg-[#1a1a1a]/[0.06]"
               style={{ top: '50%', transform: 'translateY(-50%)' }}
             />
           </nav>
 
-          {/* Right side */}
-          <div className="flex items-center gap-3">
+          {/* Right */}
+          <div className="flex items-center gap-4">
             {!loading && (
               session ? (
-                <div className="hidden md:flex items-center gap-3">
-                  <button onClick={handleSignOut}
-                    className="px-5 py-2 rounded-full text-sm font-medium text-gray-500 hover:text-black transition-colors">
-                    Sign Out
-                  </button>
-                </div>
+                <button onClick={handleSignOut}
+                  className="hidden md:block text-sm text-ink-light hover:text-ink transition-colors duration-300">
+                  Sign Out
+                </button>
               ) : (
                 <div className="hidden md:flex items-center gap-2">
-                  <Link href="/login"
-                    className="px-5 py-2 rounded-full text-sm font-medium text-gray-500 hover:text-black transition-colors">
-                    Sign In
-                  </Link>
+                  <Link href="/login" className="text-sm text-ink-light hover:text-ink transition-colors duration-300">Sign In</Link>
                   <Link href="/register"
-                    className="px-5 py-2.5 rounded-full bg-black text-white text-sm font-medium hover:bg-gray-800 transition-colors">
-                    Get Started
+                    className="rolling-btn px-5 py-2.5 rounded-full bg-ink text-cream-light text-sm font-medium">
+                    <span className="rolling-text">Get Started</span>
+                    <span className="rolling-text-clone">Get Started</span>
                   </Link>
                 </div>
               )
             )}
             <button onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 hover:text-black transition-colors">
+              className="md:hidden w-9 h-9 flex items-center justify-center text-ink-light hover:text-ink transition-colors">
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
       </motion.header>
 
-      {/* Mobile menu */}
+      {/* Mobile */}
       {mobileOpen && (
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
           className="fixed inset-x-0 top-[56px] z-40 p-4 md:hidden">
           <div className="liquid-glass rounded-2xl p-4 space-y-1 shadow-lg">
             {navLinks.map((link) => (
               <Link key={link.label} href={link.href} onClick={() => setMobileOpen(false)}
-                className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:text-black hover:bg-black/[0.03] transition-all">
+                className="block px-4 py-3 rounded-xl text-sm font-medium text-ink-light hover:text-ink hover:bg-ink/[0.03] transition-all">
                 {link.label}
               </Link>
             ))}
-            <div className="h-px bg-black/[0.06] my-2" />
+            <div className="h-px bg-ink/[0.06] my-2" />
             {!loading && !session && (
               <>
-                <Link href="/login" onClick={() => setMobileOpen(false)} className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-600">Sign In</Link>
-                <Link href="/register" onClick={() => setMobileOpen(false)} className="block px-4 py-3 rounded-xl text-sm font-medium text-center bg-black text-white">Get Started</Link>
+                <Link href="/login" onClick={() => setMobileOpen(false)} className="block px-4 py-3 rounded-xl text-sm text-ink-light">Sign In</Link>
+                <Link href="/register" onClick={() => setMobileOpen(false)} className="block px-4 py-3 rounded-xl text-sm font-medium text-center bg-ink text-cream-light">Get Started</Link>
               </>
             )}
           </div>
@@ -142,7 +131,7 @@ function NavTab({ children, href, isActive, setCursorPos }: {
         const { width } = ref.current.getBoundingClientRect();
         setCursorPos({ width, opacity: 1, left: ref.current.offsetLeft });
       }}
-      className={`relative z-10 px-4 py-2 rounded-full text-sm font-medium transition-colors ${isActive ? 'text-black' : 'text-gray-400 hover:text-gray-700'}`}>
+      className={`relative z-10 px-5 py-2 rounded-full text-[13px] font-medium transition-colors duration-300 ${isActive ? 'text-ink' : 'text-ink-light hover:text-ink'}`}>
       {children}
     </Link>
   );

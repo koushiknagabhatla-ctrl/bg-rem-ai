@@ -4,7 +4,7 @@ import { motion, type Variants } from 'framer-motion';
 import React from 'react';
 import { cn } from '@/lib/utils';
 
-type RevealVariant = 'fade-up' | 'fade-down' | 'fade-left' | 'fade-right' | 'scale' | 'blur-in';
+type RevealVariant = 'fade-up' | 'fade-down' | 'fade-left' | 'fade-right' | 'scale' | 'blur-in' | 'text-reveal' | 'line-reveal';
 
 interface ScrollRevealProps {
   children: React.ReactNode;
@@ -19,7 +19,7 @@ interface ScrollRevealProps {
 
 const revealVariants: Record<RevealVariant, Variants> = {
   'fade-up': {
-    hidden: { opacity: 0, y: 40 },
+    hidden: { opacity: 0, y: 60 },
     visible: { opacity: 1, y: 0 },
   },
   'fade-down': {
@@ -35,12 +35,20 @@ const revealVariants: Record<RevealVariant, Variants> = {
     visible: { opacity: 1, x: 0 },
   },
   'scale': {
-    hidden: { opacity: 0, scale: 0.85 },
+    hidden: { opacity: 0, scale: 0.92 },
     visible: { opacity: 1, scale: 1 },
   },
   'blur-in': {
-    hidden: { opacity: 0, filter: 'blur(10px)' },
+    hidden: { opacity: 0, filter: 'blur(12px)' },
     visible: { opacity: 1, filter: 'blur(0px)' },
+  },
+  'text-reveal': {
+    hidden: { opacity: 0, y: 80, rotateX: 35 },
+    visible: { opacity: 1, y: 0, rotateX: 0 },
+  },
+  'line-reveal': {
+    hidden: { opacity: 0, y: '100%' },
+    visible: { opacity: 1, y: 0 },
   },
 };
 
@@ -48,10 +56,10 @@ export function ScrollReveal({
   children,
   variant = 'fade-up',
   delay = 0,
-  duration = 0.8,
+  duration = 1,
   className,
   once = true,
-  amount = 0.2,
+  amount = 0.15,
   staggerChildren,
 }: ScrollRevealProps) {
   const containerVariants: Variants = {
@@ -96,5 +104,69 @@ export function ScrollReveal({
     >
       {children}
     </motion.div>
+  );
+}
+
+/* ─── Text Line by Line Reveal (Jasmine-style) ─── */
+export function TextReveal({ children, className, delay = 0 }: { children: string; className?: string; delay?: number }) {
+  const words = children.split(' ');
+  return (
+    <motion.span
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.5 }}
+      className={cn('inline-block', className)}
+    >
+      {words.map((word, i) => (
+        <span key={i} className="inline-block overflow-hidden mr-[0.3em]">
+          <motion.span
+            className="inline-block"
+            variants={{
+              hidden: { y: '105%', rotate: 3 },
+              visible: { y: 0, rotate: 0 },
+            }}
+            transition={{
+              duration: 0.7,
+              delay: delay + i * 0.04,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
+            {word}
+          </motion.span>
+        </span>
+      ))}
+    </motion.span>
+  );
+}
+
+/* ─── Heading with Character Reveal ─── */
+export function HeadingReveal({ children, className, delay = 0 }: { children: string; className?: string; delay?: number }) {
+  const chars = children.split('');
+  return (
+    <motion.span
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.5 }}
+      className={cn('inline-block', className)}
+    >
+      {chars.map((char, i) => (
+        <span key={i} className="inline-block overflow-hidden">
+          <motion.span
+            className="inline-block"
+            variants={{
+              hidden: { y: '120%' },
+              visible: { y: 0 },
+            }}
+            transition={{
+              duration: 0.6,
+              delay: delay + i * 0.025,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </motion.span>
+        </span>
+      ))}
+    </motion.span>
   );
 }

@@ -22,14 +22,11 @@ export const ImageComparisonSlider = React.forwardRef<HTMLDivElement, ImageCompa
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const x = clientX - rect.left;
-      let newPosition = (x / rect.width) * 100;
-      newPosition = Math.max(0, Math.min(100, newPosition));
-      setSliderPosition(newPosition);
+      setSliderPosition(Math.max(0, Math.min(100, (x / rect.width) * 100)));
     };
 
     const handleMouseMove = (e: MouseEvent) => { if (!isDragging) return; handleMove(e.clientX); };
     const handleTouchMove = (e: TouchEvent) => { if (!isDragging) return; handleMove(e.touches[0].clientX); };
-    const handleInteractionStart = () => { setIsDragging(true); };
     const handleInteractionEnd = () => { setIsDragging(false); };
 
     React.useEffect(() => {
@@ -39,9 +36,7 @@ export const ImageComparisonSlider = React.forwardRef<HTMLDivElement, ImageCompa
         document.addEventListener("mouseup", handleInteractionEnd);
         document.addEventListener("touchend", handleInteractionEnd);
         document.body.style.cursor = 'ew-resize';
-      } else {
-        document.body.style.cursor = '';
-      }
+      } else { document.body.style.cursor = ''; }
       return () => {
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("touchmove", handleTouchMove);
@@ -52,38 +47,30 @@ export const ImageComparisonSlider = React.forwardRef<HTMLDivElement, ImageCompa
     }, [isDragging]);
 
     return (
-      <div
-        ref={containerRef}
+      <div ref={containerRef}
         className={cn("relative w-full h-full overflow-hidden select-none group cursor-ew-resize", className)}
-        onMouseDown={handleInteractionStart}
-        onTouchStart={handleInteractionStart}
-        {...props}
-      >
-        {/* Right Image — checker bg for transparency */}
+        onMouseDown={() => setIsDragging(true)} onTouchStart={() => setIsDragging(true)} {...props}>
+        
         <div className="absolute inset-0 checker-bg" />
         <img src={rightImage} alt={altRight} className="absolute inset-0 w-full h-full object-cover pointer-events-none" draggable={false} />
-        <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg text-[10px] font-semibold text-white/90 bg-black/50 backdrop-blur-md z-20 uppercase tracking-wider">After</div>
+        <div className="absolute bottom-4 right-4 px-3 py-1.5 rounded-full text-[10px] font-semibold text-white/80 bg-black/40 backdrop-blur-md z-20 uppercase tracking-widest">After</div>
         
-        {/* Left Image — clipped */}
         <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none"
           style={{ clipPath: `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)` }}>
           <img src={leftImage} alt={altLeft} className="w-full h-full object-cover" draggable={false} />
-          <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded-lg text-[10px] font-semibold text-white/90 bg-black/50 backdrop-blur-md uppercase tracking-wider">Before</div>
+          <div className="absolute bottom-4 left-4 px-3 py-1.5 rounded-full text-[10px] font-semibold text-white/80 bg-black/40 backdrop-blur-md uppercase tracking-widest">Before</div>
         </div>
 
-        {/* Slider Handle */}
         <div className="absolute top-0 h-full" style={{ left: `calc(${sliderPosition}% - 1px)` }}>
-          <div className="absolute inset-y-0 w-0.5 bg-white shadow-md mx-auto"></div>
+          <div className="absolute inset-y-0 w-[2px] bg-white/80 mx-auto shadow-sm" />
           <div className={cn(
-            "absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-10 w-10 flex items-center justify-center rounded-full bg-white text-gray-700 shadow-lg border border-gray-200",
+            "absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-10 w-10 flex items-center justify-center rounded-full bg-cream border-2 border-white shadow-lg",
             "transition-all duration-200",
             isDragging && "scale-110 shadow-xl"
-          )}
-            role="slider" aria-valuenow={sliderPosition} aria-valuemin={0} aria-valuemax={100} aria-orientation="horizontal"
-          >
-            <div className="flex items-center">
-              <ChevronLeft className="h-3.5 w-3.5" />
-              <ChevronRight className="h-3.5 w-3.5" />
+          )} role="slider" aria-valuenow={sliderPosition} aria-valuemin={0} aria-valuemax={100}>
+            <div className="flex items-center text-ink-light">
+              <ChevronLeft className="h-3 w-3" />
+              <ChevronRight className="h-3 w-3" />
             </div>
           </div>
         </div>
