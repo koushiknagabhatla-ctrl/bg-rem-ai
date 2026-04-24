@@ -73,16 +73,16 @@ export function Navbar() {
             ) : !session ? (
               <>
                 <Link href="/login" className="text-[11px] font-semibold tracking-widest uppercase text-[#BFA899] hover:text-white transition-colors duration-300">Sign In</Link>
-                <LiquidButton size="lg" asChild>
-                  <Link href="/register">Get Started</Link>
-                </LiquidButton>
+                <Link href="/register">
+                  <LiquidButton size="lg">Get Started</LiquidButton>
+                </Link>
               </>
             ) : (
               <div className="flex items-center gap-4">
                 {!isToolPage && (
-                  <LiquidButton size="sm" asChild>
-                    <Link href="/tool">Studio</Link>
-                  </LiquidButton>
+                  <Link href="/tool">
+                    <LiquidButton size="sm">Studio</LiquidButton>
+                  </Link>
                 )}
                 <button onClick={handleSignOut} className="text-[11px] font-semibold tracking-widest uppercase text-[#BFA899] hover:text-red-400 transition-colors duration-300">
                   Sign Out
@@ -117,9 +117,9 @@ export function Navbar() {
               {!session ? (
                 <>
                   <Link href="/login" onClick={() => setMobileOpen(false)} className="glass3d px-8 py-3 border border-[#8B5E3C]/20 rounded-full text-center text-sm font-semibold text-white">Sign In</Link>
-                  <LiquidButton size="xl" asChild onClick={() => setMobileOpen(false)}>
-                    <Link href="/register">Get Started</Link>
-                  </LiquidButton>
+                  <Link href="/register" onClick={() => setMobileOpen(false)} className="w-full">
+                    <LiquidButton size="xl" className="w-full">Get Started</LiquidButton>
+                  </Link>
                 </>
               ) : (
                 <button onClick={() => { handleSignOut(); setMobileOpen(false); }} className="glass3d px-8 py-3 border border-[#8B5E3C]/20 rounded-full text-sm font-semibold text-white">Sign Out</button>

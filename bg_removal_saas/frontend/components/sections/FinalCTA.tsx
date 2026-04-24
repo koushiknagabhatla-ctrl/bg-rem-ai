@@ -63,9 +63,9 @@ export function FinalCTA() {
             50 free high-resolution extractions. No credit card required. Start building in seconds.
           </motion.p>
 
-          <LiquidButton size="xxl" asChild>
-            <Link href="/register">Begin Free Trial</Link>
-          </LiquidButton>
+          <Link href="/register">
+            <LiquidButton size="xxl">Begin Free Trial</LiquidButton>
+          </Link>
         </motion.div>
       </motion.div>
     </section>

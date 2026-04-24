@@ -85,9 +85,11 @@ export function Hero() {
           transition={{ duration: 1.5, delay: 1, ease: [0.16, 1, 0.3, 1] }} 
           className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full sm:w-auto z-20 mt-8"
         >
-          <LiquidButton size="xxl" asChild>
-            <Link href="/register">Start for Free</Link>
-          </LiquidButton>
+          <Link href="/register" className="w-full sm:w-auto">
+            <LiquidButton size="xxl" className="w-full">
+              Start for Free
+            </LiquidButton>
+          </Link>
           
           <a href="#demo" className="px-10 py-5 rounded-full border border-[#8B5E3C]/20 text-[#D4A574] font-semibold text-xs tracking-[0.2em] uppercase hover:bg-[#8B5E3C]/5 hover:border-[#8B5E3C]/50 transition-all duration-700 w-full sm:w-auto text-center hover:scale-105">
             See It Work
