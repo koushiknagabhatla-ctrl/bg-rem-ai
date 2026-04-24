@@ -37,15 +37,13 @@ export function CinematicIntro({ children }: { children: React.ReactNode }) {
             <span className="italic text-cream/60">AI</span>
           </motion.div>
         </div>
-        <div className="overflow-hidden mt-4">
+        <div className="overflow-hidden mt-2">
           <motion.div
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.4 }}
-            className="text-cream/50 text-xs tracking-[0.3em] uppercase"
-          >
-            Award Winning Edition
-          </motion.div>
+            className="w-12 h-px bg-cream/30 mx-auto"
+          />
         </div>
       </motion.div>
       

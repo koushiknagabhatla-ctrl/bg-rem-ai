@@ -31,7 +31,7 @@ export function Navbar() {
   const handleSignOut = async () => { await supabase.auth.signOut(); router.push('/'); };
 
   const handleToolClick = () => {
-    if (session) router.push('/');        // Signed in → go to workspace (page.tsx renders Workspace)
+    if (session) router.push('/tool');    // Signed in → go to workspace page
     else router.push('/login');            // Not signed in → go to sign in
   };
 
