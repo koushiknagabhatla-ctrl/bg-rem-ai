@@ -53,10 +53,9 @@ export function Navbar() {
         }`}
       >
         <div className="max-w-[1400px] mx-auto flex items-center justify-between">
-          {/* Logo */}
           <Link href="/" className="group flex items-center gap-1">
-            <span className="text-lg font-serif font-semibold tracking-tight text-ink">VCranks</span>
-            <span className="text-lg font-serif font-semibold italic text-ink/40 group-hover:text-ink/70 transition-colors duration-300">AI</span>
+            <span className="text-lg font-serif font-semibold tracking-tight text-white">VCranks</span>
+            <span className="text-lg font-serif font-semibold italic text-white/40 group-hover:text-white/70 transition-colors duration-300">AI</span>
           </Link>
 
           {/* Center nav — liquid glass pill */}
@@ -108,25 +107,25 @@ export function Navbar() {
                   onClick={handleSignOut}
                   data-signout
                   data-mascot="crying"
-                  className="hidden md:block text-sm text-ink/40 hover:text-ink transition-colors duration-300"
+                  className="hidden md:block text-sm text-white/40 hover:text-white transition-colors duration-300"
                 >
                   Sign Out
                 </button>
               ) : (
                 <div className="hidden md:flex items-center gap-2">
                   <Link href="/login" data-mascot="excited"
-                    className="text-sm text-ink/40 hover:text-ink transition-colors duration-300">
+                    className="text-sm text-white/40 hover:text-white transition-colors duration-300">
                     Sign In
                   </Link>
                   <Link href="/register" data-mascot="excited"
-                    className="group relative overflow-hidden px-5 py-2.5 rounded-full bg-ink text-cream-light text-sm font-medium hover:bg-ink/90 transition-colors duration-300">
+                    className="group relative overflow-hidden px-5 py-2.5 rounded-full bg-white text-black text-sm font-medium hover:bg-white/90 transition-colors duration-300">
                     Get Started
                   </Link>
                 </div>
               )
             )}
             <button onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden w-9 h-9 flex items-center justify-center text-ink/50 hover:text-ink transition-colors">
+              className="md:hidden w-9 h-9 flex items-center justify-center text-white/50 hover:text-white transition-colors">
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>

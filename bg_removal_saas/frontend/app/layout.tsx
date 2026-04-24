@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="font-sans antialiased bg-cream">
+      <body className="font-sans antialiased bg-[#050508] text-white">
         <SmoothScrollProvider>
           <CustomCursor />
           <Navbar />
