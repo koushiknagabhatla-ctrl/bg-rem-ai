@@ -13,7 +13,7 @@ export function CinematicIntro({ children }: { children: React.ReactNode }) {
     // Prevent scrolling while intro is playing
     document.body.style.overflow = 'hidden';
 
-    // Simulate loading progress
+    // Simulate loading progress much faster (zero lag)
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
@@ -21,17 +21,17 @@ export function CinematicIntro({ children }: { children: React.ReactNode }) {
           setTimeout(() => {
             setLoading(false);
             document.body.style.overflow = 'unset';
-          }, 800);
+          }, 200);
           return 100;
         }
-        return prev + Math.floor(Math.random() * 15);
+        return prev + 25;
       });
-    }, 150);
+    }, 50);
 
     // Swap words rapidly
     const wordInterval = setInterval(() => {
       setActiveWord((prev) => (prev < words.length - 1 ? prev + 1 : prev));
-    }, 400);
+    }, 150);
 
     return () => {
       clearInterval(progressInterval);
@@ -89,9 +89,12 @@ export function CinematicIntro({ children }: { children: React.ReactNode }) {
           </motion.div>
         )}
       </AnimatePresence>
-      <div className={loading ? 'opacity-0' : 'opacity-100 transition-opacity duration-1000'}>
-        {children}
-      </div>
+      {/* 
+        IMPORTANT: Do not wrap children in opacity-0 or conditional rendering. 
+        Framer Motion's whileInView needs the DOM nodes to be fully present 
+        and calculating correctly behind the black intro overlay so they don't break. 
+      */}
+      {children}
     </>
   );
 }
