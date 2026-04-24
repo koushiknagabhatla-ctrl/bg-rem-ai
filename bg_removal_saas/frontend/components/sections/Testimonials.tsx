@@ -91,7 +91,7 @@ export function Testimonials() {
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-[#8B5E3C]/0 via-[#8B5E3C]/0 to-[#C4956A]/5 group-hover:to-[#C4956A]/15 rounded-[3rem] transition-all duration-700 blur-xl" />
                   
-                  <div className="relative h-full flex flex-col justify-between p-8 md:p-12 lg:p-14 rounded-[3rem] border border-[#8B5E3C]/20 glass3d bg-[#0A0604]/20 backdrop-blur-[24px] shadow-[0_20px_40px_rgba(0,0,0,0.4)] group-hover:border-[#C4956A]/40 group-hover:bg-[#0A0604]/30 transition-all duration-500 overflow-hidden">
+                  <div className="relative h-full flex flex-col justify-between p-8 md:p-12 lg:p-14 !rounded-[3rem] border border-[#8B5E3C]/20 glass3d bg-[#0A0604]/20 backdrop-blur-[24px] shadow-[0_20px_40px_rgba(0,0,0,0.4)] group-hover:border-[#C4956A]/40 group-hover:bg-[#0A0604]/30 transition-all duration-500 overflow-hidden">
                     
                     <Quote className="absolute top-10 right-10 w-24 h-24 text-[#C4956A]/[0.05] transform group-hover:scale-110 transition-transform duration-700 pointer-events-none" />
 

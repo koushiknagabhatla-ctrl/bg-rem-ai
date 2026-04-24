@@ -22,7 +22,6 @@ export function LandingView() {
         <SocialProof />
         <BeforeAfter />
         <Performance />
-        <HowItWorks />
         <AboutSection />
         <Testimonials />
         <FinalCTA />
