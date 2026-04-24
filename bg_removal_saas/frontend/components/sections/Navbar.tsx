@@ -42,10 +42,10 @@ export function Navbar() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.1, ease }}
-        className={`fixed top-0 w-full z-50 px-6 md:px-10 transition-all duration-500 ${
+        className={`fixed top-0 w-full z-50 px-6 md:px-10 py-3 transition-all duration-500 ${
           scrolled 
-            ? 'py-3 bg-[#0C0806]/80 backdrop-blur-xl border-b border-[#8B5E3C]/10' 
-            : 'py-5 bg-transparent'
+            ? 'bg-[#0C0806]/80 backdrop-blur-xl border-b border-[#8B5E3C]/10' 
+            : 'bg-transparent'
         }`}
       >
         <div className="max-w-[1280px] mx-auto grid grid-cols-2 md:grid-cols-3 items-center">

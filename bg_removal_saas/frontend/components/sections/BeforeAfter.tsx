@@ -10,14 +10,16 @@ export function BeforeAfter() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start end", "end start"]
+    offset: ["0 1", "0.5 0.7"]
   });
 
-  const cardY = useTransform(scrollYProgress, [0, 0.5, 1], [120, 0, -40]);
-  const cardRotateX = useTransform(scrollYProgress, [0, 0.4, 1], [8, 0, -2]);
-  const cardScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.92, 1, 0.98]);
+  const cardY = useTransform(scrollYProgress, [0, 1], [150, 0]);
+  const cardRotateX = useTransform(scrollYProgress, [0, 1], [15, 0]);
+  const cardScale = useTransform(scrollYProgress, [0, 1], [0.9, 1]);
+  const cardOpacity = useTransform(scrollYProgress, [0, 0.8], [0, 1]);
+  
   const headerY = useTransform(scrollYProgress, [0, 0.5], [60, 0]);
-  const headerOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+  const headerOpacity = useTransform(scrollYProgress, [0, 0.4], [0, 1]);
 
   return (
     <section ref={sectionRef} id="demo" className="relative py-32 md:py-48 px-6 md:px-16 overflow-hidden [perspective:1500px]">
@@ -40,7 +42,7 @@ export function BeforeAfter() {
 
         {/* Single large comparison card with 3D reveal */}
         <motion.div
-          style={{ y: cardY, rotateX: cardRotateX, scale: cardScale }}
+          style={{ y: cardY, rotateX: cardRotateX, scale: cardScale, opacity: cardOpacity }}
           className="glass3d p-4 md:p-6 rounded-3xl border border-[#8B5E3C]/20 shadow-2xl shadow-black/50 transform-gpu max-w-5xl mx-auto overflow-hidden"
         >
           <div className="w-full h-[50vh] md:h-[70vh] rounded-2xl overflow-hidden bg-[#1A0E08]">

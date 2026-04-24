@@ -31,7 +31,7 @@ export function NavHeader({ session, handleSignOut }: { session: any, handleSign
 
   return (
     <ul
-      className="relative mx-auto flex w-fit rounded-full glass3d p-1 border border-[#8B5E3C]/20"
+      className="relative mx-auto flex w-fit rounded-full bg-[#1A0E08]/60 backdrop-blur-md p-1 border border-[#8B5E3C]/20"
       onMouseLeave={() => setPosition((pv) => ({ ...pv, opacity: 0 }))}
     >
       {items.map((item) => (

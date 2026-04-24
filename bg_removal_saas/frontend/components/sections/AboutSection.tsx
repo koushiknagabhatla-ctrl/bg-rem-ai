@@ -3,14 +3,32 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 
-const ease = [0.16, 1, 0.3, 1] as const;
-
 const values = [
   { label: 'Neural Precision', value: 'Our custom U-Net architecture was trained exclusively on the P3M-10K dataset, producing sub-pixel alpha mattes that rival professional manual cutouts.' },
   { label: 'Zero Compromise', value: 'We never downscale your images. Every pixel of your original resolution is preserved through our INT8 ONNX inference pipeline.' },
   { label: 'Privacy First', value: 'All processing happens in encrypted memory buffers. Your images are never written to disk, never logged, never stored. Full data sovereignty.' },
   { label: 'Built to Scale', value: 'Distributed across Vercel Edge and Render infrastructure. Process 40,000+ images per day without breaking a sweat.' },
 ];
+
+function ContinuousValueCard({ v, index }: { v: typeof values[0], index: number }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: cardRef, offset: ["0 1", "0.5 0.8"] });
+
+  const y = useTransform(scrollYProgress, [0, 1], [80, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const rotateX = useTransform(scrollYProgress, [0, 1], [15, 0]);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      style={{ y, opacity, rotateX }}
+      className="glass3d p-8 border border-[#8B5E3C]/10 group hover:border-[#8B5E3C]/30 transition-colors duration-500 transform-gpu"
+    >
+      <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#E8B98A] mb-4 block group-hover:text-white transition-colors duration-300">{v.label}</span>
+      <p className="text-base text-[#BFA899] font-light leading-relaxed">{v.value}</p>
+    </motion.div>
+  );
+}
 
 export function AboutSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -19,17 +37,15 @@ export function AboutSection() {
     offset: ["start end", "end start"]
   });
 
-  const headerY = useTransform(scrollYProgress, [0, 0.3], [100, 0]);
-  const headerOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
-  const leftY = useTransform(scrollYProgress, [0.1, 0.5], [60, 0]);
-  const rightY = useTransform(scrollYProgress, [0.15, 0.55], [80, 0]);
+  const headerY = useTransform(scrollYProgress, [0, 0.4], [100, 0]);
+  const headerOpacity = useTransform(scrollYProgress, [0, 0.25], [0, 1]);
+  const leftY = useTransform(scrollYProgress, [0.1, 0.6], [120, 0]);
+  const leftRotate = useTransform(scrollYProgress, [0.1, 0.6], [-5, 0]);
 
   return (
-    <section ref={sectionRef} id="about" className="py-32 md:py-48 px-6 md:px-16 relative overflow-hidden">
-      {/* Subtle background glow */}
-      <div className="absolute top-1/3 left-1/4 w-[600px] h-[600px] bg-[#8B5E3C]/5 rounded-full blur-[150px] pointer-events-none" />
-
+    <section ref={sectionRef} id="about" className="py-32 md:py-48 px-6 md:px-16 relative overflow-hidden [perspective:2000px]">
       <div className="max-w-[1280px] mx-auto relative z-10">
+        
         {/* Section Header */}
         <motion.div style={{ y: headerY, opacity: headerOpacity }} className="mb-24 transform-gpu">
           <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-[#E8B98A] mb-6 block">About VCranks</span>
@@ -43,9 +59,10 @@ export function AboutSection() {
 
         {/* Two Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          
           {/* Left: Mission Statement in glass */}
-          <motion.div style={{ y: leftY }} className="transform-gpu">
-            <div className="glass3d p-12 md:p-16 border border-[#8B5E3C]/20 relative overflow-hidden">
+          <motion.div style={{ y: leftY, rotateY: leftRotate }} className="transform-gpu">
+            <div className="glass3d p-12 md:p-16 border border-[#8B5E3C]/20 relative overflow-hidden shadow-2xl">
               {/* Background watermark */}
               <div className="absolute -top-8 -right-8 opacity-[0.03] pointer-events-none select-none">
                 <span className="font-display text-[12rem] font-extrabold text-[#C4956A]">V</span>
@@ -70,21 +87,11 @@ export function AboutSection() {
           </motion.div>
 
           {/* Right: Values Grid */}
-          <motion.div style={{ y: rightY }} className="flex flex-col gap-6 transform-gpu">
+          <div className="flex flex-col gap-6">
             {values.map((v, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 1, delay: i * 0.1, ease }}
-                className="glass3d p-8 border border-[#8B5E3C]/10 group hover:border-[#8B5E3C]/30 transition-colors duration-500"
-              >
-                <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#E8B98A] mb-4 block group-hover:text-white transition-colors duration-300">{v.label}</span>
-                <p className="text-base text-[#BFA899] font-light leading-relaxed">{v.value}</p>
-              </motion.div>
+              <ContinuousValueCard key={i} v={v} index={i} />
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
