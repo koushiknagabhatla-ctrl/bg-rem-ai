@@ -2,14 +2,13 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Environment, ContactShadows, useCursor, RoundedBox } from '@react-three/drei';
+import { Float, Environment, ContactShadows, useCursor } from '@react-three/drei';
 import * as THREE from 'three';
 
-function MinimalAnimeGirl({ mouseTarget }: { mouseTarget: React.MutableRefObject<THREE.Vector3> }) {
+function PremiumAnimeCompanion({ mouseTarget }: { mouseTarget: React.MutableRefObject<THREE.Vector3> }) {
+  const groupRef = useRef<THREE.Group>(null);
   const headRef = useRef<THREE.Group>(null);
-  const [hovered, setHovered] = useState(false);
   const [blink, setBlink] = useState(false);
-  useCursor(hovered);
 
   // Blinking logic
   useEffect(() => {
@@ -20,206 +19,167 @@ function MinimalAnimeGirl({ mouseTarget }: { mouseTarget: React.MutableRefObject
     return () => clearInterval(blinkInterval);
   }, []);
 
-  const skinColor = '#Fdf2ee';
-  const hairColor = '#2D2A4A';
-  const eyeColor = '#b392f0';
+  const skinColor = '#FDFaF5';
+  const hairColor = '#1A1A1A';
+  const eyeColor = '#6366F1';
 
   useFrame((state, delta) => {
-    if (headRef.current) {
-      // Look at logic
-      const targetPos = new THREE.Vector3(
-        mouseTarget.current.x * 5,
-        mouseTarget.current.y * 5,
-        4
-      );
-      
-      const currentRotation = headRef.current.quaternion.clone();
-      const targetMatrix = new THREE.Matrix4().lookAt(
-        headRef.current.position,
-        targetPos,
-        new THREE.Vector3(0, 1, 0)
-      );
-      const targetQuaternion = new THREE.Quaternion().setFromRotationMatrix(targetMatrix);
-      
-      // Smoothly interpolate rotation
-      headRef.current.quaternion.slerp(targetQuaternion, 6 * delta);
+    if (headRef.current && groupRef.current) {
+      // Get mouse coordinates (-1 to 1)
+      const mx = (state.pointer.x * window.innerWidth) / 2;
+      const my = (state.pointer.y * window.innerHeight) / 2;
 
-      // Bounce on hover
-      const targetY = hovered ? 0.3 : 0;
-      headRef.current.position.y = THREE.MathUtils.lerp(headRef.current.position.y, targetY, 8 * delta);
+      // Mouse target interpolation
+      mouseTarget.current.x = THREE.MathUtils.lerp(mouseTarget.current.x, state.pointer.x, 8 * delta);
+      mouseTarget.current.y = THREE.MathUtils.lerp(mouseTarget.current.y, state.pointer.y, 8 * delta);
+
+      // Rotate group slightly based on cursor
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, mouseTarget.current.x * 0.5, 4 * delta);
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, -mouseTarget.current.y * 0.3, 4 * delta);
+      
+      // Specifically rotate the head more dramatically, ensuring +Z is forward
+      // The face is built on the +Z axis. If we just rotate X/Y, we maintain forward visibility.
+      headRef.current.rotation.y = mouseTarget.current.x * 0.6;
+      headRef.current.rotation.x = -mouseTarget.current.y * 0.4;
     }
   });
 
   return (
-    <group onPointerOver={() => setHovered(true)} onPointerOut={() => setHovered(false)} scale={hovered ? 1.05 : 1}>
-      <Float speed={2.5} rotationIntensity={0.2} floatIntensity={1}>
+    <group ref={groupRef} position={[0, -0.6, 0]}>
+      <Float speed={2} rotationIntensity={0.1} floatIntensity={0.8}>
         <group position={[0, 0, 0]}>
           
           {/* Head & Hair Group */}
-          <group ref={headRef} position={[0, 1.2, 0]}>
+          <group ref={headRef} position={[0, 1.4, 0]}>
             
-            {/* Cute Rounded Head */}
+            {/* Face/Head Base (Looking +Z) */}
             <mesh castShadow receiveShadow>
               <sphereGeometry args={[1, 64, 64]} />
-              <meshStandardMaterial color={skinColor} roughness={0.3} metalness={0.1} />
+              <meshStandardMaterial color={skinColor} roughness={0.2} />
             </mesh>
 
-            {/* Hair Base */}
+            {/* Premium Hair (Glassy/Smooth) */}
             <mesh position={[0, 0.1, -0.1]} castShadow>
               <sphereGeometry args={[1.05, 64, 64, 0, Math.PI * 2, 0, Math.PI * 0.55]} />
-              <meshStandardMaterial color={hairColor} roughness={0.6} />
+              <meshPhysicalMaterial color={hairColor} roughness={0.3} clearcoat={1} clearcoatRoughness={0.1} />
             </mesh>
             
-            {/* Front Bangs */}
-            <mesh position={[0, 0.6, 0.7]} rotation={[0.4, 0, 0]}>
-              <capsuleGeometry args={[0.3, 1.4, 4, 16]} />
-              <meshStandardMaterial color={hairColor} />
-            </mesh>
-            <mesh position={[-0.5, 0.4, 0.6]} rotation={[0.2, 0, -0.4]}>
-              <capsuleGeometry args={[0.25, 1.2, 4, 16]} />
-              <meshStandardMaterial color={hairColor} />
-            </mesh>
-            <mesh position={[0.5, 0.4, 0.6]} rotation={[0.2, 0, 0.4]}>
-              <capsuleGeometry args={[0.25, 1.2, 4, 16]} />
-              <meshStandardMaterial color={hairColor} />
-            </mesh>
-
-            {/* Side Hair Tails */}
-            <mesh position={[-0.9, -0.2, 0]} rotation={[0, 0, 0.3]} castShadow>
-              <capsuleGeometry args={[0.25, 1.5, 8, 16]} />
-              <meshStandardMaterial color={hairColor} />
-            </mesh>
-            <mesh position={[0.9, -0.2, 0]} rotation={[0, 0, -0.3]} castShadow>
-              <capsuleGeometry args={[0.25, 1.5, 8, 16]} />
-              <meshStandardMaterial color={hairColor} />
-            </mesh>
-
-            {/* Hair Accessory (Ribbon/Butterfly) */}
-            <group position={[0.7, 0.7, 0.4]} rotation={[0.5, 0.5, -0.4]}>
-              <mesh>
-                <coneGeometry args={[0.3, 0.6, 4]} />
-                <meshStandardMaterial color={eyeColor} />
+            {/* Front Bangs (Curved) */}
+            <group position={[0, 0, 0]}>
+              <mesh position={[-0.4, 0.6, 0.8]} rotation={[0.4, 0.3, -0.2]}>
+                <capsuleGeometry args={[0.2, 1.2, 8, 16]} />
+                <meshPhysicalMaterial color={hairColor} roughness={0.3} clearcoat={1} />
               </mesh>
-              <mesh rotation={[Math.PI, 0, 0]} position={[0, -0.3, 0]}>
-                <coneGeometry args={[0.3, 0.6, 4]} />
-                <meshStandardMaterial color={eyeColor} />
+              <mesh position={[0.4, 0.6, 0.8]} rotation={[0.4, -0.3, 0.2]}>
+                <capsuleGeometry args={[0.2, 1.2, 8, 16]} />
+                <meshPhysicalMaterial color={hairColor} roughness={0.3} clearcoat={1} />
               </mesh>
             </group>
 
-            {/* Anime Eyes */}
-            <group position={[0, -0.1, 0.9]}>
-              {/* Left Eye */}
-              <group position={[-0.35, 0, 0]}>
-                {hovered ? (
-                  // Happy ^ eye
-                  <mesh rotation={[0, 0, 0.5]}>
-                    <capsuleGeometry args={[0.04, 0.2, 4, 8]} />
+            {/* Hair Accessories (Glowing elements typical of premium Awwwards models) */}
+            <mesh position={[-0.95, 0.5, 0.2]} rotation={[0, 0, -0.3]}>
+              <boxGeometry args={[0.1, 0.8, 0.4]} />
+              <meshStandardMaterial color={eyeColor} emissive={eyeColor} emissiveIntensity={0.5} />
+            </mesh>
+            <mesh position={[0.95, 0.5, 0.2]} rotation={[0, 0, 0.3]}>
+              <boxGeometry args={[0.1, 0.8, 0.4]} />
+              <meshStandardMaterial color={eyeColor} emissive={eyeColor} emissiveIntensity={0.5} />
+            </mesh>
+
+            {/* Eyes (Positioned on the +Z curve) */}
+            <group position={[0, -0.1, 0.88]}>
+              {blink ? (
+                // Closed Eyes
+                <>
+                  <mesh position={[-0.35, 0, 0.08]} rotation={[0, -0.2, 0]}>
+                    <capsuleGeometry args={[0.02, 0.25, 4, 8]} />
                     <meshBasicMaterial color="#111" />
                   </mesh>
-                ) : blink ? (
-                  // Closed - eye
-                  <mesh>
-                    <capsuleGeometry args={[0.03, 0.3, 4, 8]} />
+                  <mesh position={[0.35, 0, 0.08]} rotation={[0, 0.2, 0]}>
+                    <capsuleGeometry args={[0.02, 0.25, 4, 8]} />
                     <meshBasicMaterial color="#111" />
                   </mesh>
-                ) : (
-                  // Open Anime Eye
-                  <>
+                </>
+              ) : (
+                // Open Eyes
+                <>
+                  {/* Left Eye */}
+                  <group position={[-0.35, 0, 0.05]} rotation={[0, -0.3, 0]}>
                     <mesh>
                       <sphereGeometry args={[0.15, 32, 32]} />
                       <meshBasicMaterial color="#111" />
                     </mesh>
-                    {/* Iris */}
-                    <mesh position={[0, -0.05, 0.05]}>
+                    <mesh position={[0, -0.05, 0.06]}>
                       <sphereGeometry args={[0.12, 32, 32]} />
-                      <meshBasicMaterial color={eyeColor} />
+                      <meshStandardMaterial color={eyeColor} emissive={eyeColor} emissiveIntensity={0.5} />
                     </mesh>
-                    {/* Highlight */}
                     <mesh position={[0.05, 0.05, 0.12]}>
                       <sphereGeometry args={[0.04, 16, 16]} />
                       <meshBasicMaterial color="white" />
                     </mesh>
-                  </>
-                )}
-              </group>
-
-              {/* Right Eye */}
-              <group position={[0.35, 0, 0]}>
-                {hovered ? (
-                  // Happy ^ eye
-                  <mesh rotation={[0, 0, -0.5]}>
-                    <capsuleGeometry args={[0.04, 0.2, 4, 8]} />
-                    <meshBasicMaterial color="#111" />
-                  </mesh>
-                ) : blink ? (
-                  // Closed - eye
-                  <mesh>
-                    <capsuleGeometry args={[0.03, 0.3, 4, 8]} />
-                    <meshBasicMaterial color="#111" />
-                  </mesh>
-                ) : (
-                  // Open Anime Eye
-                  <>
+                  </group>
+                  
+                  {/* Right Eye */}
+                  <group position={[0.35, 0, 0.05]} rotation={[0, 0.3, 0]}>
                     <mesh>
                       <sphereGeometry args={[0.15, 32, 32]} />
                       <meshBasicMaterial color="#111" />
                     </mesh>
-                    {/* Iris */}
-                    <mesh position={[0, -0.05, 0.05]}>
+                    <mesh position={[0, -0.05, 0.06]}>
                       <sphereGeometry args={[0.12, 32, 32]} />
-                      <meshBasicMaterial color={eyeColor} />
+                      <meshStandardMaterial color={eyeColor} emissive={eyeColor} emissiveIntensity={0.5} />
                     </mesh>
-                    {/* Highlight */}
                     <mesh position={[-0.05, 0.05, 0.12]}>
                       <sphereGeometry args={[0.04, 16, 16]} />
                       <meshBasicMaterial color="white" />
                     </mesh>
-                  </>
-                )}
-              </group>
+                  </group>
+                </>
+              )}
             </group>
 
-            {/* Mouth */}
-            <mesh position={[0, -0.35, 0.95]} rotation={[hovered ? Math.PI / 2 : 0, 0, 0]}>
-              {hovered ? (
-                // Happy open mouth (Torus)
-                <torusGeometry args={[0.1, 0.03, 16, 32, Math.PI]} />
-              ) : (
-                // Tiny dot mouth
-                <sphereGeometry args={[0.03, 8, 8]} />
-              )}
-              <meshBasicMaterial color={hovered ? "#ff6b6b" : "#444"} />
+            {/* Tiny Kawaii Mouth */}
+            <mesh position={[0, -0.35, 0.95]} rotation={[0, 0, 0]}>
+              <sphereGeometry args={[0.03, 16, 16]} />
+              <meshBasicMaterial color="#444" />
             </mesh>
 
             {/* Blushes */}
-            <mesh position={[-0.5, -0.25, 0.82]}>
-              <circleGeometry args={[0.15, 32]} />
-              <meshBasicMaterial color="#ff9999" transparent opacity={0.5} />
+            <mesh position={[-0.45, -0.2, 0.85]} rotation={[0, -0.3, 0]}>
+              <circleGeometry args={[0.12, 32]} />
+              <meshBasicMaterial color="#ff9999" transparent opacity={0.6} />
             </mesh>
-            <mesh position={[0.5, -0.25, 0.82]}>
-              <circleGeometry args={[0.15, 32]} />
-              <meshBasicMaterial color="#ff9999" transparent opacity={0.5} />
+            <mesh position={[0.45, -0.2, 0.85]} rotation={[0, 0.3, 0]}>
+              <circleGeometry args={[0.12, 32]} />
+              <meshBasicMaterial color="#ff9999" transparent opacity={0.6} />
             </mesh>
           </group>
 
-          {/* Body (Minimalist floating dress) */}
-          <group position={[0, -0.5, 0]}>
+          {/* Minimalist Floating Futuristic Body */}
+          <group position={[0, -0.2, 0]}>
+            {/* Main torso cloak */}
             <mesh castShadow receiveShadow>
-              <coneGeometry args={[0.8, 1.5, 32, 1, true]} />
-              <meshStandardMaterial color="#fff" side={THREE.DoubleSide} roughness={0.2} metalness={0.1} />
+              <coneGeometry args={[0.9, 1.8, 32, 1, true]} />
+              <meshPhysicalMaterial color="#ffffff" roughness={0.1} transmission={0.9} thickness={0.5} ior={1.5} />
             </mesh>
-            {/* Belt */}
-            <mesh position={[0, 0.5, 0]}>
-              <cylinderGeometry args={[0.3, 0.3, 0.1, 32]} />
+            
+            {/* Inner Core */}
+            <mesh position={[0, 0.2, 0]}>
+              <cylinderGeometry args={[0.3, 0.4, 0.8, 16]} />
               <meshStandardMaterial color={hairColor} />
             </mesh>
-          </group>
 
+            {/* Glowing ring/collar */}
+            <mesh position={[0, 0.8, 0]}>
+              <torusGeometry args={[0.4, 0.05, 16, 32]} />
+              <meshStandardMaterial color={eyeColor} emissive={eyeColor} emissiveIntensity={1} />
+            </mesh>
+          </group>
         </group>
       </Float>
       
-      {/* Dynamic floor shadow */}
-      <ContactShadows position={[0, -1.8, 0]} opacity={0.4} scale={5} blur={2.5} far={4} />
+      {/* High-quality dynamic floor shadow */}
+      <ContactShadows position={[0, -1.8, 0]} opacity={0.6} scale={10} blur={2.5} far={4} color="#000" />
     </group>
   );
 }
@@ -227,19 +187,14 @@ function MinimalAnimeGirl({ mouseTarget }: { mouseTarget: React.MutableRefObject
 function Scene() {
   const mouseTarget = useRef(new THREE.Vector3());
 
-  useFrame((state) => {
-    // Get mouse coordinates roughly from -1 to 1 based on screen size
-    mouseTarget.current.x = THREE.MathUtils.lerp(mouseTarget.current.x, state.pointer.x, 0.1);
-    mouseTarget.current.y = THREE.MathUtils.lerp(mouseTarget.current.y, state.pointer.y, 0.1);
-  });
-
   return (
     <>
-      <ambientLight intensity={1} color="#fff1e6" />
-      <directionalLight position={[10, 10, 5]} intensity={1.5} color="#fff" castShadow shadow-mapSize={[1024, 1024]} />
-      <spotLight position={[-10, 5, 10]} intensity={2} color="#b392f0" />
-      <Environment preset="city" />
-      <MinimalAnimeGirl mouseTarget={mouseTarget} />
+      <ambientLight intensity={1.2} color="#ffffff" />
+      <directionalLight position={[10, 20, 10]} intensity={2} color="#ffffff" castShadow shadow-mapSize={[2048, 2048]} />
+      <spotLight position={[-10, 5, 10]} intensity={3} color="#6366F1" penumbra={1} />
+      <spotLight position={[10, -5, 10]} intensity={2} color="#ff9999" penumbra={1} />
+      <Environment preset="studio" />
+      <PremiumAnimeCompanion mouseTarget={mouseTarget} />
     </>
   );
 }
@@ -251,9 +206,9 @@ export function Awwwards3DAssistant({ className }: { className?: string }) {
   if (!mounted) return null;
 
   return (
-    // We add absolute positioning to lock it to the right corner, out of the text's way
-    <div className={`fixed bottom-[10%] right-[5%] w-[400px] h-[500px] z-[40] pointer-events-auto ${className || ''}`}>
-      <Canvas shadows camera={{ position: [0, 1.5, 7], fov: 35 }}>
+    // Lowered z-index and removed pointer events so it NEVER blocks buttons
+    <div className={`fixed bottom-0 right-[5%] w-[500px] h-[600px] z-[0] pointer-events-none opacity-90 transition-opacity duration-1000 ${className || ''}`}>
+      <Canvas shadows camera={{ position: [0, 1.5, 8], fov: 35 }} gl={{ antialias: true, alpha: true }}>
         <Scene />
       </Canvas>
     </div>

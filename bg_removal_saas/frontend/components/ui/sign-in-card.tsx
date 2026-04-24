@@ -18,7 +18,7 @@ export function SignInCard() {
     e.preventDefault(); setIsLoading(true); setError(null);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) { setError(error.message); setIsLoading(false); }
-    else { router.push('/'); }
+    else { router.push('/tool'); }
   };
 
   const handleGoogleSignIn = async () => {
@@ -27,8 +27,8 @@ export function SignInCard() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center px-4 section-cream relative">
-      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="absolute top-6 left-6 z-20">
+    <div className="min-h-screen pt-32 pb-20 w-full flex flex-col items-center justify-center px-4 section-cream relative">
+      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="absolute top-[100px] left-6 z-20">
         <Link href="/" className="flex items-center gap-2 text-ink-muted hover:text-ink text-sm transition-colors duration-300">
           <ArrowLeft className="w-4 h-4" /> Home
         </Link>

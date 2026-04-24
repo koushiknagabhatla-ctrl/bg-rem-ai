@@ -46,10 +46,10 @@ function TiltCard({ children, className }: { children: React.ReactNode; classNam
 /* ─── Line Reveal ─── */
 function LineReveal({ children, delay = 0 }: { children: string; delay?: number }) {
   return (
-    <span className="block overflow-hidden pb-3">
+    <span className="block overflow-hidden pb-4">
       <motion.span className="block"
-        initial={{ y: '130%', rotate: 3 }}
-        whileInView={{ y: 0, rotate: 0 }}
+        initial={{ y: '130%' }}
+        whileInView={{ y: 0 }}
         viewport={{ once: true, amount: 0.8 }}
         transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1], delay }}>
         {children}
@@ -81,10 +81,10 @@ export function AboutView() {
             </ScrollReveal>
             <h1 className="text-4xl md:text-[5rem] font-serif font-bold leading-[0.95] tracking-tight mb-12 text-ink">
               <LineReveal delay={0.1}>Building the future</LineReveal>
-              <span className="block overflow-hidden relative">
+              <span className="block overflow-hidden relative pb-4">
                 <motion.span className="block italic text-ink"
-                  initial={{ y: '130%', rotate: 3 }}
-                  whileInView={{ y: 0, rotate: 0 }}
+                  initial={{ y: '130%' }}
+                  whileInView={{ y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1], delay: 0.25 }}>
                   of image editing.

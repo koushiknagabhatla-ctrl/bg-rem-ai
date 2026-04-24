@@ -24,11 +24,11 @@ function SectionLabel({ num, label }: { num: string; label: string }) {
 /* ─── Animated Line Reveal ─── */
 function LineReveal({ children, delay = 0 }: { children: string; delay?: number }) {
   return (
-    <span className="block overflow-hidden pb-3">
+    <span className="block overflow-hidden pb-4">
       <motion.span
         className="block"
-        initial={{ y: '130%', rotate: 4 }}
-        whileInView={{ y: 0, rotate: 0 }}
+        initial={{ y: '130%' }}
+        whileInView={{ y: 0 }}
         viewport={{ once: true, amount: 0.8 }}
         transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1], delay }}
       >
@@ -74,20 +74,15 @@ export function LandingView() {
 
             <h1 className="text-[clamp(3.5rem,10vw,10.5rem)] font-serif font-bold leading-[0.88] tracking-[-0.04em] mb-12 text-ink">
               <LineReveal delay={1.8}>Remove any</LineReveal>
-              <span className="block overflow-hidden relative">
+              <span className="block overflow-hidden relative pb-4">
                 <motion.span
                   className="block italic text-ink pr-8"
-                  initial={{ y: '130%', rotate: 4 }}
-                  animate={{ y: 0, rotate: 0 }}
+                  initial={{ y: '130%' }}
+                  animate={{ y: 0 }}
                   transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1], delay: 1.95 }}
                 >
                   background
                 </motion.span>
-                {/* Visual accent line behind text */}
-                <motion.div 
-                  initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 2.3, duration: 1.4, ease: [0.76, 0, 0.24, 1] }}
-                  className="absolute bottom-2 lg:bottom-4 left-0 w-full h-1 bg-ink/10 -z-10 origin-left rounded-full" 
-                />
               </span>
               <LineReveal delay={2.1}>instantly.</LineReveal>
             </h1>
