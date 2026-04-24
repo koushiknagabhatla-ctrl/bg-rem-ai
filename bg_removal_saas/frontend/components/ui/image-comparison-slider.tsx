@@ -12,11 +12,21 @@ interface ImageComparisonSliderProps extends React.HTMLAttributes<HTMLDivElement
   initialPosition?: number;
 }
 
-export const ImageComparisonSlider = React.forwardRef<HTMLDivElement, ImageComparisonSliderProps>(
+export interface ImageComparisonSliderRef {
+  setPosition: (val: number) => void;
+}
+
+export const ImageComparisonSlider = React.forwardRef<ImageComparisonSliderRef, ImageComparisonSliderProps>(
   ({ className, leftImage, rightImage, altLeft = "Before", altRight = "After", initialPosition = 50, ...props }, ref) => {
     const [sliderPosition, setSliderPosition] = React.useState(initialPosition);
     const [isDragging, setIsDragging] = React.useState(false);
     const containerRef = React.useRef<HTMLDivElement>(null);
+
+    React.useImperativeHandle(ref, () => ({
+      setPosition: (val: number) => {
+        setSliderPosition(val);
+      }
+    }));
 
     const handleMove = (clientX: number) => {
       if (!containerRef.current) return;
