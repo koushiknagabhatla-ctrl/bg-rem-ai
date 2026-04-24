@@ -42,13 +42,30 @@ export function BeforeAfter() {
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, ease }}
-          className="mb-20 text-center md:text-left"
+          className="mb-20 text-center md:text-left flex flex-col md:flex-row md:items-end justify-between gap-8"
         >
-          <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-[#C4956A] mb-4 block">Product Showcase</span>
-          <h2 className="font-display text-4xl md:text-6xl font-extrabold text-white leading-tight max-w-3xl">
-            Micro-level precision. <br />
-            <span className="text-[#8B5E3C] italic font-medium">Even on complex subjects.</span>
-          </h2>
+          <div>
+            <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-[#C4956A] mb-4 block">Product Showcase</span>
+            <h2 className="font-display text-4xl md:text-6xl font-extrabold text-white leading-tight max-w-3xl">
+              Micro-level precision. <br />
+              <span className="text-[#8B5E3C] italic font-medium">Even on complex subjects.</span>
+            </h2>
+          </div>
+          
+          {/* Slide Instruction Hint */}
+          <motion.div
+             initial={{ opacity: 0, scale: 0.9, x: 20 }}
+             animate={isInView ? { opacity: 1, scale: 1, x: 0 } : {}}
+             transition={{ duration: 1, delay: 1.5, ease }}
+             className="glass3d hidden md:flex items-center gap-3 px-6 py-3 rounded-full mb-2 shrink-0 border border-[#8B5E3C]/30"
+          >
+             <div className="w-8 h-8 rounded-full bg-[#1A0E08] border border-[#8B5E3C]/40 flex items-center justify-center">
+                <svg className="w-4 h-4 text-[#E8B98A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+             </div>
+             <span className="text-xs font-semibold tracking-widest uppercase text-[#BFA899]">Slide to reveal</span>
+          </motion.div>
         </motion.div>
 
         {/* Cards */}

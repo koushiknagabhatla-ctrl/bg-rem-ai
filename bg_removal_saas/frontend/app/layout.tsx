@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { SmoothScrollProvider } from '@/components/SmoothScrollProvider';
+import { Navbar } from '@/components/sections/Navbar';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -10,8 +11,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="font-body antialiased">
+      <body className="font-body antialiased bg-[#0C0806]">
+        {/* Animated Motion Background mapped to the entire layout */}
+        <div className="fixed inset-0 z-[-1] gradient-hero opacity-80 pointer-events-none" />
+        
         <SmoothScrollProvider>
+          <Navbar />
           {children}
         </SmoothScrollProvider>
       </body>
