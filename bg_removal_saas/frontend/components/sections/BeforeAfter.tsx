@@ -35,33 +35,33 @@ export function BeforeAfter() {
   const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
 
   return (
-    <section id="demo" ref={sectionRef} className="py-28 md:py-40 px-6 md:px-16 bg-[#0A0A0F]">
-      <div className="max-w-[1280px] mx-auto">
+    <section id="demo" ref={sectionRef} className="py-28 md:py-40 px-6 md:px-16 gradient-warm relative overflow-hidden">
+      <div className="max-w-[1280px] mx-auto relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, ease }}
-          className="mb-20"
+          className="mb-20 text-center md:text-left"
         >
-          <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-[#6C63FF] mb-4 block">Product Showcase</span>
+          <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-[#C4956A] mb-4 block">Product Showcase</span>
           <h2 className="font-display text-4xl md:text-6xl font-extrabold text-white leading-tight max-w-3xl">
             Micro-level precision. <br />
-            <span className="text-white/30 italic font-medium">Even on complex subjects.</span>
+            <span className="text-[#8B5E3C] italic font-medium">Even on complex subjects.</span>
           </h2>
         </motion.div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {demos.map((demo, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 60 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 1, delay: 0.15 * i, ease }}
-              className="group"
+              className="group flex flex-col"
             >
-              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border border-white/[0.06] bg-[#111118] shadow-xl mb-6">
+              <div className="glass3d relative aspect-[4/5] overflow-hidden mb-8">
                 <ImageComparisonSlider
                   leftImage={demo.left}
                   rightImage={demo.right}
@@ -69,9 +69,11 @@ export function BeforeAfter() {
                   altRight="Processed"
                 />
               </div>
-              <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#00E5C3] mb-2 block">{demo.label}</span>
-              <h3 className="font-display text-xl font-bold text-white mb-2">{demo.title}</h3>
-              <p className="text-sm text-[#8B8A97] leading-relaxed">{demo.desc}</p>
+              <div className="px-2">
+                <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#D4A574] mb-3 block">{demo.label}</span>
+                <h3 className="font-display text-2xl font-bold text-white mb-3">{demo.title}</h3>
+                <p className="text-sm text-[#BFA899] leading-relaxed font-light">{demo.desc}</p>
+              </div>
             </motion.div>
           ))}
         </div>

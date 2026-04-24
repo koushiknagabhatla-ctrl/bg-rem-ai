@@ -13,7 +13,7 @@ function Counter({ target, suffix = '', prefix = '' }: { target: number; suffix?
   useEffect(() => {
     if (inView && ref.current) {
       const ctrl = animate(0, target, {
-        duration: 2,
+        duration: 2.5,
         ease: 'easeOut',
         onUpdate(v) { if (ref.current) ref.current.textContent = prefix + (Number.isInteger(target) ? Math.floor(v).toString() : v.toFixed(1)) + suffix; },
       });
@@ -38,20 +38,22 @@ export function Performance() {
   const inView = useInView(sectionRef, { once: true, margin: '-80px' });
 
   return (
-    <section ref={sectionRef} className="py-28 md:py-40 px-6 md:px-16 bg-[#111118]">
-      <div className="max-w-[1280px] mx-auto">
+    <section ref={sectionRef} className="py-28 md:py-40 px-6 md:px-16 bg-[#0C0806] relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#8B5E3C]/5 blur-[120px] rounded-full pointer-events-none" />
+
+      <div className="max-w-[1280px] mx-auto relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, ease }}
-          className="mb-20"
+          className="mb-24 text-center"
         >
-          <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-[#00E5C3] mb-4 block">Performance</span>
-          <h2 className="font-display text-4xl md:text-6xl font-extrabold text-white leading-tight max-w-4xl mb-6">
-            Engineered <span className="italic font-medium text-white/30">without compromise.</span>
+          <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-[#E8B98A] mb-6 block">Performance</span>
+          <h2 className="font-display text-4xl md:text-6xl font-extrabold text-white leading-tight max-w-4xl mx-auto mb-8">
+            Engineered <span className="italic font-medium text-[#8B5E3C]">without compromise.</span>
           </h2>
-          <p className="text-lg text-[#8B8A97] max-w-2xl leading-relaxed">
+          <p className="text-lg text-[#BFA899] font-light max-w-2xl mx-auto leading-relaxed">
             We bypassed third-party APIs and built a custom neural infrastructure aggressively optimized for edge computing.
           </p>
         </motion.div>
@@ -61,43 +63,43 @@ export function Performance() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, delay: 0.2, ease }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 p-8 rounded-2xl border border-white/[0.06] bg-white/[0.02]"
+          className="glass3d grid grid-cols-1 md:grid-cols-3 gap-8 mb-24 p-10 md:p-14"
         >
           <div className="text-center">
-            <span className="text-4xl md:text-5xl font-display font-extrabold text-white block mb-2">
+            <span className="text-5xl md:text-6xl font-display font-extrabold text-white block mb-4">
               <Counter target={0.3} suffix="s" />
             </span>
-            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#8B8A97]">Avg. Processing</span>
+            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#C4956A]">Avg. Processing</span>
           </div>
-          <div className="text-center border-x border-white/[0.04]">
-            <span className="text-4xl md:text-5xl font-display font-extrabold text-white block mb-2">
+          <div className="text-center border-y md:border-y-0 md:border-x border-[#8B5E3C]/20 py-8 md:py-0">
+            <span className="text-5xl md:text-6xl font-display font-extrabold text-[#E8B98A] block mb-4">
               <Counter target={100} suffix="%" />
             </span>
-            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#8B8A97]">Resolution Preserved</span>
+            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#C4956A]">Resolution Preserved</span>
           </div>
           <div className="text-center">
-            <span className="text-4xl md:text-5xl font-display font-extrabold text-white block mb-2">
+            <span className="text-5xl md:text-6xl font-display font-extrabold text-white block mb-4">
               <Counter target={0} suffix="" />
             </span>
-            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#8B8A97]">Data Stored</span>
+            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#C4956A]">Data Stored</span>
           </div>
         </motion.div>
 
         {/* Feature Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((f, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 40 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.3 + i * 0.08, ease }}
-              className="card-surface p-8 group"
+              className="glass3d p-10 group"
             >
-              <div className="w-10 h-10 rounded-xl border border-white/[0.06] bg-white/[0.03] flex items-center justify-center text-[#6C63FF] mb-8 group-hover:bg-[#6C63FF]/10 transition-colors duration-500">
+              <div className="w-12 h-12 rounded-2xl border border-[#8B5E3C]/30 bg-[#1A0E08] flex items-center justify-center text-[#D4A574] mb-8 group-hover:bg-[#8B5E3C] group-hover:text-white transition-all duration-500 shadow-lg">
                 {f.icon}
               </div>
-              <h3 className="font-display text-lg font-bold text-white mb-3">{f.title}</h3>
-              <p className="text-sm text-[#8B8A97] leading-relaxed">{f.desc}</p>
+              <h3 className="font-display text-xl font-bold text-white mb-4">{f.title}</h3>
+              <p className="text-sm text-[#BFA899] font-light leading-relaxed">{f.desc}</p>
             </motion.div>
           ))}
         </div>

@@ -1,10 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { motion, useInView, animate } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { MagneticWrapper } from '@/components/ui/MagneticWrapper';
-import { ChevronDown } from 'lucide-react';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -35,51 +33,49 @@ export function Hero() {
   useEffect(() => { setTimeout(() => setMounted(true), 50); }, []);
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col justify-center px-6 md:px-16 pt-28 pb-24 overflow-hidden gradient-mesh">
-      {/* Grid overlay */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
-        backgroundSize: '80px 80px',
-      }} />
+    <section className="relative w-full min-h-screen flex flex-col justify-center px-6 md:px-16 pt-32 pb-24 overflow-hidden gradient-hero">
+      
+      {/* Background radial glow */}
+      <div className="absolute inset-0 pointer-events-none opacity-50 transition-opacity duration-1000 ease-in-out" />
 
-      <div className="relative z-10 w-full max-w-[1280px] mx-auto">
-        {/* Tag */}
+      <div className="relative z-10 w-full max-w-[1280px] mx-auto flex flex-col items-center text-center">
+        {/* Top Floating Badge */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={mounted ? { opacity: 1, y: 0 } : {}}
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={mounted ? { opacity: 1, scale: 1, y: 0 } : {}}
           transition={{ duration: 1, delay: 0.2, ease }}
-          className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm mb-10"
+          className="glass3d inline-flex items-center gap-3 px-5 py-2.5 mb-12 group cursor-default"
         >
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00E5C3] opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00E5C3]" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E8B98A] opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D4A574]" />
           </span>
-          <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#8B8A97]">V2.0 Neural Engine</span>
+          <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#C4956A] group-hover:text-white transition-colors duration-300">V2.0 Neural Engine Active</span>
         </motion.div>
 
-        {/* Headline */}
-        <h1 className="font-display text-[clamp(3rem,8vw,7.5rem)] font-extrabold leading-[0.9] tracking-[-0.03em] text-white mb-10 max-w-5xl">
-          <span className="block overflow-hidden pb-2">
-            <WordReveal text="Flawless" delay={0.3} />
+        {/* Main Headline */}
+        <h1 className="font-display text-[clamp(3.5rem,9vw,9rem)] font-extrabold leading-[0.85] tracking-[-0.04em] text-white mb-10 max-w-6xl">
+          <span className="block overflow-hidden pb-4">
+            <WordReveal text="Backgrounds" delay={0.3} />
           </span>
-          <span className="block overflow-hidden pb-2">
+          <span className="block overflow-hidden pb-4">
             <motion.span
-              className="inline-block italic font-medium text-white/40"
+              className="inline-block italic font-medium text-[#8B5E3C]"
               initial={{ y: '110%' }}
               animate={mounted ? { y: 0 } : {}}
               transition={{ duration: 1, delay: 0.5, ease }}
             >
-              Background
+              Removed.
             </motion.span>
           </span>
-          <span className="block overflow-hidden pb-2">
+          <span className="block overflow-hidden pb-4">
             <motion.span
-              className="inline-block bg-gradient-to-r from-white via-white to-[#6C63FF] bg-clip-text text-transparent"
-              initial={{ y: '110%' }}
-              animate={mounted ? { y: 0 } : {}}
-              transition={{ duration: 1, delay: 0.6, ease }}
+               className="inline-block"
+               initial={{ y: '110%' }}
+               animate={mounted ? { y: 0 } : {}}
+               transition={{ duration: 1, delay: 0.6, ease }}
             >
-              Removal.
+              Artistry Retained.
             </motion.span>
           </span>
         </h1>
@@ -89,43 +85,26 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={mounted ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, delay: 0.9, ease }}
-          className="text-lg md:text-xl text-[#8B8A97] max-w-xl leading-relaxed mb-12 font-light"
+          className="text-lg md:text-xl text-[#BFA899] max-w-2xl leading-relaxed mb-14 font-light mix-blend-screen"
         >
-          Zero masking. Zero pixelation. Enterprise-grade AI processing at your fingertips, powered by a custom neural architecture.
+          Zero masking. Zero pixelation. Enterprise-grade AI processing at your fingertips, powered by a custom neural architecture reflecting true cinematic quality.
         </motion.p>
 
-        {/* CTAs */}
+        {/* CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={mounted ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, delay: 1.1, ease }}
-          className="flex flex-wrap items-center gap-4 mb-16"
+          className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-20 w-full sm:w-auto"
         >
-          <MagneticWrapper>
-            <Link href="/register" className="px-8 py-4 rounded-full bg-[#6C63FF] text-white font-bold text-sm tracking-wide hover:shadow-[0_0_30px_rgba(108,99,255,0.4)] transition-all duration-500">
-              Start for Free
-            </Link>
-          </MagneticWrapper>
-          <MagneticWrapper>
-            <a href="#demo" className="px-8 py-4 rounded-full border border-white/10 text-white/80 font-semibold text-sm tracking-wide hover:bg-white/5 transition-all duration-300">
-              See It Work
-            </a>
-          </MagneticWrapper>
+          <Link href="/register" className="glass3d relative overflow-hidden group px-10 py-4 w-full sm:w-auto rounded-full text-white font-bold text-sm tracking-widest uppercase hover:bg-white/5 transition-all duration-500 text-center flex items-center justify-center before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#8B5E3C] before:to-[#C4956A] before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-20">
+            <span className="relative z-10">Start for Free</span>
+          </Link>
+          <a href="#demo" className="px-10 py-4 rounded-full border border-[#8B5E3C]/30 text-[#D4A574] font-semibold text-sm tracking-widest uppercase hover:bg-[#8B5E3C]/10 hover:border-[#8B5E3C]/60 transition-all duration-500 w-full sm:w-auto text-center">
+            See It Work
+          </a>
         </motion.div>
 
-        {/* Stats Row */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={mounted ? { opacity: 1 } : {}}
-          transition={{ duration: 1, delay: 1.4, ease }}
-          className="flex flex-wrap items-center gap-6 text-[#4A4A57] text-xs font-mono tracking-wider uppercase"
-        >
-          <span>50 free extractions</span>
-          <span className="w-1 h-1 rounded-full bg-[#4A4A57]" />
-          <span>No credit card</span>
-          <span className="w-1 h-1 rounded-full bg-[#4A4A57]" />
-          <span>99.2% accuracy</span>
-        </motion.div>
       </div>
 
       {/* Scroll indicator */}
@@ -133,11 +112,11 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={mounted ? { opacity: 1 } : {}}
         transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
         style={{ animation: 'scroll-indicator 2s ease-in-out infinite' }}
       >
-        <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[#4A4A57]">Scroll</span>
-        <ChevronDown className="w-4 h-4 text-[#4A4A57]" />
+        <div className="w-[1px] h-12 bg-gradient-to-b from-[#C4956A] to-transparent" />
+        <span className="text-[9px] font-mono tracking-[0.4em] uppercase text-[#A06B45]">Scroll</span>
       </motion.div>
     </section>
   );
