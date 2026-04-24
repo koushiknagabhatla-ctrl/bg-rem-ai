@@ -20,12 +20,12 @@ export function DownloadButton({ resultUrl }: { resultUrl: string }) {
 
   return (
     <div className="space-y-3">
-      <button onClick={() => download('transparent')} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-violet-500/10 text-violet-400 border border-violet-500/15 hover:bg-violet-500/15 text-xs font-medium transition-all">
+      <button onClick={() => download('transparent')} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100 hover:bg-indigo-100 text-xs font-medium transition-all">
         <Download className="w-3.5 h-3.5" /> PNG (Transparent)
       </button>
       <div className="grid grid-cols-2 gap-2.5">
-        <button onClick={() => download('#ffffff')} className="py-2 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white/50 hover:bg-white/[0.08] text-xs font-medium transition-all">White BG</button>
-        <button onClick={() => download('#000000')} className="py-2 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white/50 hover:bg-white/[0.08] text-xs font-medium transition-all">Black BG</button>
+        <button onClick={() => download('#ffffff')} className="py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-500 hover:bg-gray-100 text-xs font-medium transition-all">White BG</button>
+        <button onClick={() => download('#000000')} className="py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-500 hover:bg-gray-100 text-xs font-medium transition-all">Black BG</button>
       </div>
     </div>
   );

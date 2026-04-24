@@ -3,9 +3,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabase';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Info, CreditCard, Wrench, Zap, Menu, X } from 'lucide-react';
-import { LiquidButton, GlassFilter } from '@/components/ui/liquid-glass-button';
+import { motion } from 'framer-motion';
+import { Zap, Menu, X } from 'lucide-react';
 
 export function Navbar() {
   const supabase = createBrowserSupabaseClient();
@@ -15,8 +14,6 @@ export function Navbar() {
   const [loading, setLoading] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  // Animated cursor state
   const [cursorPos, setCursorPos] = useState({ left: 0, width: 0, opacity: 0 });
 
   useEffect(() => {
@@ -34,9 +31,9 @@ export function Navbar() {
   const handleSignOut = async () => { await supabase.auth.signOut(); router.push('/'); };
 
   const navLinks = [
-    { href: '/', label: 'Home', icon: <Home className="w-3.5 h-3.5" /> },
-    { href: '/about', label: 'About', icon: <Info className="w-3.5 h-3.5" /> },
-    { href: '/#pricing', label: 'Pricing', icon: <CreditCard className="w-3.5 h-3.5" /> },
+    { href: '/', label: 'Home' },
+    { href: '/about', label: 'About' },
+    { href: '/#pricing', label: 'Pricing' },
   ];
 
   return (
@@ -45,42 +42,35 @@ export function Navbar() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 w-full z-50 px-4 md:px-6 py-3 transition-all duration-400 ${scrolled ? 'liquid-glass-nav scrolled' : 'liquid-glass-nav'}`}
+        className={`fixed top-0 w-full z-50 px-4 md:px-6 py-3 ${scrolled ? 'liquid-glass-nav scrolled' : 'liquid-glass-nav'}`}
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-violet-500/20 group-hover:shadow-violet-500/40 transition-all duration-300 group-hover:scale-105">
+            <div className="w-8 h-8 rounded-xl bg-indigo-500 flex items-center justify-center group-hover:scale-105 transition-transform">
               <Zap className="w-4 h-4 text-white" />
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
-            <span className="font-bold text-[15px] tracking-tight text-white font-display">VCranks AI</span>
+            <span className="font-bold text-[15px] tracking-tight text-black">VCranks AI</span>
           </Link>
 
-          {/* Center pill nav with animated cursor */}
+          {/* Center nav — liquid glass pill */}
           <nav
-            className="hidden md:flex items-center relative rounded-full px-1.5 py-1.5 liquid-glass-strong"
+            className="hidden md:flex items-center relative liquid-glass rounded-full px-1.5 py-1.5"
             onMouseLeave={() => setCursorPos(pv => ({ ...pv, opacity: 0 }))}
           >
             {navLinks.map((link) => {
               const isActive = pathname === link.href || (link.href === '/about' && pathname === '/about');
               return (
-                <NavTab
-                  key={link.label}
-                  href={link.href}
-                  isActive={isActive}
-                  setCursorPos={setCursorPos}
-                >
-                  {link.icon}
+                <NavTab key={link.label} href={link.href} isActive={isActive} setCursorPos={setCursorPos}>
                   {link.label}
                 </NavTab>
               );
             })}
-            {/* Animated cursor pill */}
+            {/* Animated cursor */}
             <motion.div
               animate={cursorPos}
               transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-              className="absolute z-0 h-8 rounded-full bg-white/[0.08] md:h-9"
+              className="absolute z-0 h-8 rounded-full bg-black/[0.05]"
               style={{ top: '50%', transform: 'translateY(-50%)' }}
             />
           </nav>
@@ -90,116 +80,69 @@ export function Navbar() {
             {!loading && (
               session ? (
                 <div className="hidden md:flex items-center gap-3">
-                  <Link href="/" className="px-4 py-2 rounded-full text-white/60 text-[13px] font-medium hover:text-white transition-colors flex items-center gap-1.5">
-                    <Wrench className="w-3.5 h-3.5" /> Studio
-                  </Link>
                   <button onClick={handleSignOut}
-                    className="px-5 py-2 rounded-full border border-white/[0.08] text-white/70 text-[13px] font-medium hover:bg-white/[0.05] hover:text-white transition-all">
+                    className="px-5 py-2 rounded-full text-sm font-medium text-gray-500 hover:text-black transition-colors">
                     Sign Out
                   </button>
                 </div>
               ) : (
-                <div className="hidden md:flex items-center gap-3">
+                <div className="hidden md:flex items-center gap-2">
                   <Link href="/login"
-                    className="px-5 py-2 rounded-full text-white/60 text-[13px] font-medium hover:text-white transition-colors">
+                    className="px-5 py-2 rounded-full text-sm font-medium text-gray-500 hover:text-black transition-colors">
                     Sign In
                   </Link>
                   <Link href="/register"
-                    className="relative px-5 py-2.5 rounded-full bg-gradient-to-r from-violet-600 to-cyan-600 text-white text-[13px] font-semibold hover:from-violet-500 hover:to-cyan-500 transition-all shadow-lg shadow-violet-500/20 hover:shadow-violet-500/30 hover:scale-[1.02] active:scale-[0.98]">
+                    className="px-5 py-2.5 rounded-full bg-black text-white text-sm font-medium hover:bg-gray-800 transition-colors">
                     Get Started
                   </Link>
                 </div>
               )
             )}
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden w-9 h-9 rounded-xl liquid-glass flex items-center justify-center text-white/60 hover:text-white transition-colors"
-            >
-              {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+            <button onClick={() => setMobileOpen(!mobileOpen)}
+              className="md:hidden w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 hover:text-black transition-colors">
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
       </motion.header>
 
-      {/* Mobile drawer */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-x-0 top-[60px] z-40 p-4 md:hidden"
-          >
-            <div className="liquid-glass-strong rounded-2xl p-4 space-y-1">
-              {navLinks.map((link) => (
-                <Link key={link.label} href={link.href} onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-white/60 hover:text-white hover:bg-white/[0.05] transition-all">
-                  {link.icon}
-                  {link.label}
-                </Link>
-              ))}
-              <div className="h-px bg-white/[0.06] my-2" />
-              {!loading && (
-                session ? (
-                  <>
-                    <Link href="/" onClick={() => setMobileOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-white/60 hover:text-white hover:bg-white/[0.05] transition-all">
-                      <Wrench className="w-3.5 h-3.5" /> Studio
-                    </Link>
-                    <button onClick={() => { handleSignOut(); setMobileOpen(false); }}
-                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-white/60 hover:text-white hover:bg-white/[0.05] transition-all text-left">
-                      Sign Out
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <Link href="/login" onClick={() => setMobileOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-white/60 hover:text-white hover:bg-white/[0.05] transition-all">
-                      Sign In
-                    </Link>
-                    <Link href="/register" onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-violet-600 to-cyan-600 text-white">
-                      Get Started Free
-                    </Link>
-                  </>
-                )
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <GlassFilter />
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+          className="fixed inset-x-0 top-[56px] z-40 p-4 md:hidden">
+          <div className="liquid-glass rounded-2xl p-4 space-y-1 shadow-lg">
+            {navLinks.map((link) => (
+              <Link key={link.label} href={link.href} onClick={() => setMobileOpen(false)}
+                className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:text-black hover:bg-black/[0.03] transition-all">
+                {link.label}
+              </Link>
+            ))}
+            <div className="h-px bg-black/[0.06] my-2" />
+            {!loading && !session && (
+              <>
+                <Link href="/login" onClick={() => setMobileOpen(false)} className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-600">Sign In</Link>
+                <Link href="/register" onClick={() => setMobileOpen(false)} className="block px-4 py-3 rounded-xl text-sm font-medium text-center bg-black text-white">Get Started</Link>
+              </>
+            )}
+          </div>
+        </motion.div>
+      )}
     </>
   );
 }
 
-/* ─── Nav Tab with cursor tracking ─── */
 function NavTab({ children, href, isActive, setCursorPos }: {
-  children: React.ReactNode;
-  href: string;
-  isActive: boolean;
-  setCursorPos: (pos: any) => void;
+  children: React.ReactNode; href: string; isActive: boolean; setCursorPos: (pos: any) => void;
 }) {
   const ref = useRef<HTMLAnchorElement>(null);
-
   return (
-    <Link
-      ref={ref}
-      href={href}
+    <Link ref={ref} href={href}
       onMouseEnter={() => {
         if (!ref.current) return;
         const { width } = ref.current.getBoundingClientRect();
         setCursorPos({ width, opacity: 1, left: ref.current.offsetLeft });
       }}
-      className={`relative z-10 flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium transition-all duration-300 ${
-        isActive
-          ? 'text-white'
-          : 'text-white/40 hover:text-white/80'
-      }`}
-    >
+      className={`relative z-10 px-4 py-2 rounded-full text-sm font-medium transition-colors ${isActive ? 'text-black' : 'text-gray-400 hover:text-gray-700'}`}>
       {children}
     </Link>
   );

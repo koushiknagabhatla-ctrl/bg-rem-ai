@@ -2,200 +2,141 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import { useRef } from 'react';
-import { ArrowDown, Zap, Shield, Eye, Sliders, CloudLightning, Brain, Check, Sparkles, ArrowRight } from 'lucide-react';
+import { ArrowDown, ArrowRight, Zap, Shield, Eye, Sliders, CloudLightning, Brain, Check, Sparkles, Upload, Download, Image } from 'lucide-react';
 import { InteractiveRobotSpline } from '@/components/ui/interactive-3d-robot';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
-import { LiquidButton } from '@/components/ui/liquid-glass-button';
+import { ImageComparisonSlider } from '@/components/ui/image-comparison-slider';
 
 const ROBOT_SCENE_URL = "https://prod.spline.design/PyzDhpQ9E5f1E3MT/scene.splinecode";
 
 export function LandingView() {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-white">
 
-      {/* ═══════════════════════════════════════════════════════
-          HERO SECTION — 3D Robot + Overlay Text
-      ═══════════════════════════════════════════════════════ */}
-      <section ref={heroRef} className="relative w-full h-screen overflow-hidden">
-        
-        {/* 3D Robot Background */}
-        <div className="absolute inset-0 z-0">
-          <InteractiveRobotSpline
-            scene={ROBOT_SCENE_URL}
-            className="absolute inset-0 w-full h-full"
-          />
+      {/* ═══════════ HERO — 3D Robot Behind, Text In Front ═══════════ */}
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Soft gradient bg */}
+        <div className="absolute inset-0 bg-gradient-to-b from-indigo-50/50 via-white to-white" />
+
+        {/* 3D Robot — behind text (z-0) */}
+        <div className="absolute inset-0 z-0 opacity-40">
+          <InteractiveRobotSpline scene={ROBOT_SCENE_URL} className="absolute inset-0 w-full h-full" />
         </div>
 
-        {/* Gradient overlays for readability */}
-        <div className="absolute inset-0 z-[1] pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#030014]/70 via-transparent to-[#030014]/90" />
-          <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-[#030014] to-transparent" />
-        </div>
+        {/* Hero text — in front (z-10) */}
+        <motion.div style={{ y: heroY, opacity: heroOpacity }}
+          className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+          
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 mb-8">
+            <span className="w-2 h-2 rounded-full bg-green-400" />
+            <span className="text-xs font-medium text-indigo-600">AI-Powered Background Removal</span>
+          </motion.div>
 
-        {/* Floating orbs */}
-        <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
-          <div className="absolute top-[15%] left-[10%] w-72 h-72 bg-violet-600/10 rounded-full blur-[120px] animate-orb-1" />
-          <div className="absolute top-[40%] right-[15%] w-56 h-56 bg-cyan-500/8 rounded-full blur-[100px] animate-orb-2" />
-          <div className="absolute bottom-[25%] left-[40%] w-64 h-64 bg-rose-500/5 rounded-full blur-[100px] animate-orb-1" style={{ animationDelay: '2s' }} />
-        </div>
+          <motion.h1 initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            className="text-[clamp(2.5rem,8vw,6rem)] font-black tracking-[-0.04em] leading-[0.9] mb-6 text-black">
+            VCranks
+            <br />
+            <span className="gradient-text">AI</span>
+          </motion.h1>
 
-        {/* Hero content overlay */}
-        <motion.div
-          style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
-          className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none"
-        >
-          <div className="text-center px-6 max-w-5xl mx-auto pointer-events-auto">
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full liquid-glass-strong mb-8"
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50" />
-              <span className="text-xs font-medium text-white/60">AI-Powered Background Removal</span>
-            </motion.div>
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-base md:text-lg text-gray-500 max-w-lg mx-auto leading-relaxed mb-10">
+            Remove backgrounds from any image in seconds.
+            <br className="hidden md:block" />
+            Simple. Fast. Pixel-perfect results.
+          </motion.p>
 
-            {/* Main heading */}
-            <motion.h1
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-              className="text-[clamp(2.5rem,9vw,7rem)] font-black tracking-[-0.04em] leading-[0.85] mb-6 font-display"
-            >
-              <span className="shimmer-text">VCRANKS</span>
-              <br />
-              <span className="gradient-text">AI</span>
-            </motion.h1>
-
-            {/* Subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-sm md:text-base text-white/40 max-w-lg mx-auto leading-relaxed mb-8 font-tech"
-            >
-              Remove backgrounds from any image with our custom neural network.
-              <br className="hidden md:block" />
-              Pixel-perfect results. Zero learning curve.
-            </motion.p>
-
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-4"
-            >
-              <Link href="/register">
-                <LiquidButton size="xl" className="text-white font-semibold">
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Get Started Free
-                </LiquidButton>
-              </Link>
-              <Link href="/login"
-                className="px-8 py-3.5 rounded-full border border-white/10 text-white/60 text-sm font-medium hover:text-white hover:border-white/20 hover:bg-white/[0.03] transition-all flex items-center gap-2">
-                Sign In <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </motion.div>
-          </div>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/register"
+              className="px-8 py-3.5 rounded-full bg-black text-white text-sm font-semibold hover:bg-gray-800 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-black/10">
+              Get Started Free
+            </Link>
+            <Link href="/login"
+              className="px-8 py-3.5 rounded-full border border-gray-200 text-gray-600 text-sm font-medium hover:text-black hover:border-gray-300 transition-all flex items-center gap-2">
+              Sign In <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </motion.div>
         </motion.div>
 
         {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10"
-        >
-          <span className="text-[10px] text-white/20 uppercase tracking-[0.3em] font-medium font-tech">Scroll to explore</span>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10">
+          <span className="text-[10px] text-gray-400 uppercase tracking-[0.3em] font-medium">Scroll</span>
           <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }}>
-            <ArrowDown className="w-4 h-4 text-white/20" />
+            <ArrowDown className="w-4 h-4 text-gray-300" />
           </motion.div>
         </motion.div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════
-          FEATURES SECTION
-      ═══════════════════════════════════════════════════════ */}
-      <section id="features" className="relative py-32 px-6">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#030014] via-[#050518] to-[#030014] pointer-events-none" />
-        {/* Decorative line */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[1px] bg-gradient-to-r from-transparent via-violet-500/20 to-transparent" />
-        
-        {/* Floating orbs */}
-        <div className="absolute top-[20%] right-[10%] w-[400px] h-[400px] bg-violet-600/5 rounded-full blur-[150px] pointer-events-none animate-orb-2" />
-        <div className="absolute bottom-[10%] left-[5%] w-[300px] h-[300px] bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none animate-orb-1" />
-
-        <div className="max-w-6xl mx-auto relative z-10">
-          <ScrollReveal variant="fade-up" className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 font-display">
-              Everything you need to
-              <br />
-              <span className="gradient-text">remove backgrounds</span>
-            </h2>
-            <p className="text-white/30 text-sm md:text-base max-w-xl mx-auto font-tech">
-              Powered by a custom-trained MobileNetV3 U-Net, quantized to INT8 precision for blazing fast inference.
-            </p>
+      {/* ═══════════ SECTION 1 — What We Do ═══════════ */}
+      <section className="py-32 px-6 section-soft">
+        <div className="max-w-5xl mx-auto">
+          <ScrollReveal variant="fade-up">
+            <div className="text-center mb-20">
+              <p className="text-xs font-semibold text-indigo-500 uppercase tracking-[0.2em] mb-4">What we do</p>
+              <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-black mb-6">
+                Remove any background<br />with one click
+              </h2>
+              <p className="text-gray-500 text-base max-w-xl mx-auto">
+                Our custom-trained neural network handles complex edges — hair, fur, transparent objects — with surgical precision. No manual editing needed.
+              </p>
+            </div>
           </ScrollReveal>
 
-          {/* Feature cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {[
-              { icon: <Brain className="w-5 h-5" />, title: "AI-Powered Extraction", desc: "Our neural network handles hair, fur, transparent objects, and complex edges with surgical precision.", color: "violet" },
-              { icon: <Zap className="w-5 h-5" />, title: "Lightning Fast", desc: "Images process in under a second. INT8 quantized inference on dedicated GPU infrastructure running 24/7.", color: "cyan" },
-              { icon: <Shield className="w-5 h-5" />, title: "Private by Default", desc: "Your images are never stored or used for training. HMAC-SHA256 signed requests ensure zero data leaks.", color: "emerald" },
-              { icon: <Sliders className="w-5 h-5" />, title: "Full Resolution", desc: "No downscaling. Your image keeps every pixel. What you upload is what you get back — minus the background.", color: "rose" },
-              { icon: <CloudLightning className="w-5 h-5" />, title: "One-Click Export", desc: "Download as transparent PNG, or with a white or black background. No watermarks, ever.", color: "amber" },
-              { icon: <Eye className="w-5 h-5" />, title: "Before/After Preview", desc: "Interactive comparison slider lets you see the exact extraction quality before you download.", color: "blue" },
-            ].map((feature, i) => (
-              <ScrollReveal key={feature.title} variant="fade-up" delay={i * 0.1}>
-                <div className="glass-card p-7 h-full group">
-                  <div className="relative z-10">
-                    <div className={`w-11 h-11 rounded-xl bg-gradient-to-br from-${feature.color}-500/20 to-${feature.color}-500/5 border border-${feature.color}-500/10 flex items-center justify-center mb-5 text-${feature.color}-400 group-hover:text-${feature.color}-300 transition-all`}>
-                      {feature.icon}
-                    </div>
-                    <h3 className="text-[15px] font-semibold text-white mb-2">{feature.title}</h3>
-                    <p className="text-sm text-white/30 leading-relaxed">{feature.desc}</p>
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
+          {/* Before/After Comparison */}
+          <ScrollReveal variant="scale">
+            <div className="max-w-3xl mx-auto rounded-2xl overflow-hidden shadow-2xl shadow-black/10 border border-gray-100">
+              <div className="aspect-[16/9]">
+                <ImageComparisonSlider
+                  leftImage="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&q=80"
+                  rightImage="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&q=80&monochrome=ffffff"
+                  altLeft="Original photo with background"
+                  altRight="Background removed result"
+                />
+              </div>
+            </div>
+            <p className="text-center text-sm text-gray-400 mt-4">Drag the slider to compare before and after</p>
+          </ScrollReveal>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════
-          HOW IT WORKS
-      ═══════════════════════════════════════════════════════ */}
-      <section className="relative py-32 px-6">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#030014] via-[#03001a] to-[#030014] pointer-events-none" />
-        <div className="max-w-4xl mx-auto relative z-10">
-          <ScrollReveal variant="fade-up" className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 font-display">How it works</h2>
-            <p className="text-white/30 text-sm max-w-lg mx-auto font-tech">Three steps. No design skills needed.</p>
+      {/* ═══════════ SECTION 2 — How It Works (Step by Step) ═══════════ */}
+      <section className="py-32 px-6 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <ScrollReveal variant="fade-up">
+            <div className="text-center mb-20">
+              <p className="text-xs font-semibold text-indigo-500 uppercase tracking-[0.2em] mb-4">How it works</p>
+              <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-black">Three simple steps</h2>
+            </div>
           </ScrollReveal>
 
           <div className="space-y-0">
             {[
-              { num: "01", title: "Upload your image", desc: "Drag and drop or click to select. We support JPG, PNG, and WEBP files up to 20MB. Your image stays in your browser until you hit generate." },
-              { num: "02", title: "AI removes the background", desc: "Our custom MobileNetV3 U-Net processes your image in real-time. The neural network identifies the foreground with pixel-perfect accuracy." },
-              { num: "03", title: "Download your result", desc: "Compare before and after with the interactive slider. Export as transparent PNG, or with a solid white or black background in one click." },
+              { num: "01", icon: <Upload className="w-6 h-6" />, title: "Upload your image", desc: "Drag and drop or click to select. We support JPG, PNG, and WEBP files up to 20MB. Your image stays private in your browser until you hit generate." },
+              { num: "02", icon: <Sparkles className="w-6 h-6" />, title: "AI removes the background", desc: "Our custom MobileNetV3 U-Net processes your image in real-time. The neural network identifies the foreground with pixel-perfect accuracy — handles hair, fur, and complex edges." },
+              { num: "03", icon: <Download className="w-6 h-6" />, title: "Download your result", desc: "Compare before and after with the interactive slider. Export as transparent PNG, or with a white or black background. No watermarks, ever." },
             ].map((step, i) => (
-              <ScrollReveal key={step.num} variant={i % 2 === 0 ? 'fade-left' : 'fade-right'} delay={i * 0.15}>
-                <div className="flex flex-col md:flex-row items-start gap-8 py-10 border-b border-white/[0.04] last:border-0">
-                  <div className="shrink-0">
-                    <div className="text-6xl font-black gradient-text font-display w-24">{step.num}</div>
+              <ScrollReveal key={step.num} variant={i % 2 === 0 ? 'fade-left' : 'fade-right'} delay={i * 0.1}>
+                <div className="flex flex-col md:flex-row items-start gap-8 py-12 border-b border-gray-100 last:border-0">
+                  <div className="flex items-center gap-5 shrink-0">
+                    <div className="text-5xl font-black text-gray-100 w-20 font-tech">{step.num}</div>
+                    <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-500">
+                      {step.icon}
+                    </div>
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-3 font-display">{step.title}</h3>
-                    <p className="text-white/30 leading-relaxed text-sm">{step.desc}</p>
+                    <h3 className="text-xl font-bold text-black mb-3">{step.title}</h3>
+                    <p className="text-gray-500 leading-relaxed">{step.desc}</p>
                   </div>
                 </div>
               </ScrollReveal>
@@ -204,97 +145,168 @@ export function LandingView() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════
-          PRICING SECTION
-      ═══════════════════════════════════════════════════════ */}
-      <section id="pricing" className="relative py-32 px-6">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#030014] via-[#080020] to-[#030014] pointer-events-none" />
-        <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-violet-600/5 rounded-full blur-[150px] pointer-events-none" />
-
-        <div className="max-w-3xl mx-auto relative z-10">
-          <ScrollReveal variant="fade-up" className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 font-display">Simple pricing</h2>
-            <p className="text-white/30 text-sm max-w-md mx-auto font-tech">Start free with 50 credits. No credit card required.</p>
+      {/* ═══════════ SECTION 3 — Features ═══════════ */}
+      <section className="py-32 px-6 section-muted">
+        <div className="max-w-6xl mx-auto">
+          <ScrollReveal variant="fade-up">
+            <div className="text-center mb-20">
+              <p className="text-xs font-semibold text-indigo-500 uppercase tracking-[0.2em] mb-4">Features</p>
+              <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-black mb-6">
+                Built for professionals
+              </h2>
+              <p className="text-gray-500 text-base max-w-xl mx-auto">
+                Every detail is engineered for speed, quality, and privacy.
+              </p>
+            </div>
           </ScrollReveal>
 
-          <ScrollReveal variant="scale">
-            <div className="glass-card p-10 text-center relative overflow-hidden">
-              {/* Shimmer line */}
-              <div className="absolute top-0 left-0 right-0 h-[1px] overflow-hidden">
-                <div className="w-[200%] h-full bg-gradient-to-r from-transparent via-violet-500/50 to-transparent animate-glass-shimmer" />
-              </div>
-              
-              <div className="relative z-10">
-                {/* Badge */}
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[11px] font-semibold uppercase tracking-wider mb-6">
-                  <Sparkles className="w-3 h-3" /> Free Forever
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[
+              { icon: <Brain className="w-5 h-5" />, title: "AI-Powered Extraction", desc: "Custom neural network trained on millions of images handles even the most complex edges." },
+              { icon: <Zap className="w-5 h-5" />, title: "Lightning Fast", desc: "INT8 quantized inference processes images in under a second on dedicated infrastructure." },
+              { icon: <Shield className="w-5 h-5" />, title: "Private by Default", desc: "Your images are never stored. HMAC-SHA256 signed requests ensure zero data leaks." },
+              { icon: <Sliders className="w-5 h-5" />, title: "Full Resolution", desc: "No downscaling. Your image keeps every pixel — minus the background." },
+              { icon: <CloudLightning className="w-5 h-5" />, title: "One-Click Export", desc: "Download as transparent PNG, or with white/black backgrounds. No watermarks." },
+              { icon: <Eye className="w-5 h-5" />, title: "Before/After Preview", desc: "Interactive comparison slider lets you inspect quality before downloading." },
+            ].map((feature, i) => (
+              <ScrollReveal key={feature.title} variant="fade-up" delay={i * 0.08}>
+                <div className="liquid-glass-card p-7 h-full">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center mb-5 text-indigo-500">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-[15px] font-semibold text-black mb-2">{feature.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">{feature.desc}</p>
                 </div>
-                
-                <div className="text-5xl font-black mb-2 font-display">Free</div>
-                <div className="text-white/25 text-sm mb-8 font-tech">50 credits • 5 per image • 10 free removals</div>
-                
-                <div className="grid grid-cols-2 gap-3 text-sm text-white/40 mb-10 max-w-md mx-auto">
-                  {["Full resolution output", "Transparent PNG export", "White & black backgrounds", "Before/After slider", "No watermarks", "Privacy guaranteed"].map((f) => (
-                    <div key={f} className="flex items-center gap-2.5">
-                      <Check className="w-3.5 h-3.5 text-violet-400 shrink-0" />
-                      <span className="text-left">{f}</span>
-                    </div>
-                  ))}
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ SECTION 4 — The Technology ═══════════ */}
+      <section className="py-32 px-6 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <ScrollReveal variant="fade-up">
+            <div className="text-center mb-16">
+              <p className="text-xs font-semibold text-indigo-500 uppercase tracking-[0.2em] mb-4">Technology</p>
+              <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-black mb-6">
+                Powered by cutting-edge AI
+              </h2>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+            {[
+              { value: "10K+", label: "Images Processed" },
+              { value: "99.9%", label: "Uptime" },
+              { value: "<1s", label: "Processing" },
+              { value: "0", label: "Images Stored" },
+            ].map((stat, i) => (
+              <ScrollReveal key={stat.label} variant="fade-up" delay={i * 0.1}>
+                <div className="text-center p-6 rounded-2xl bg-gray-50">
+                  <div className="text-2xl md:text-3xl font-bold text-black mb-1">{stat.value}</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wider">{stat.label}</div>
                 </div>
-                
-                <Link href="/register">
-                  <LiquidButton size="xl" className="text-white font-semibold">
-                    Get Started Free
-                  </LiquidButton>
-                </Link>
+              </ScrollReveal>
+            ))}
+          </div>
+
+          <ScrollReveal variant="fade-up">
+            <div className="liquid-glass-card p-8 md:p-12">
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h3 className="text-lg font-bold text-black mb-3">Custom Neural Network</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed mb-4">
+                    Built on MobileNetV3-Small U-Net architecture with CBAM attention modules. Trained on the P3M-10K dataset with progressive resolution training.
+                  </p>
+                  <h3 className="text-lg font-bold text-black mb-3">INT8 Quantization</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">
+                    Model quantized to INT8 ONNX format for 4x faster inference without quality loss. Optimized for CPU and GPU deployment.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-black mb-3">Enterprise Security</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed mb-4">
+                    Every API request is cryptographically signed with HMAC-SHA256. Images are processed in-memory and never written to disk.
+                  </p>
+                  <h3 className="text-lg font-bold text-black mb-3">Edge Infrastructure</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">
+                    Deployed on dedicated GPU servers with global edge networks for sub-second response times worldwide.
+                  </p>
+                </div>
               </div>
             </div>
           </ScrollReveal>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════
-          CTA SECTION
-      ═══════════════════════════════════════════════════════ */}
-      <section className="relative py-32 px-6">
-        <div className="absolute inset-0 bg-gradient-to-t from-[#030014] to-[#050518] pointer-events-none" />
-        <div className="absolute bottom-[30%] right-[20%] w-[400px] h-[400px] bg-cyan-500/5 rounded-full blur-[150px] pointer-events-none animate-orb-1" />
-        <div className="absolute top-[20%] left-[10%] w-[300px] h-[300px] bg-violet-500/5 rounded-full blur-[120px] pointer-events-none animate-orb-2" />
+      {/* ═══════════ SECTION 5 — Pricing ═══════════ */}
+      <section id="pricing" className="py-32 px-6 section-accent-soft">
+        <div className="max-w-3xl mx-auto">
+          <ScrollReveal variant="fade-up">
+            <div className="text-center mb-16">
+              <p className="text-xs font-semibold text-indigo-500 uppercase tracking-[0.2em] mb-4">Pricing</p>
+              <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-black mb-6">Start free, upgrade later</h2>
+              <p className="text-gray-500 max-w-md mx-auto">50 credits to get started. No credit card required.</p>
+            </div>
+          </ScrollReveal>
 
-        <div className="max-w-3xl mx-auto text-center relative z-10">
           <ScrollReveal variant="scale">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 font-display">
-              Ready to remove
-              <br />
-              <span className="gradient-text">backgrounds?</span>
+            <div className="liquid-glass-card p-10 text-center">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-600 text-[11px] font-semibold uppercase tracking-wider mb-6">
+                <Sparkles className="w-3 h-3" /> Free Forever
+              </div>
+              <div className="text-5xl font-black text-black mb-2">$0</div>
+              <div className="text-gray-400 text-sm mb-8">50 credits • 5 per image • 10 free removals</div>
+              <div className="grid grid-cols-2 gap-3 text-sm text-gray-500 mb-10 max-w-md mx-auto text-left">
+                {["Full resolution output", "Transparent PNG export", "White & black backgrounds", "Before/After slider", "No watermarks", "Privacy guaranteed"].map((f) => (
+                  <div key={f} className="flex items-center gap-2.5">
+                    <Check className="w-4 h-4 text-indigo-500 shrink-0" />
+                    <span>{f}</span>
+                  </div>
+                ))}
+              </div>
+              <Link href="/register"
+                className="inline-block px-10 py-3.5 rounded-full bg-black text-white text-sm font-semibold hover:bg-gray-800 transition-all shadow-lg shadow-black/10 hover:scale-[1.02] active:scale-[0.98]">
+                Get Started Free
+              </Link>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ═══════════ SECTION 6 — CTA ═══════════ */}
+      <section className="py-32 px-6 bg-white">
+        <div className="max-w-3xl mx-auto text-center">
+          <ScrollReveal variant="fade-up">
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-black mb-6">
+              Ready to remove<br /><span className="gradient-text">backgrounds?</span>
             </h2>
-            <p className="text-white/30 mb-10 max-w-md mx-auto text-sm font-tech">Join thousands of users already creating professional cutouts with VCranks AI.</p>
+            <p className="text-gray-500 mb-10 max-w-md mx-auto">
+              Join thousands of users creating professional cutouts with VCranks AI.
+            </p>
             <Link href="/register"
-              className="inline-block px-10 py-4 rounded-full bg-gradient-to-r from-violet-600 via-purple-600 to-cyan-600 text-white text-sm font-semibold hover:from-violet-500 hover:via-purple-500 hover:to-cyan-500 transition-all shadow-2xl shadow-violet-500/20 hover:shadow-violet-500/40 hover:scale-[1.02] active:scale-[0.98] animate-gradient-shift"
-              style={{ backgroundSize: '200% 200%' }}>
+              className="inline-block px-10 py-4 rounded-full bg-black text-white text-sm font-semibold hover:bg-gray-800 transition-all shadow-lg shadow-black/10 hover:scale-[1.02] active:scale-[0.98]">
               Start for free →
             </Link>
           </ScrollReveal>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════
-          FOOTER
-      ═══════════════════════════════════════════════════════ */}
-      <footer className="relative border-t border-white/[0.04] py-12 px-6 bg-[#030014]">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[1px] bg-gradient-to-r from-transparent via-violet-500/20 to-transparent" />
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      {/* ═══════════ FOOTER ═══════════ */}
+      <footer className="border-t border-gray-100 py-12 px-6 bg-white">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-indigo-500 flex items-center justify-center">
               <Zap className="w-3 h-3 text-white" />
             </div>
-            <span className="text-sm font-semibold text-white/50 font-display">VCranks AI</span>
+            <span className="text-sm font-semibold text-gray-500">VCranks AI</span>
           </div>
-          <p className="text-xs text-white/15 font-tech">© 2026 VCranks AI. All rights reserved.</p>
+          <p className="text-xs text-gray-400">© 2026 VCranks AI. All rights reserved.</p>
           <div className="flex gap-6">
-            <Link href="/about" className="text-xs text-white/20 hover:text-white/50 transition-colors font-tech">About</Link>
-            <Link href="/#pricing" className="text-xs text-white/20 hover:text-white/50 transition-colors font-tech">Pricing</Link>
-            <Link href="/login" className="text-xs text-white/20 hover:text-white/50 transition-colors font-tech">Sign In</Link>
+            <Link href="/about" className="text-xs text-gray-400 hover:text-black transition-colors">About</Link>
+            <Link href="/#pricing" className="text-xs text-gray-400 hover:text-black transition-colors">Pricing</Link>
+            <Link href="/login" className="text-xs text-gray-400 hover:text-black transition-colors">Sign In</Link>
           </div>
         </div>
       </footer>

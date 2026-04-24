@@ -54,37 +54,36 @@ export const ImageComparisonSlider = React.forwardRef<HTMLDivElement, ImageCompa
     return (
       <div
         ref={containerRef}
-        className={cn("relative w-full h-full overflow-hidden select-none group", className)}
+        className={cn("relative w-full h-full overflow-hidden select-none group cursor-ew-resize", className)}
         onMouseDown={handleInteractionStart}
         onTouchStart={handleInteractionStart}
         {...props}
       >
-        {/* Right Image (bottom) */}
+        {/* Right Image — checker bg for transparency */}
+        <div className="absolute inset-0 checker-bg" />
         <img src={rightImage} alt={altRight} className="absolute inset-0 w-full h-full object-cover pointer-events-none" draggable={false} />
-        {/* Label */}
-        <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg text-[10px] font-semibold text-white/60 bg-black/60 backdrop-blur-md border border-white/10 z-20 uppercase tracking-wider">After</div>
+        <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg text-[10px] font-semibold text-white/90 bg-black/50 backdrop-blur-md z-20 uppercase tracking-wider">After</div>
         
-        {/* Left Image (top, clipped) */}
+        {/* Left Image — clipped */}
         <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none"
           style={{ clipPath: `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)` }}>
           <img src={leftImage} alt={altLeft} className="w-full h-full object-cover" draggable={false} />
-          <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded-lg text-[10px] font-semibold text-white/60 bg-black/60 backdrop-blur-md border border-white/10 uppercase tracking-wider">Before</div>
+          <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded-lg text-[10px] font-semibold text-white/90 bg-black/50 backdrop-blur-md uppercase tracking-wider">Before</div>
         </div>
 
         {/* Slider Handle */}
-        <div className="absolute top-0 h-full w-1 cursor-ew-resize" style={{ left: `calc(${sliderPosition}% - 2px)` }}>
-          <div className="absolute inset-y-0 w-0.5 bg-white/50 backdrop-blur-sm mx-auto shadow-[0_0_10px_rgba(255,255,255,0.3)]"></div>
+        <div className="absolute top-0 h-full" style={{ left: `calc(${sliderPosition}% - 1px)` }}>
+          <div className="absolute inset-y-0 w-0.5 bg-white shadow-md mx-auto"></div>
           <div className={cn(
-            "absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-12 w-12 flex items-center justify-center rounded-full bg-white/10 text-white shadow-xl backdrop-blur-xl border border-white/20",
-            "transition-all duration-300 ease-in-out",
-            "group-hover:scale-105",
-            isDragging && "scale-105 shadow-2xl shadow-violet-500/30 bg-white/20"
+            "absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-10 w-10 flex items-center justify-center rounded-full bg-white text-gray-700 shadow-lg border border-gray-200",
+            "transition-all duration-200",
+            isDragging && "scale-110 shadow-xl"
           )}
-            role="slider" aria-valuenow={sliderPosition} aria-valuemin={0} aria-valuemax={100} aria-orientation="horizontal" aria-label="Image comparison slider"
+            role="slider" aria-valuenow={sliderPosition} aria-valuemin={0} aria-valuemax={100} aria-orientation="horizontal"
           >
-            <div className="flex items-center text-white">
-              <ChevronLeft className="h-4 w-4 drop-shadow-md" />
-              <ChevronRight className="h-4 w-4 drop-shadow-md" />
+            <div className="flex items-center">
+              <ChevronLeft className="h-3.5 w-3.5" />
+              <ChevronRight className="h-3.5 w-3.5" />
             </div>
           </div>
         </div>
