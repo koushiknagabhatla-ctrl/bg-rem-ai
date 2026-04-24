@@ -15,7 +15,7 @@ import { Footer } from '@/components/sections/Footer';
 export function LandingView() {
   return (
     <Preloader>
-      <GradientBackground className="min-h-screen text-white selection:bg-[#C4956A]/30 selection:text-white">
+      <GradientBackground>
         <Hero />
         <SocialProof />
         <BeforeAfter />

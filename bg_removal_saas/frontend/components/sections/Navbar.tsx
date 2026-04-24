@@ -2,18 +2,25 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { NavHeader } from '@/components/ui/nav-header';
 
+const ease = [0.16, 1, 0.3, 1] as const;
+
 export function Navbar() {
   const supabase = createBrowserSupabaseClient();
   const router = useRouter();
+  const pathname = usePathname();
   const [session, setSession] = useState<any>(undefined);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Don't show the sliding pill nav on auth pages
+  const isAuthPage = pathname === '/login' || pathname === '/register';
+  const isToolPage = pathname === '/tool';
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSession(data.session));
@@ -34,12 +41,16 @@ export function Navbar() {
       <motion.header
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 w-full z-50 px-6 md:px-10 py-4 transition-all duration-500 ${scrolled ? 'nav-glass py-3' : 'bg-transparent'}`}
+        transition={{ duration: 0.8, delay: 0.1, ease }}
+        className={`fixed top-0 w-full z-50 px-6 md:px-10 transition-all duration-500 ${
+          scrolled 
+            ? 'py-3 bg-[#0C0806]/80 backdrop-blur-xl border-b border-[#8B5E3C]/10' 
+            : 'py-5 bg-transparent'
+        }`}
       >
         <div className="max-w-[1280px] mx-auto grid grid-cols-2 md:grid-cols-3 items-center">
           
-          {/* Logo (Left, 1/3) */}
+          {/* Logo */}
           <div className="flex justify-start">
             <Link href="/" className="group flex items-center gap-1.5 focus:outline-none">
               <span className="font-display text-lg font-bold tracking-tight text-white">VCranks</span>
@@ -47,24 +58,35 @@ export function Navbar() {
             </Link>
           </div>
 
-          {/* User's Custom NavHeader (Center, 1/3) */}
+          {/* Center Nav — only on landing page */}
           <div className="hidden md:flex justify-center">
-             <NavHeader session={session} handleSignOut={handleSignOut} />
+            {!isAuthPage && (
+              <NavHeader session={session} handleSignOut={handleSignOut} />
+            )}
           </div>
 
-          {/* Desktop Auth (Right, 1/3) */}
-          <div className="hidden md:flex justify-end items-center gap-6 line-clamp-1">
-            {!session ? (
+          {/* Right Auth */}
+          <div className="hidden md:flex justify-end items-center gap-6">
+            {session === undefined ? (
+              <div className="w-20 h-8 rounded-full bg-[#1A0E08] animate-pulse" />
+            ) : !session ? (
               <>
-                <Link href="/login" className="text-[10px] sm:text-xs font-semibold tracking-widest uppercase text-[#BFA899] hover:text-white transition-colors duration-300">Sign In</Link>
-                <Link href="/register" className="glass3d px-6 py-2.5 rounded-full border border-[#8B5E3C]/30 text-white text-[10px] font-bold tracking-widest uppercase hover:bg-[#8B5E3C]/20 transition-all duration-300 shadow-[0_0_15px_rgba(139,94,60,0.15)] flex-shrink-0">
+                <Link href="/login" className="text-[11px] font-semibold tracking-widest uppercase text-[#BFA899] hover:text-white transition-colors duration-300">Sign In</Link>
+                <Link href="/register" className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#8B5E3C] to-[#C4956A] text-white text-[11px] font-bold tracking-widest uppercase hover:shadow-[0_0_20px_rgba(196,149,106,0.3)] transition-all duration-300 hover:scale-105">
                   Get Started
                 </Link>
               </>
             ) : (
-              <button onClick={handleSignOut} className="text-[10px] sm:text-xs font-semibold tracking-widest uppercase text-[#BFA899] hover:text-[#E85B5B] transition-colors duration-300">
-                Sign Out
-              </button>
+              <div className="flex items-center gap-4">
+                {!isToolPage && (
+                  <Link href="/tool" className="px-5 py-2 rounded-full bg-[#8B5E3C]/20 border border-[#8B5E3C]/30 text-[11px] font-bold tracking-widest uppercase text-[#E8B98A] hover:bg-[#8B5E3C]/30 transition-all duration-300">
+                    Studio
+                  </Link>
+                )}
+                <button onClick={handleSignOut} className="text-[11px] font-semibold tracking-widest uppercase text-[#BFA899] hover:text-red-400 transition-colors duration-300">
+                  Sign Out
+                </button>
+              </div>
             )}
           </div>
 
@@ -84,9 +106,9 @@ export function Navbar() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
             className="fixed inset-0 z-40 bg-[#0C0806]/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8"
           >
-            {[{ href: '/', label: 'Home' }, { href: '/about', label: 'About' }, { href: session ? '/tool' : '/login', label: 'Workspace' }].map((link, i) => (
+            {[{ href: '/', label: 'Home' }, { href: '#about', label: 'About' }, { href: session ? '/tool' : '/login', label: 'Workspace' }].map((link, i) => (
               <motion.div key={link.href} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
-                transition={{ delay: i * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}>
+                transition={{ delay: i * 0.08, duration: 0.5, ease }}>
                 <Link href={link.href} onClick={() => setMobileOpen(false)} className="text-3xl font-display font-bold text-white hover:text-[#C4956A] transition-colors">{link.label}</Link>
               </motion.div>
             ))}

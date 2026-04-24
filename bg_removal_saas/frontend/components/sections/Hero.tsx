@@ -40,14 +40,12 @@ export function Hero() {
 
   const textScale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
-  const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
 
   return (
-    <section ref={containerRef} id="hero" className="relative w-full min-h-[160vh] flex flex-col justify-start pt-32 pb-24 overflow-hidden">
+    <section ref={containerRef} id="hero" className="relative w-full min-h-screen flex flex-col justify-center px-6 md:px-16 pt-32 pb-24 overflow-hidden">
       
       {/* Hero Text Content — scales down on scroll */}
-      <motion.div style={{ scale: textScale, opacity: textOpacity }} className="relative z-10 w-full max-w-[1280px] mx-auto flex flex-col items-center text-center px-6 md:px-16 sticky top-[15vh]">
+      <motion.div style={{ scale: textScale, opacity: textOpacity }} className="relative z-10 w-full max-w-[1280px] mx-auto flex flex-col items-center text-center">
         
         {/* Main Headline */}
         <h1 className="font-display text-[clamp(3rem,8vw,9rem)] font-extrabold leading-[0.85] tracking-[-0.04em] text-white mb-10 max-w-6xl">
@@ -84,7 +82,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={mounted ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, delay: 1, ease }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-20 w-full sm:w-auto z-20"
+          className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full sm:w-auto z-20"
         >
           <Link href="/register" className="glass3d relative overflow-hidden group px-10 py-5 w-full sm:w-auto rounded-full text-white font-bold text-xs tracking-[0.2em] uppercase transition-all duration-500 text-center flex items-center justify-center border border-[#8B5E3C]/40 shadow-[0_0_30px_rgba(139,94,60,0.15)] hover:shadow-[0_0_40px_rgba(232,185,138,0.25)] hover:scale-105">
             <span className="relative z-10">Start for Free</span>
@@ -95,45 +93,11 @@ export function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Single Showcase Image — parallaxes up as you scroll, revealing itself */}
-      <motion.div 
-        style={{ y: imageY, scale: imageScale }}
-        className="relative z-20 w-full max-w-5xl mx-auto px-6 md:px-16 mt-12"
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 100, rotateX: 8 }}
-          animate={mounted ? { opacity: 1, y: 0, rotateX: 0 } : {}}
-          transition={{ duration: 1.5, delay: 1.2, ease }}
-          className="glass3d p-3 md:p-4 rounded-3xl border border-[#8B5E3C]/20 shadow-2xl shadow-black/50 transform-gpu [perspective:1200px] overflow-hidden"
-        >
-          <div className="relative rounded-2xl overflow-hidden aspect-[16/9] bg-[#1A0E08]">
-            <img 
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&q=80" 
-              alt="AI Background Removal Demo" 
-              className="w-full h-full object-cover"
-            />
-            {/* Glass overlay with slide instruction */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0C0806]/80 via-transparent to-transparent" />
-            <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between">
-              <div className="glass3d px-5 py-2.5 rounded-full border border-[#8B5E3C]/30 flex items-center gap-3">
-                <svg className="w-4 h-4 text-[#E8B98A] animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                </svg>
-                <span className="text-[10px] font-semibold tracking-widest uppercase text-[#BFA899]">Slide to compare</span>
-              </div>
-              <div className="glass3d px-5 py-2.5 rounded-full border border-[#8B5E3C]/30">
-                <span className="text-[10px] font-mono tracking-widest uppercase text-[#E8B98A]">AI Processed</span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </motion.div>
-
       {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={mounted ? { opacity: 1 } : {}}
-        transition={{ delay: 2.5, duration: 2 }}
+        transition={{ delay: 2, duration: 2 }}
         className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-30"
       >
         <div className="w-[1px] h-16 relative overflow-hidden">
