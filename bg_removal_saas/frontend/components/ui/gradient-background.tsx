@@ -21,38 +21,38 @@ export function GradientBackground({
         Uses blurry radial blobs that animate translation and scaling to create a cinematic liquid feel.
       */}
       {mounted && (
-        <div className="fixed inset-0 z-0 pointer-events-none opacity-50 mix-blend-screen" style={{ filter: 'blur(100px)' }}>
+        <div className="fixed inset-0 z-0 pointer-events-none opacity-60 mix-blend-screen" style={{ filter: 'blur(80px)' }}>
           {/* Top Left Warm Glow */}
           <motion.div
             className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[#8B5E3C]"
             animate={{
-              x: ['0%', '20%', '-10%', '0%'],
-              y: ['0%', '10%', '-20%', '0%'],
-              scale: [1, 1.2, 0.9, 1]
+              x: ['0%', '30%', '-20%', '0%'],
+              y: ['0%', '20%', '-15%', '0%'],
+              scale: [1, 1.4, 0.8, 1]
             }}
-            transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
           />
 
           {/* Bottom Right Deep Auburn */}
           <motion.div
             className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-[#3D2B1F]"
             animate={{
-              x: ['0%', '-20%', '10%', '0%'],
-              y: ['0%', '-10%', '15%', '0%'],
-              scale: [1, 0.8, 1.1, 1]
+              x: ['0%', '-30%', '15%', '0%'],
+              y: ['0%', '-20%', '20%', '0%'],
+              scale: [1, 0.7, 1.2, 1]
             }}
-            transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
+            transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
           />
 
           {/* Center Caramel Orb */}
           <motion.div
-            className="absolute top-[30%] left-[30%] w-[40vw] h-[40vw] rounded-full bg-[#C4956A] opacity-40"
+            className="absolute top-[30%] left-[30%] w-[40vw] h-[40vw] rounded-full bg-[#C4956A] opacity-50"
             animate={{
-              x: ['0%', '30%', '-20%', '0%'],
-              y: ['0%', '-30%', '20%', '0%'],
-              scale: [0.8, 1.1, 0.9, 0.8]
+              x: ['0%', '40%', '-30%', '0%'],
+              y: ['0%', '-40%', '30%', '0%'],
+              scale: [0.8, 1.3, 0.7, 0.8]
             }}
-            transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
           />
         </div>
       )}
