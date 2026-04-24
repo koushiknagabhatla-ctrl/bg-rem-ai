@@ -92,24 +92,6 @@ export function Hero() {
           </a>
         </motion.div>
       </motion.div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={mounted ? { opacity: 1 } : {}}
-        transition={{ delay: 2, duration: 2 }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-30"
-      >
-        <div className="w-[1px] h-16 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#8B5E3C] to-transparent opacity-20" />
-          <motion.div 
-            animate={{ y: ['-100%', '100%'] }} 
-            transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
-            className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-transparent via-[#E8B98A] to-transparent" 
-          />
-        </div>
-        <span className="text-[9px] font-mono tracking-[0.4em] uppercase text-[#A06B45]">Scroll</span>
-      </motion.div>
     </section>
   );
 }

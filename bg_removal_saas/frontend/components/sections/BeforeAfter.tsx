@@ -84,12 +84,12 @@ export function BeforeAfter() {
 
         {/* 
           Slider Engine Block: 
-          Uses Aspect-[16/9] to ensure the Porsche GT3 RS image never stretches or squashes! 
+          Uses Aspect-[9/16] and max-w-[400px] constraint to ensure the vertical portrait layout is perfect! 
         */}
-        <div className="slider-container glass3d p-2 md:p-6 rounded-3xl md:rounded-[40px] border border-[#8B5E3C]/20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] max-w-5xl mx-auto will-change-transform z-30">
+        <div className="slider-container glass3d p-2 md:p-4 rounded-3xl md:rounded-[40px] border border-[#8B5E3C]/20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] max-w-[400px] mx-auto will-change-transform z-30">
           
-          {/* Strictly enforced aspect ratio container */}
-          <div className="w-full aspect-[16/9] rounded-2xl md:rounded-[30px] overflow-hidden bg-[#0A0604] border border-white/5 relative">
+          {/* Strictly enforced aspect-[9/16] portrait container */}
+          <div className="w-full aspect-[9/16] rounded-2xl md:rounded-[30px] overflow-hidden bg-[#0A0604] border border-white/5 relative">
               <ImageComparisonSlider
                 ref={sliderRef}
                 initialPosition={80}
