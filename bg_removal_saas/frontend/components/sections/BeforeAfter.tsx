@@ -74,18 +74,18 @@ export function BeforeAfter() {
 
   return (
     <section ref={sectionRef} id="demo" className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-transparent z-10 px-4 md:px-16">
-      <div className="w-full max-w-[1280px] mx-auto relative z-10 flex flex-col items-center justify-center">
+      <div className="w-full max-w-[1280px] mx-auto relative z-10 flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16">
         
         {/* Header Phase */}
-        <div className="header-content mb-8 md:mb-12 text-center relative z-20">
+        <div className="header-content mb-8 lg:mb-0 text-center lg:text-left relative z-20 w-full lg:w-1/2 lg:pl-10">
           <span className="font-mono text-xs md:text-sm tracking-[0.4em] uppercase text-[#E8B98A] mb-4 md:mb-6 block drop-shadow-xl">
             Product Showcase
           </span>
           <h2 className="font-display text-4xl md:text-5xl lg:text-7xl font-extrabold text-white leading-tight max-w-4xl mx-auto mb-4 md:mb-6">
-            Micro-level precision. <br className="hidden md:block" />
+            Micro-level precision. <br />
             <span className="text-[#8B5E3C] italic font-medium drop-shadow-xl">Even on complex subjects.</span>
           </h2>
-          <p className="text-base md:text-lg text-[#BFA899] font-light max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base md:text-lg text-[#BFA899] font-light max-w-2xl mx-auto lg:mx-0 leading-relaxed">
             Stray hairs, transparent fabrics, complex edges — resolved at sub-pixel precision in under 300ms.
           </p>
         </div>
@@ -94,7 +94,8 @@ export function BeforeAfter() {
           Slider Engine Block: 
           Uses Aspect-[9/16] and tighter maximum bounds to prevent overpowering the screen 
         */}
-        <div className="slider-container glass3d p-2 md:p-3 rounded-2xl md:rounded-3xl border border-[#8B5E3C]/20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] w-full max-w-[320px] max-h-[60vh] mx-auto will-change-transform z-30">
+        <div className="w-full lg:w-1/2 flex justify-center items-center">
+          <div className="slider-container glass3d p-2 md:p-3 rounded-[2rem] border border-[#8B5E3C]/20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] w-full max-w-[320px] max-h-[60vh] lg:mx-0 will-change-transform z-30">
           
           {/* Strictly enforced aspect-[9/16] portrait container */}
           <div className="w-full h-full aspect-[9/16] rounded-xl md:rounded-2xl overflow-hidden bg-[#0A0604] border border-white/5 relative">
@@ -121,6 +122,7 @@ export function BeforeAfter() {
               <span className="text-[10px] font-mono tracking-widest uppercase text-[#6B5B50] hidden sm:block">4K Resolution</span>
               <span className="text-[10px] font-mono tracking-widest uppercase text-[#6B5B50] hidden sm:block">•</span>
               <span className="text-[10px] font-mono tracking-widest uppercase text-[#8B5E3C]">GSAP Timeline</span>
+            </div>
             </div>
           </div>
         </div>

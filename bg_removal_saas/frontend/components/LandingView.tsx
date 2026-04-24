@@ -5,6 +5,7 @@ import { GradientBackground } from '@/components/ui/gradient-background';
 import { Hero } from '@/components/sections/Hero';
 import { SocialProof } from '@/components/sections/SocialProof';
 import { BeforeAfter } from '@/components/sections/BeforeAfter';
+import { DeepPrecisionZoom } from '@/components/sections/DeepPrecisionZoom';
 import { Performance } from '@/components/sections/Performance';
 import { HowItWorks } from '@/components/sections/HowItWorks';
 import { AboutSection } from '@/components/sections/AboutSection';
@@ -21,6 +22,7 @@ export function LandingView() {
         <Hero />
         <SocialProof />
         <BeforeAfter />
+        <DeepPrecisionZoom />
         <Performance />
         <AboutSection />
         <Testimonials />
