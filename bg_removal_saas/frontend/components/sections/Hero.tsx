@@ -48,11 +48,11 @@ export function Hero() {
       <motion.div style={{ scale: textScale, opacity: textOpacity }} className="relative z-10 w-full max-w-[1280px] mx-auto flex flex-col items-center text-center">
         
         {/* Main Headline */}
-        <h1 className="font-display text-[clamp(3rem,8vw,9rem)] font-extrabold leading-[0.85] tracking-[-0.04em] text-white mb-10 max-w-6xl">
-          <span className="block overflow-hidden pb-4">
+        <h1 className="font-display text-[clamp(2.5rem,7vw,8rem)] font-extrabold leading-[1.1] tracking-[-0.02em] text-white mb-10 max-w-6xl">
+          <span className="block overflow-hidden py-2">
             <WordReveal text="Backgrounds" delay={0.1} />
           </span>
-          <span className="block overflow-hidden pb-4">
+          <span className="block overflow-hidden py-2">
             <motion.span
               className="inline-block italic font-medium text-[#8B5E3C]"
               initial={{ y: '110%' }}
@@ -62,7 +62,7 @@ export function Hero() {
               Removed.
             </motion.span>
           </span>
-          <span className="block overflow-hidden pb-4">
+          <span className="block overflow-hidden py-2">
             <WordReveal text="Artistry Retained." delay={0.5} />
           </span>
         </h1>

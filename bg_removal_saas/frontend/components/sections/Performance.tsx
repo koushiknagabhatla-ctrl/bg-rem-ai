@@ -62,9 +62,9 @@ export function Performance() {
               transform: i === 0 ? 'translateY(0vh)' : 'translateY(100vh)' 
             }}
           >
-            <div className="w-full max-w-4xl glass3d p-12 md:p-20 border border-[#8B5E3C]/15 backdrop-blur-2xl bg-[#0C0806]/80 shadow-[0_0_80px_rgba(0,0,0,0.8)] relative">
+            <div className="w-full max-w-4xl glass3d p-12 md:p-20 border border-[#8B5E3C]/10 backdrop-blur-3xl bg-black/30 shadow-[0_0_80px_rgba(0,0,0,0.8)] relative overflow-hidden">
               
-              <div className="absolute top-0 right-0 text-[18rem] md:text-[24rem] font-display font-extrabold text-[#C4956A] opacity-[0.03] select-none z-0 transform translate-x-1/4 -translate-y-1/2 leading-none">
+              <div className="absolute top-0 right-0 text-[18rem] md:text-[24rem] font-display font-extrabold text-[#C4956A] opacity-[0.02] select-none z-0 transform translate-x-1/4 -translate-y-1/2 leading-none pointer-events-none mix-blend-screen">
                 P
               </div>
               
@@ -75,8 +75,8 @@ export function Performance() {
                   <h3 className="text-sm font-bold text-[#E8B98A] tracking-[0.3em] uppercase">{stat.label}</h3>
                 </div>
                 
-                <div className="flex-1 border-tl md:border-l border-[#8B5E3C]/20 pt-8 md:pt-0 md:pl-12">
-                  <p className="text-2xl md:text-3xl text-[#BFA899] font-light leading-relaxed">
+                <div className="flex-1 border-tl md:border-l border-[#8B5E3C]/30 pt-8 md:pt-0 md:pl-12">
+                  <p className="text-2xl md:text-3xl text-[#BFA899] font-light leading-relaxed drop-shadow-md">
                     {stat.desc}
                   </p>
                 </div>

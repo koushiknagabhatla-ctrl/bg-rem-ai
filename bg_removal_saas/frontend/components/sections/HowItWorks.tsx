@@ -57,19 +57,19 @@ export function HowItWorks() {
               transform: i === 0 ? 'translateX(0vw)' : 'translateX(100vw)' 
             }}
           >
-            <div className="w-full max-w-5xl glass3d p-16 md:p-24 border border-[#8B5E3C]/15 backdrop-blur-2xl bg-[#0C0806]/80 flex flex-col items-center text-center shadow-[0_0_80px_rgba(0,0,0,0.8)] relative">
+            <div className="w-full max-w-5xl glass3d p-16 md:p-24 border border-[#8B5E3C]/10 backdrop-blur-3xl bg-black/30 flex flex-col items-center text-center shadow-[0_0_80px_rgba(0,0,0,0.8)] relative overflow-hidden">
               
-              <div className="absolute top-0 right-0 text-[18rem] md:text-[24rem] font-display font-extrabold text-[#C4956A] opacity-[0.05] select-none z-0 transform -translate-y-1/3 translate-x-1/4 leading-none">
+              <div className="absolute top-0 right-0 text-[18rem] md:text-[24rem] font-display font-extrabold text-[#C4956A] opacity-[0.02] select-none z-0 transform -translate-y-1/4 translate-x-[10%] leading-none pointer-events-none mix-blend-screen">
                 0{i + 1}
               </div>
               
-              <div className="w-24 h-24 rounded-3xl bg-[#1A0E08] border border-[#8B5E3C]/30 flex items-center justify-center shadow-[0_0_40px_rgba(232,185,138,0.15)] mb-12 relative z-10">
+              <div className="w-24 h-24 rounded-3xl bg-[#1A0E08]/50 backdrop-blur-md border border-[#8B5E3C]/30 flex items-center justify-center shadow-[0_0_40px_rgba(232,185,138,0.15)] mb-12 relative z-10">
                 <step.icon className="w-12 h-12 text-[#E8B98A]" strokeWidth={1.5} />
               </div>
-              <h3 className="font-display text-5xl md:text-7xl font-bold text-white mb-8 drop-shadow-md relative z-10">
+              <h3 className="font-display text-5xl md:text-7xl font-bold text-white mb-8 drop-shadow-lg relative z-10">
                 {step.title}
               </h3>
-              <p className="text-2xl md:text-3xl text-[#BFA899] font-light leading-relaxed max-w-3xl relative z-10">
+              <p className="text-2xl md:text-3xl text-[#BFA899] font-light leading-relaxed max-w-3xl relative z-10 drop-shadow-md">
                 {step.desc}
               </p>
             </div>

@@ -19,12 +19,12 @@ export function CinematicIntro({ children }: { children: React.ReactNode }) {
           setTimeout(() => {
             setLoading(false);
             document.body.style.overflow = 'unset';
-          }, 400); // give "Ready" time to linger
+          }, 200); // reduced linger
           return 100;
         }
-        return prev + 20;
+        return prev + 25; // incredibly fast increment
       });
-    }, 70);
+    }, 40);
 
     const wordInterval = setInterval(() => {
       setActiveWord((prev) => (prev < words.length - 1 ? prev + 1 : prev));
