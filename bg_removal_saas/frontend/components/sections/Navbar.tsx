@@ -119,7 +119,7 @@ export function Navbar() {
                   <Link href="/login" onClick={() => setMobileOpen(false)} className="glass3d px-8 py-3 border border-[#8B5E3C]/20 rounded-full text-center text-sm font-semibold text-white">Sign In</Link>
                   <LiquidButton size="xl" asChild onClick={() => setMobileOpen(false)}>
                     <Link href="/register">Get Started</Link>
-                  </LiquidButton
+                  </LiquidButton>
                 </>
               ) : (
                 <button onClick={() => { handleSignOut(); setMobileOpen(false); }} className="glass3d px-8 py-3 border border-[#8B5E3C]/20 rounded-full text-sm font-semibold text-white">Sign Out</button>
