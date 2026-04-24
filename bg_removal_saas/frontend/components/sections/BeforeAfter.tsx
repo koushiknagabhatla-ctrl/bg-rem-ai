@@ -94,11 +94,11 @@ export function BeforeAfter() {
           Slider Engine Block: 
           Uses Aspect-[9/16] and tighter maximum bounds to prevent overpowering the screen 
         */}
-        <div className="w-full lg:w-1/2 flex justify-center items-center">
-          <div className="slider-container glass3d p-2 md:p-3 rounded-[2rem] border border-[#8B5E3C]/20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] w-full max-w-[320px] max-h-[60vh] lg:mx-0 will-change-transform z-30">
+        <div className="w-full lg:w-1/2 flex justify-center items-center h-[65vh] md:h-[75vh]">
+          <div className="slider-container glass3d p-2 md:p-3 rounded-[2rem] border border-[#8B5E3C]/20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] h-full max-h-[600px] aspect-[9/16] lg:mx-0 will-change-transform z-30 flex flex-col">
           
           {/* Strictly enforced aspect-[9/16] portrait container */}
-          <div className="w-full h-full aspect-[9/16] rounded-xl md:rounded-2xl overflow-hidden bg-[#0A0604] border border-white/5 relative">
+          <div className="w-full flex-1 rounded-xl md:rounded-[1.25rem] overflow-hidden bg-[#0A0604] border border-white/5 relative">
               <ImageComparisonSlider
                 ref={sliderRef}
                 initialPosition={80}
@@ -109,19 +109,19 @@ export function BeforeAfter() {
               />
           </div>
 
-          <div className="flex items-center justify-between mt-4 px-2">
+          <div className="flex items-center justify-between mt-3 px-2 flex-shrink-0">
             <div className="flex items-center gap-3">
-              <div className="glass3d px-4 py-2 rounded-full border border-[#8B5E3C]/20 flex items-center gap-2">
-                <svg className="w-3.5 h-3.5 text-[#E8B98A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="glass3d px-3 py-2 rounded-full border border-[#8B5E3C]/20 flex items-center gap-2">
+                <svg className="w-3 md:w-3.5 h-3 md:h-3.5 text-[#E8B98A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                 </svg>
-                <span className="text-[10px] font-semibold tracking-widest uppercase text-[#BFA899]">Auto Scrub</span>
+                <span className="text-[9px] md:text-[10px] font-semibold tracking-widest uppercase text-[#BFA899]">Auto Scrub</span>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <span className="text-[10px] font-mono tracking-widest uppercase text-[#6B5B50] hidden sm:block">4K Resolution</span>
-              <span className="text-[10px] font-mono tracking-widest uppercase text-[#6B5B50] hidden sm:block">•</span>
-              <span className="text-[10px] font-mono tracking-widest uppercase text-[#8B5E3C]">GSAP Timeline</span>
+            <div className="flex items-center gap-2">
+              <span className="text-[9px] md:text-[10px] font-mono tracking-widest uppercase text-[#6B5B50] hidden sm:block">4K</span>
+              <span className="text-[9px] md:text-[10px] font-mono tracking-widest uppercase text-[#6B5B50] hidden sm:block">•</span>
+              <span className="text-[9px] md:text-[10px] font-mono tracking-widest uppercase text-[#8B5E3C]">GSAP</span>
             </div>
             </div>
           </div>

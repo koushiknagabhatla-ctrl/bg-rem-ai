@@ -79,7 +79,7 @@ export function AboutSection() {
                 
                 {/* Numbers deleted per design feedback */}
                 
-                <div className="backdrop-blur-xl bg-[#0C0806]/80 p-8 md:p-16 border border-[#8B5E3C]/15 relative z-10 w-full shadow-[0_0_80px_rgba(0,0,0,0.8)]">
+                <div className="glass3d !rounded-[3rem] bg-[#0A0604]/40 backdrop-blur-[24px] p-8 md:p-16 border border-[#8B5E3C]/20 relative z-10 w-full shadow-[0_30px_100px_rgba(0,0,0,0.6)]">
                   <span className="font-mono text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-[#C4956A] mb-4 md:mb-8 block drop-shadow-md">{v.label}</span>
                   <p className="text-lg md:text-3xl text-[#BFA899] font-light leading-relaxed">
                     {v.value}
