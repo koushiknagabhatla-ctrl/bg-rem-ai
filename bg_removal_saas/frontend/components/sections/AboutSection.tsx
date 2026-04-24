@@ -41,21 +41,21 @@ export function AboutSection() {
   return (
     <section ref={container} id="about" className="h-screen w-full overflow-hidden bg-transparent">
       
-      <div className="relative w-full h-full max-w-[1280px] mx-auto px-6 flex flex-col md:flex-row items-center">
+      <div className="relative w-full h-full max-w-[1280px] mx-auto px-6 flex flex-col md:flex-row items-center pt-24 md:pt-0 pb-12 md:pb-0">
         
         {/* Left Side: Fixed Philosophy Text */}
-        <div className="w-full lg:w-[45%] h-full flex flex-col justify-center relative z-[5] lg:pt-0 pt-32">
+        <div className="w-full lg:w-[45%] flex-shrink-0 flex flex-col justify-center relative z-[5]">
           <div>
-            <span className="font-mono text-[11px] tracking-[0.5em] uppercase text-[#E8B98A] mb-6 block drop-shadow-[0_0_10px_rgba(232,185,138,0.5)]">
+            <span className="font-mono text-[10px] md:text-[11px] tracking-[0.5em] uppercase text-[#E8B98A] mb-4 md:mb-6 block drop-shadow-[0_0_10px_rgba(232,185,138,0.5)]">
               Our Foundation
             </span>
-            <h2 className="font-display text-5xl md:text-7xl font-extrabold text-white leading-tight mb-8 drop-shadow-2xl">
-              <HeadingReveal>Built different.</HeadingReveal><br/>
+            <h2 className="font-display text-4xl md:text-7xl font-extrabold text-white leading-tight mb-4 md:mb-8 drop-shadow-2xl">
+              <HeadingReveal>Built different.</HeadingReveal><br className="hidden md:block" />
               <span className="italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#C4956A] to-[#8B5E3C]">
                 <HeadingReveal delay={0.25}>On purpose.</HeadingReveal>
               </span>
             </h2>
-            <div className="text-2xl text-[#BFA899] font-light leading-relaxed drop-shadow-sm mb-8">
+            <div className="text-lg md:text-2xl text-[#BFA899] font-light leading-relaxed drop-shadow-sm mb-4 md:mb-8 max-w-sm md:max-w-none">
               <TextReveal delay={0.5}>
                 We grew exhausted by tools that degraded our images. So we engineered a platform that treats every single pixel with obsessive respect.
               </TextReveal>
@@ -64,7 +64,7 @@ export function AboutSection() {
         </div>
 
         {/* Right Side: GSAP Scroll Pinned Cards */}
-        <div className="w-full lg:w-[55%] relative h-[50vh] md:h-full">
+        <div className="w-full lg:w-[55%] relative flex-1 min-h-[40vh] md:h-full mt-4 md:mt-0">
           {values.map((v, i) => (
             <div
               key={i}
@@ -77,13 +77,13 @@ export function AboutSection() {
             >
               <div className="w-full h-full flex flex-col justify-center relative">
                 
-                <div className="absolute top-1/2 -translate-y-1/2 left-0 text-[14rem] md:text-[20rem] font-display font-extrabold text-[#C4956A] opacity-[0.03] select-none z-0 tracking-tighter mix-blend-screen">
+                <div className="absolute top-1/2 -translate-y-1/2 left-0 text-[10rem] md:text-[20rem] font-display font-extrabold text-[#C4956A] opacity-[0.03] select-none z-0 tracking-tighter mix-blend-screen">
                   0{i + 1}
                 </div>
                 
-                <div className="backdrop-blur-xl bg-[#0C0806]/80 p-10 md:p-16 border border-[#8B5E3C]/15 relative z-10 w-full shadow-[0_0_80px_rgba(0,0,0,0.8)]">
-                  <span className="font-mono text-[11px] tracking-[0.4em] uppercase text-[#C4956A] mb-8 block drop-shadow-md">{v.label}</span>
-                  <p className="text-2xl md:text-3xl text-[#BFA899] font-light leading-relaxed">
+                <div className="backdrop-blur-xl bg-[#0C0806]/80 p-8 md:p-16 border border-[#8B5E3C]/15 relative z-10 w-full shadow-[0_0_80px_rgba(0,0,0,0.8)]">
+                  <span className="font-mono text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-[#C4956A] mb-4 md:mb-8 block drop-shadow-md">{v.label}</span>
+                  <p className="text-lg md:text-3xl text-[#BFA899] font-light leading-relaxed">
                     {v.value}
                   </p>
                 </div>

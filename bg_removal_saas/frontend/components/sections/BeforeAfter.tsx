@@ -33,15 +33,23 @@ export function BeforeAfter() {
       ease: "power2.inOut",
       duration: 3
     })
-    // Sequence 2: The before/after slider DRAGS ACROSS AUTOMATICALLY. (80% -> 0%)
+    // Sequence 2: The before/after slider DRAGS ACROSS AUTOMATICALLY. (80% -> 0% -> 50%)
     .to(proxy, {
       pos: 0,
-      duration: 5,
+      duration: 3,
       ease: "power1.inOut",
       onUpdate: () => {
         if (sliderRef.current) sliderRef.current.setPosition(proxy.pos);
       }
     })
+    .to(proxy, {
+      pos: 50,
+      duration: 2,
+      ease: "power2.out",
+      onUpdate: () => {
+        if (sliderRef.current) sliderRef.current.setPosition(proxy.pos);
+      }
+    }, ">")
     // Sequence 3: Zoom back out seamlessly before unpinning allows scroll continuation
     .to(".slider-container", {
       scale: 1,
@@ -65,7 +73,7 @@ export function BeforeAfter() {
   }, { scope: sectionRef });
 
   return (
-    <section ref={sectionRef} id="demo" className="relative h-[110vh] w-full flex items-center justify-center overflow-hidden bg-transparent z-10 px-4 md:px-16">
+    <section ref={sectionRef} id="demo" className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-transparent z-10 px-4 md:px-16">
       <div className="w-full max-w-[1280px] mx-auto relative z-10 flex flex-col items-center justify-center">
         
         {/* Header Phase */}

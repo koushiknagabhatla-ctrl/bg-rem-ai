@@ -56,7 +56,7 @@ export function Performance() {
           <div
             key={i}
             ref={(el) => { cardsRef.current[i] = el; }}
-            className={`absolute w-full h-[100vh] mt-0 flex justify-center items-center ${i === 0 ? 'z-10' : 'z-20 rounded-t-[80px] shadow-[0_-30px_100px_rgba(0,0,0,0.8)] border-t border-[#8B5E3C]/30 glass3d !border-x-0 !border-b-0 !border-radius-[80px_80px_0_0]'}`}
+            className={`!absolute inset-0 w-full h-[100vh] mt-0 flex justify-center items-center ${i === 0 ? 'z-10' : 'z-20 rounded-t-[40px] md:rounded-t-[80px] shadow-[0_-30px_100px_rgba(0,0,0,0.8)] border-t border-[#8B5E3C]/30 glass3d !border-x-0 !border-b-0'}`}
             style={{ 
               opacity: i === 0 ? 1 : 0, 
               transform: i === 0 ? 'translateY(0vh)' : 'translateY(100vh)' 

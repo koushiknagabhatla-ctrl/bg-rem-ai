@@ -59,9 +59,7 @@ export function HowItWorks() {
           >
             <div className="w-full max-w-5xl px-6 md:px-24 flex flex-col items-center text-center relative overflow-hidden">
               
-              <div className="absolute top-0 right-0 text-[18rem] md:text-[24rem] font-display font-extrabold text-[#C4956A] opacity-[0.02] select-none z-0 transform -translate-y-1/4 translate-x-[10%] leading-none pointer-events-none mix-blend-screen">
-                0{i + 1}
-              </div>
+              {/* Numbers removed per design feedback */}
               
               <div className="w-24 h-24 rounded-3xl bg-[#1A0E08]/50 backdrop-blur-md border border-[#8B5E3C]/30 flex items-center justify-center shadow-[0_0_40px_rgba(232,185,138,0.15)] mb-12 relative z-10">
                 <step.icon className="w-12 h-12 text-[#E8B98A]" strokeWidth={1.5} />
