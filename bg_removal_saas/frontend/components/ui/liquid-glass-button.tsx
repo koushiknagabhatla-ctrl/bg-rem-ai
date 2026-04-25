@@ -113,11 +113,11 @@ function LiquidButton({
         {...props}
       >
         <div className="absolute top-0 left-0 z-0 h-full w-full rounded-full 
-            shadow-[0_0_6px_rgba(139,94,60,0.05),0_2px_6px_rgba(139,94,60,0.1),inset_3px_3px_0.5px_-3px_rgba(255,255,255,0.2),inset_-3px_-3px_0.5px_-3px_rgba(139,94,60,0.5),inset_1px_1px_1px_-0.5px_rgba(255,255,255,0.1),inset_-1px_-1px_1px_-0.5px_rgba(139,94,60,0.3),inset_0_0_6px_6px_rgba(255,255,255,0.02),inset_0_0_2px_2px_rgba(255,255,255,0.05),0_0_12px_rgba(196,149,106,0.15)] 
-        transition-all" />
+            shadow-[0_10px_30px_rgba(139,94,60,0.15),0_4px_10px_rgba(139,94,60,0.2),inset_0_1px_2px_rgba(255,255,255,0.4),inset_0_-2px_4px_rgba(0,0,0,0.4),inset_0_0_8px_rgba(255,255,255,0.05),0_0_20px_rgba(196,149,106,0.3)] 
+        transition-all group-hover:shadow-[0_12px_40px_rgba(139,94,60,0.25),0_8px_20px_rgba(139,94,60,0.3),inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-2px_6px_rgba(0,0,0,0.5),inset_0_0_12px_rgba(255,255,255,0.1),0_0_30px_rgba(196,149,106,0.5)]" />
         <div
-          className="absolute top-0 left-0 isolate -z-10 h-full w-full overflow-hidden rounded-full border border-white/10"
-          style={{ backdropFilter: 'url("#container-glass") blur(12px)', backgroundColor: 'rgba(139,94,60,0.05)' }}
+          className="absolute top-0 left-0 isolate -z-10 h-full w-full overflow-hidden rounded-full border border-white/20 bg-gradient-to-b from-white/[0.08] to-transparent mix-blend-overlay"
+          style={{ backdropFilter: 'url("#container-glass") blur(16px)', backgroundColor: 'rgba(139,94,60,0.05)' }}
         />
 
         <div className="pointer-events-none z-10 flex items-center justify-center tracking-[0.2em] uppercase font-bold text-xs mt-1">
