@@ -23,7 +23,7 @@ export function Performance() {
     ScrollTrigger.create({
       trigger: container.current,
       start: "top top",
-      end: "+=400%", // 4 cards
+      end: "+=150%", // Fast-track sequence, drastically reduced from 400%
       pin: true,
       animation: gsap.timeline()
         .to(cardsRef.current[0], { opacity: 0, scale: 0.9, y: -100, duration: 1, ease: "power2.inOut" }, 1)

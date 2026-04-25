@@ -35,10 +35,14 @@ export function SignInCard() {
         </Link>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }} 
+      <motion.div 
+        initial={{ opacity: 0, y: 50, rotateX: 10, scale: 0.95 }} 
+        animate={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }} 
+        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} 
+        style={{ perspective: 1000 }}
         className="relative z-10 w-full max-w-sm">
         
-        <div className="glass3d p-10 flex flex-col shadow-2xl border border-[#8B5E3C]/20">
+        <div className="glass3d p-10 flex flex-col shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-[#8B5E3C]/30">
           
           {/* Logo & Header */}
           <div className="flex items-center justify-center gap-1.5 mb-8">

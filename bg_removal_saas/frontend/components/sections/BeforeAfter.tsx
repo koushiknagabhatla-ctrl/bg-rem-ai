@@ -11,6 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 export function BeforeAfter() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef<ImageComparisonSliderRef>(null);
+  const perspectiveRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     // Master Sequence: Lock the entire viewport, zoom, scrub the UI, and zoom out.
@@ -18,7 +19,7 @@ export function BeforeAfter() {
       scrollTrigger: {
         trigger: sectionRef.current,
         start: "center center", 
-        end: "+=3000", // The user has 3000px of scroll distance to observe the physics
+        end: "+=1500", // Massively reduced from 3000px to strictly 1500px for a much faster cinematic scroll
         pin: true,
         scrub: 2.5, // Ultra-smooth trailing coefficient
         anticipatePin: 1
@@ -27,12 +28,15 @@ export function BeforeAfter() {
 
     const proxy = { pos: 80 }; // Start slider at 80% 
 
-    // Sequence 1: Frame locks in center and zooms slightly without overpowering screen
-    tl.to(".slider-container", {
-      scale: 1.15,
-      ease: "power2.inOut",
+    // Sequence 1: Frame locks in center, tilts back into 3D space, and zooms
+    tl.fromTo(perspectiveRef.current, 
+      { rotateX: 15, rotateY: -10, z: -200, scale: 0.9 },
+      { rotateX: 0, rotateY: 0, z: 0, scale: 1.05, ease: "power3.out", duration: 3 }
+    )
+    .to(".slider-container", {
+      boxShadow: "0 50px 150px rgba(0,0,0,0.9)",
       duration: 3
-    })
+    }, "<")
     // Sequence 2: The before/after slider DRAGS ACROSS AUTOMATICALLY. (80% -> 0% -> 50%)
     .to(proxy, {
       pos: 0,
@@ -51,8 +55,10 @@ export function BeforeAfter() {
       }
     }, ">")
     // Sequence 3: Zoom back out seamlessly before unpinning allows scroll continuation
-    .to(".slider-container", {
-      scale: 1,
+    .to(perspectiveRef.current, {
+      rotateX: -10,
+      rotateY: 5,
+      scale: 0.95,
       ease: "power2.inOut",
       duration: 3
     });
@@ -94,8 +100,8 @@ export function BeforeAfter() {
           Slider Engine Block: 
           Uses Aspect-[9/16] and tighter maximum bounds to prevent overpowering the screen 
         */}
-        <div className="w-full lg:w-1/2 flex justify-center items-center h-[65vh] md:h-[75vh]">
-          <div className="slider-container glass3d p-2 md:p-3 rounded-[2rem] border border-[#8B5E3C]/20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] h-full max-h-[600px] aspect-[9/16] lg:mx-0 will-change-transform z-30 flex flex-col">
+        <div className="w-full lg:w-1/2 flex justify-center items-center h-[65vh] md:h-[75vh]" style={{ perspective: 1200 }}>
+          <div ref={perspectiveRef} className="slider-container glass3d p-2 md:p-3 rounded-[2rem] border border-[#8B5E3C]/20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] h-full max-h-[600px] aspect-[9/16] lg:mx-0 will-change-transform z-30 flex flex-col transform-style-3d">
           
           {/* Strictly enforced aspect-[9/16] portrait container */}
           <div className="w-full flex-1 rounded-xl md:rounded-[1.25rem] overflow-hidden bg-[#0A0604] border border-white/5 relative">

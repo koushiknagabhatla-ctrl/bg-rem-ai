@@ -129,8 +129,8 @@ body {
 
 /* ═══════════ LIQUID GLASS 3D (Curated.media Aesthetic) ═══════════ */
 .glass3d {
-  --filter-glass3d: blur(24px) brightness(1.15) saturate(1.4);
-  --color-glass3d: rgba(255, 255, 255, 0.05);
+  --filter-glass3d: blur(40px) brightness(1.25) saturate(1.5);
+  --color-glass3d: rgba(255, 255, 255, 0.03);
   --noise-glass3d: url("https://www.transparenttextures.com/patterns/cartographer.png");
 
   position: relative;
@@ -168,11 +168,11 @@ body {
   overflow: hidden;
   z-index: 5;
   box-shadow:
-    inset 2px 2px 1px -3px hsl(30 20% 90% / 0.8),
-    inset 4px 4px 2px -6px hsl(30 20% 90% / 0.3),
-    inset 1.5px 1.5px 1.5px -0.75px hsl(30 20% 90% / 0.15),
-    inset 1.5px 1.5px 0.25px hsl(30 20% 90% / 0.03),
-    inset 0 0 0.25px 0.5px hsl(30 20% 90% / 0.03);
+    inset 2px 2px 1px -3px hsl(0 0% 100% / 0.95),
+    inset 4px 4px 2px -6px hsl(0 0% 100% / 0.45),
+    inset 1.5px 1.5px 1.5px -0.75px hsl(30 20% 90% / 0.25),
+    inset 1.5px 1.5px 0.25px hsl(0 0% 100% / 0.1),
+    inset 0 0 0.25px 0.5px hsl(0 0% 100% / 0.1);
 }
 
 .glass3d > * {

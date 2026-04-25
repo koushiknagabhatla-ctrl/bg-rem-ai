@@ -23,7 +23,7 @@ export function AboutSection() {
     ScrollTrigger.create({
       trigger: container.current,
       start: "top top",
-      end: "+=400%", // 4 items
+      end: "+=150%", // Sped up massively: Previously 400%, now 150% for high velocity
       pin: true,
       animation: gsap.timeline()
         .to(cardsRef.current[0], { opacity: 0, scale: 0.9, x: 100, duration: 1, ease: "power2.inOut" }, 1)
