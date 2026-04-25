@@ -32,7 +32,6 @@ export function GradientBackground({
               color2="#3D1C04"   /* Mid brown */
               color3="#EAA752"   /* Brilliant gold highlight */
             />
-            <EnergyRing radius={1.5} position={[0, 0, -0.5]} />
           </Canvas>
         </div>
       )}

@@ -1,5 +1,6 @@
 'use client';
 import { Download } from 'lucide-react';
+import { LiquidButton } from '@/components/ui/liquid-glass-button';
 
 export function DownloadButton({ resultUrl }: { resultUrl: string }) {
   const download = async (bgColor: string) => {
@@ -20,9 +21,9 @@ export function DownloadButton({ resultUrl }: { resultUrl: string }) {
 
   return (
     <div className="space-y-3">
-      <button onClick={() => download('transparent')} className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-[#8B5E3C] to-[#C4956A] text-white border border-[#8B5E3C]/30 hover:shadow-[0_0_20px_rgba(196,149,106,0.3)] text-xs font-bold tracking-widest uppercase transition-all duration-300">
+      <LiquidButton onClick={() => download('transparent')} className="w-full flex items-center justify-center gap-2 py-3">
         <Download className="w-3.5 h-3.5" /> PNG (Transparent)
-      </button>
+      </LiquidButton>
       <div className="grid grid-cols-2 gap-2.5">
         <button onClick={() => download('#ffffff')} className="py-2.5 rounded-xl bg-[#1A0E08] border border-[#8B5E3C]/20 text-[#BFA899] hover:bg-[#8B5E3C]/10 text-xs font-semibold transition-all duration-300">White BG</button>
         <button onClick={() => download('#000000')} className="py-2.5 rounded-xl bg-[#1A0E08] border border-[#8B5E3C]/20 text-[#BFA899] hover:bg-[#8B5E3C]/10 text-xs font-semibold transition-all duration-300">Black BG</button>
