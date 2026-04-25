@@ -19,12 +19,12 @@ export function SocialProof() {
         <p className="text-center text-[10px] font-mono tracking-[0.4em] uppercase text-[#8B5E3C] mb-8">
           Trusted by creative teams worldwide
         </p>
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden marquee-container">
           <div className="marquee-track">
             {brands.map((brand, i) => (
               <span
                 key={i}
-                className="inline-flex items-center justify-center px-12 text-lg font-display font-bold text-[#F5EDE4]/10 hover:text-[#C4956A]/40 transition-colors duration-500 whitespace-nowrap select-none"
+                className="inline-flex items-center justify-center px-12 text-lg font-display font-bold text-[#F5EDE4]/15 hover:text-[#C4956A]/50 transition-colors duration-500 whitespace-nowrap select-none"
               >
                 {brand}
               </span>

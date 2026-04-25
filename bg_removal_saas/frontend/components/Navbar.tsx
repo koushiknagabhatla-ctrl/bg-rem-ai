@@ -54,7 +54,7 @@ export function Navbar() {
       >
         <div className="max-w-[1400px] mx-auto flex items-center justify-between">
           <Link href="/" className="group flex items-center gap-1">
-            <span className="text-lg font-serif font-semibold tracking-tight text-white">VCranks</span>
+            <span className="text-lg font-serif font-semibold tracking-tight text-white">VCrancks</span>
             <span className="text-lg font-serif font-semibold italic text-white/40 group-hover:text-white/70 transition-colors duration-300">AI</span>
           </Link>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -14,20 +14,45 @@ export function NavHeader({ session, handleSignOut }: { session: any, handleSign
   const items: NavItem[] = [
     { label: 'Home', href: '/', scrollTo: 'hero' },
     { label: 'About', href: '/', scrollTo: 'about' },
-    { label: 'Workspace', href: session ? '/tool' : '/login', scrollTo: session ? 'tool-section' : undefined },
+    { label: 'Workspace', href: session ? '/tool' : '/login' },
   ];
 
-  const handleNav = (item: NavItem) => {
-    if (item.scrollTo && pathname === '/') {
-      const el = document.getElementById(item.scrollTo);
-      if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+  // Handle scroll after page load (for cross-page hash navigation)
+  useEffect(() => {
+    if (pathname === '/') {
+      const hash = window.location.hash.replace('#', '');
+      if (hash) {
+        // Small delay to wait for DOM to render and GSAP to initialize
+        const timeout = setTimeout(() => {
+          const el = document.getElementById(hash);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 800);
+        return () => clearTimeout(timeout);
+      }
     }
-    if (item.scrollTo && pathname !== '/') {
-      router.push('/#' + item.scrollTo);
+  }, [pathname]);
+
+  const handleNav = useCallback((item: NavItem) => {
+    // If Workspace link, just navigate directly
+    if (!item.scrollTo) {
+      router.push(item.href);
       return;
     }
-    router.push(item.href);
-  };
+
+    // If already on landing page, scroll to section
+    if (pathname === '/') {
+      const el = document.getElementById(item.scrollTo);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+    }
+
+    // If on a different page, navigate to landing with hash
+    window.location.href = '/#' + item.scrollTo;
+  }, [pathname, router]);
 
   return (
     <ul

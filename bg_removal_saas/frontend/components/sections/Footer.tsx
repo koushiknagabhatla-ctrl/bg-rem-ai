@@ -1,14 +1,19 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useRef } from 'react';
 import Link from 'next/link';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
 export function Footer() {
   return (
-    <footer className="px-6 md:px-16 pt-20 pb-10 border-t border-[#8B5E3C]/10 relative">
+    <footer className="px-6 md:px-16 pt-16 pb-8 border-t border-[#8B5E3C]/10 relative">
+      
+      {/* Animated top border glow */}
+      <div className="absolute top-0 left-0 right-0 h-px">
+        <div className="section-divider w-full" />
+      </div>
+
       <div className="max-w-[1280px] mx-auto">
         {/* Top Row */}
         <motion.div
@@ -16,11 +21,11 @@ export function Footer() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 1, ease }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-12 pb-16 border-b border-[#8B5E3C]/10"
+          className="grid grid-cols-1 md:grid-cols-3 gap-12 pb-12 border-b border-[#8B5E3C]/10"
         >
           {/* Brand */}
           <div>
-            <span className="font-display text-2xl font-bold text-white block mb-4">VCranks <span className="text-[#8B5E3C] italic">AI</span></span>
+            <span className="font-display text-2xl font-bold text-white block mb-4">VCrancks <span className="text-[#8B5E3C] italic">AI</span></span>
             <p className="text-sm text-[#BFA899] leading-relaxed max-w-xs font-light">
               Professional AI background removal. Built for designers, photographers, and e-commerce teams who refuse to compromise.
             </p>
@@ -53,7 +58,7 @@ export function Footer() {
                 <a
                   key={i}
                   href="#"
-                  className="w-10 h-10 rounded-full border border-[#8B5E3C]/30 flex items-center justify-center text-[#BFA899] text-xs font-mono font-bold hover:text-white hover:bg-[#8B5E3C] hover:border-[#8B5E3C] transition-all duration-300"
+                  className="w-10 h-10 rounded-full border border-[#8B5E3C]/30 flex items-center justify-center text-[#BFA899] text-xs font-mono font-bold hover:text-white hover:bg-[#8B5E3C] hover:border-[#8B5E3C] hover:scale-110 hover:shadow-[0_0_20px_rgba(196,149,106,0.3)] transition-all duration-300"
                 >
                   {label}
                 </a>
@@ -68,10 +73,10 @@ export function Footer() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.3 }}
-          className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4"
+          className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4"
         >
           <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#6B5B50]">
-            © 2026 VCranks AI. Developed by Koushik. All Rights Reserved.
+            © 2026 VCrancks AI. Developed by Koushik. All Rights Reserved.
           </p>
           <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#6B5B50]">
             Engineered with precision.

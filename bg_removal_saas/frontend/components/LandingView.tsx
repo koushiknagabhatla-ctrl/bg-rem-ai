@@ -12,7 +12,7 @@ import { Hero } from '@/components/sections/Hero';
 import { SocialProof } from '@/components/sections/SocialProof';
 import { BeforeAfter } from '@/components/sections/BeforeAfter';
 import { Performance } from '@/components/sections/Performance';
-import { HowItWorks } from '@/components/sections/HowItWorks';
+import { StatsRibbon } from '@/components/sections/StatsRibbon';
 import { AboutSection } from '@/components/sections/AboutSection';
 import { Testimonials } from '@/components/sections/Testimonials';
 import { FinalCTA } from '@/components/sections/FinalCTA';
@@ -28,18 +28,15 @@ export function LandingView() {
     // Phase 1: Authentication Redirection
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        // If an active JWT token exists, immediately bypass the landing flow
         router.replace('/tool');
       } else {
         setIsChecking(false);
       }
     });
 
-    // Phase 2: Ultimate GSAP Scroll Configuration
+    // Phase 2: GSAP Scroll Configuration
     gsap.registerPlugin(ScrollTrigger);
     
-    // This locks the viewport kinematics, preventing mobile browser address bar 
-    // collapsing from tearing the ScrollTrigger coordinate arrays apart.
     ScrollTrigger.config({
       ignoreMobileResize: true,
       syncInterval: 99
@@ -57,12 +54,15 @@ export function LandingView() {
 
   return (
     <Preloader>
-      <GradientBackground>
+      <GradientBackground className="film-grain">
         <ScrollIndicator />
         <Hero />
         <SocialProof />
         <BeforeAfter />
+        <div className="section-divider mx-6 md:mx-16" />
         <Performance />
+        <StatsRibbon />
+        <div className="section-divider mx-6 md:mx-16" />
         <AboutSection />
         <Testimonials />
         <FinalCTA />

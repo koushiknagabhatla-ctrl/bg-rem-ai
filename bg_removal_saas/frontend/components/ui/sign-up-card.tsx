@@ -49,7 +49,7 @@ export function SignUpCard() {
           
           {/* Header */}
           <div className="flex items-center justify-center gap-1.5 mb-8">
-            <span className="font-display text-xl font-bold tracking-tight text-white">VCranks</span>
+            <span className="font-display text-xl font-bold tracking-tight text-white">VCrancks</span>
             <span className="font-display text-xl font-bold italic text-[#C4956A]">AI</span>
           </div>
 

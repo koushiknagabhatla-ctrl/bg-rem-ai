@@ -4,7 +4,7 @@ import { Navbar } from '@/components/sections/Navbar';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'VCranks AI — Professional Background Removal',
+  title: 'VCrancks AI — Professional Background Removal',
   description: 'Remove backgrounds from any image with AI. Custom neural network delivering pixel-perfect results at machine speed.',
 };
 

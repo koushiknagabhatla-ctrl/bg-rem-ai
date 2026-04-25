@@ -1,88 +1,93 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { Activity, Clock, Cpu, Zap } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const stats = [
-  { icon: Clock, value: 'Instant', label: 'Processing', desc: 'Photos process so fast you won’t even have time to blink. Your flow state remains unbroken.' },
-  { icon: Zap, value: 'Pristine', label: 'Resolution', desc: 'We respect your art. Every single pixel of your original image is preserved perfectly without downscaling.' },
-  { icon: Activity, value: 'Invisible', label: 'Edges', desc: 'Flyaway hair. Fine mesh. Smoke. Our AI understands depth intuitively, leaving edges flawlessly transparent.' },
-  { icon: Cpu, value: 'Infinite', label: 'Scale', desc: 'Whether you upload one photo or forty thousand, our distributed engine handles it without breaking a sweat.' },
+  { icon: Clock, value: 'Instant', label: 'Processing', desc: "Photos process so fast you won't even blink. Your flow state remains unbroken." },
+  { icon: Zap, value: 'Pristine', label: 'Resolution', desc: 'Every pixel of your original is preserved perfectly without downscaling.' },
+  { icon: Activity, value: 'Invisible', label: 'Edges', desc: 'Hair strands, fine mesh, smoke — our AI understands depth intuitively.' },
+  { icon: Cpu, value: 'Infinite', label: 'Scale', desc: 'One photo or forty thousand — our engine handles it without breaking a sweat.' },
 ];
+
+const ease = [0.16, 1, 0.3, 1] as const;
+
+function AnimatedValue({ value, inView }: { value: string; inView: boolean }) {
+  const [display, setDisplay] = useState('');
+  
+  useEffect(() => {
+    if (!inView) return;
+    let i = 0;
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const interval = setInterval(() => {
+      setDisplay(
+        value.split('').map((char, idx) => {
+          if (idx < i) return char;
+          return chars[Math.floor(Math.random() * chars.length)];
+        }).join('')
+      );
+      i++;
+      if (i > value.length) clearInterval(interval);
+    }, 50);
+    return () => clearInterval(interval);
+  }, [value, inView]);
+
+  return <span>{display || value}</span>;
+}
 
 export function Performance() {
   const container = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
-
-  useGSAP(() => {
-    ScrollTrigger.create({
-      trigger: container.current,
-      start: "top top",
-      end: "+=150%", // Fast-track sequence, drastically reduced from 400%
-      pin: true,
-      animation: gsap.timeline()
-        .to(cardsRef.current[0], { opacity: 0, scale: 0.9, y: -100, duration: 1, ease: "power2.inOut" }, 1)
-        .fromTo(cardsRef.current[1], { y: '100vh', opacity: 0, scale: 0.8 }, { y: '0vh', opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, 1)
-        
-        .to(cardsRef.current[1], { opacity: 0, scale: 0.9, y: -100, duration: 1, ease: "power2.inOut" }, 2)
-        .fromTo(cardsRef.current[2], { y: '100vh', opacity: 0, scale: 0.8 }, { y: '0vh', opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, 2)
-        
-        .to(cardsRef.current[2], { opacity: 0, scale: 0.9, y: -100, duration: 1, ease: "power2.inOut" }, 3)
-        .fromTo(cardsRef.current[3], { y: '100vh', opacity: 0, scale: 0.8 }, { y: '0vh', opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, 3),
-      scrub: 2, // Upgraded fluid cinematic scrub
-    });
-  }, { scope: container });
+  const isInView = useInView(container, { once: true, amount: 0.3 });
 
   return (
-    <section ref={container} className="h-screen w-full overflow-hidden bg-transparent">
+    <section ref={container} className="relative py-32 md:py-40 px-6 md:px-16 overflow-hidden bg-transparent">
       
-      {/* Background Title */}
-      <div className="absolute inset-0 flex flex-col justify-start pt-[10vh] items-center pointer-events-none z-[1] select-none">
-        <span className="font-mono text-[12px] tracking-[0.5em] uppercase text-[#E8B98A] mb-4">
+      {/* Section Header */}
+      <motion.div 
+        initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
+        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 1.2, ease }}
+        className="text-center mb-20 md:mb-28 relative z-10"
+      >
+        <span className="font-mono text-[12px] tracking-[0.5em] uppercase text-[#E8B98A] mb-6 block">
           Experience
         </span>
-        <h2 className="font-display text-4xl md:text-[6rem] font-extrabold text-[#C4956A]/10 leading-none text-center">
-          MAGIC DISGUISED
+        <h2 className="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight">
+          Magic <span className="italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#C4956A] to-[#8B5E3C]">Disguised</span>
         </h2>
-      </div>
+      </motion.div>
 
-      <div className="relative w-full h-full flex items-center justify-center">
+      {/* Ambient Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[40vw] bg-[#C4956A]/5 rounded-full blur-[120px] pointer-events-none animate-glow-pulse" />
+
+      {/* Stats Grid */}
+      <div className="max-w-[1280px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 relative z-10">
         {stats.map((stat, i) => (
-          <div
+          <motion.div
             key={i}
-            ref={(el) => { cardsRef.current[i] = el; }}
-            className={`!absolute inset-0 w-full h-[100vh] mt-0 flex justify-center items-center bg-[#0C0806]/95 will-change-transform ${i === 0 ? 'z-10' : 'z-20 rounded-t-[40px] md:rounded-t-[80px] shadow-[0_-30px_100px_rgba(0,0,0,0.8)] border-t border-[#8B5E3C]/30 glass3d !border-x-0 !border-b-0'}`}
-            style={{ 
-              opacity: i === 0 ? 1 : 0, 
-              transform: i === 0 ? 'translateY(0vh)' : 'translateY(100vh)' 
-            }}
+            initial={{ opacity: 0, y: 60, filter: 'blur(6px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 1, delay: i * 0.15, ease }}
+            className="stat-card glass3d !rounded-[2rem] bg-[#0A0604]/50 backdrop-blur-[24px] p-8 md:p-12 border border-[#8B5E3C]/15 hover:border-[#8B5E3C]/30 transition-all duration-700 group"
           >
-            <div className="w-full max-w-4xl px-6 md:px-20 relative overflow-hidden">
-              
-              <div className="absolute top-0 right-0 text-[18rem] md:text-[24rem] font-display font-extrabold text-[#C4956A] opacity-[0.02] select-none z-0 transform translate-x-1/4 -translate-y-1/2 leading-none pointer-events-none mix-blend-screen">
-                P
+            <div className="flex items-start gap-6">
+              <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-[#1A0E08]/80 border border-[#8B5E3C]/20 flex items-center justify-center group-hover:border-[#C4956A]/40 group-hover:shadow-[0_0_30px_rgba(232,185,138,0.1)] transition-all duration-700">
+                <stat.icon className="w-6 h-6 text-[#C4956A] group-hover:text-[#E8B98A] transition-colors duration-500" strokeWidth={1.5} />
               </div>
-              
-              <div className="flex flex-col md:flex-row items-start md:items-center gap-12 relative z-10">
-                <div className="flex-shrink-0">
-                  <stat.icon className="w-16 h-16 text-[#C4956A] mb-8 drop-shadow-md" strokeWidth={1.5} />
-                  <span className="font-display text-5xl md:text-7xl block font-extrabold text-white mb-2 drop-shadow-sm">{stat.value}</span>
-                  <h3 className="text-sm font-bold text-[#E8B98A] tracking-[0.3em] uppercase">{stat.label}</h3>
-                </div>
-                
-                <div className="flex-1 border-tl md:border-l border-[#8B5E3C]/30 pt-8 md:pt-0 md:pl-12">
-                  <p className="text-2xl md:text-3xl text-[#BFA899] font-light leading-relaxed drop-shadow-md">
-                    {stat.desc}
-                  </p>
-                </div>
+              <div className="flex-1">
+                <span className="font-display text-3xl md:text-4xl font-extrabold text-white block mb-1 tracking-tight">
+                  <AnimatedValue value={stat.value} inView={isInView} />
+                </span>
+                <h3 className="text-xs font-bold text-[#E8B98A] tracking-[0.3em] uppercase mb-4">{stat.label}</h3>
+                <p className="text-base md:text-lg text-[#BFA899] font-light leading-relaxed">
+                  {stat.desc}
+                </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>

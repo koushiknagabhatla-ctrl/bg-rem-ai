@@ -37,6 +37,21 @@ export function Navbar() {
 
   const handleSignOut = async () => { await supabase.auth.signOut(); router.push('/'); };
 
+  const handleMobileNav = (scrollTo?: string) => {
+    setMobileOpen(false);
+    if (!scrollTo) return;
+
+    if (pathname === '/') {
+      const el = document.getElementById(scrollTo);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+    }
+    // Cross-page navigation
+    window.location.href = '/#' + scrollTo;
+  };
+
   return (
     <>
       <motion.header
@@ -54,7 +69,7 @@ export function Navbar() {
           {/* Logo */}
           <div className="flex justify-start">
             <Link href="/" className="group flex items-center gap-1.5 focus:outline-none">
-              <span className="font-display text-lg font-bold tracking-tight text-white">VCranks</span>
+              <span className="font-display text-lg font-bold tracking-tight text-white">VCrancks</span>
               <span className="font-display text-lg font-bold italic text-[#C4956A] group-hover:text-[#E8B98A] transition-colors duration-300">AI</span>
             </Link>
           </div>
@@ -107,10 +122,18 @@ export function Navbar() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
             className="fixed inset-0 z-40 bg-[#0C0806]/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8"
           >
-            {[{ href: '/', label: 'Home' }, { href: '#about', label: 'About' }, { href: session ? '/tool' : '/login', label: 'Workspace' }].map((link, i) => (
-              <motion.div key={link.href} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
+            {[
+              { label: 'Home', scrollTo: 'hero' },
+              { label: 'About', scrollTo: 'about' },
+              { label: 'Workspace', href: session ? '/tool' : '/login' },
+            ].map((link, i) => (
+              <motion.div key={link.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
                 transition={{ delay: i * 0.08, duration: 0.5, ease }}>
-                <Link href={link.href} onClick={() => setMobileOpen(false)} className="text-3xl font-display font-bold text-white hover:text-[#C4956A] transition-colors">{link.label}</Link>
+                {link.href ? (
+                  <Link href={link.href} onClick={() => setMobileOpen(false)} className="text-3xl font-display font-bold text-white hover:text-[#C4956A] transition-colors">{link.label}</Link>
+                ) : (
+                  <button onClick={() => handleMobileNav(link.scrollTo)} className="text-3xl font-display font-bold text-white hover:text-[#C4956A] transition-colors">{link.label}</button>
+                )}
               </motion.div>
             ))}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.5 }} className="flex flex-col gap-4 mt-8 w-full max-w-[200px]">

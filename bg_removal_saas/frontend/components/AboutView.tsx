@@ -94,7 +94,7 @@ export function AboutView() {
 
             <ScrollReveal variant="fade-up" delay={0.3}>
               <p className="text-xl md:text-2xl text-ink/80 font-medium leading-relaxed max-w-3xl">
-                VCranks AI is a professional-grade background removal platform built from the ground up.
+                VCrancks AI is a professional-grade background removal platform built from the ground up.
                 No third-party APIs. No shortcuts. Just a custom-trained neural network delivering pixel-perfect
                 results at machine speed.
               </p>

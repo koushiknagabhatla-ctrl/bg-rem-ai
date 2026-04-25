@@ -9,10 +9,10 @@ import { useGSAP } from '@gsap/react';
 gsap.registerPlugin(ScrollTrigger);
 
 const values = [
-  { label: 'Obsessive Detail', value: 'We don’t just erase backgrounds. We evaluate every single pixel to ensure your subject remains perfectly untouched, exactly as you captured it.' },
+  { label: 'Obsessive Detail', value: "We don't just erase backgrounds. We evaluate every single pixel to ensure your subject remains perfectly untouched, exactly as you captured it." },
   { label: 'Uncompromised Quality', value: 'No arbitrary scaling. No muddy artifacts. When you upload a 4K image, you get a pristine 4K cutout in return. We preserve your art.' },
   { label: 'Absolute Privacy', value: 'Your imagery is your intellectual property. Operations happen entirely in volatile memory so nothing is ever saved to our drives. Truly yours.' },
-  { label: 'Infinite Capacity', value: 'A one-time hobbyist or a massive e-comm studio uploading fifty-thousand shots tonight? It doesn’t matter. It all just works.' },
+  { label: 'Infinite Capacity', value: "A one-time hobbyist or a massive e-comm studio uploading fifty-thousand shots tonight? It doesn't matter. It all just works." },
 ];
 
 export function AboutSection() {
@@ -23,7 +23,7 @@ export function AboutSection() {
     ScrollTrigger.create({
       trigger: container.current,
       start: "top top",
-      end: "+=150%", // Sped up massively: Previously 400%, now 150% for high velocity
+      end: "+=120%",
       pin: true,
       animation: gsap.timeline()
         .to(cardsRef.current[0], { opacity: 0, scale: 0.9, x: 100, duration: 1, ease: "power2.inOut" }, 1)
@@ -34,7 +34,7 @@ export function AboutSection() {
         
         .to(cardsRef.current[2], { opacity: 0, scale: 0.9, x: 100, duration: 1, ease: "power2.inOut" }, 3)
         .fromTo(cardsRef.current[3], { x: '100vw', opacity: 0, scale: 0.8 }, { x: '0vw', opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, 3),
-      scrub: 2, // Fluid cinematic scrub
+      scrub: 1.8,
     });
   }, { scope: container });
 
@@ -77,11 +77,9 @@ export function AboutSection() {
             >
               <div className="w-full h-full flex flex-col justify-center relative">
                 
-                {/* Numbers deleted per design feedback */}
-                
-                <div className="glass3d !rounded-[3rem] bg-[#0A0604]/40 backdrop-blur-[24px] p-8 md:p-16 border border-[#8B5E3C]/20 relative z-10 w-full shadow-[0_30px_100px_rgba(0,0,0,0.6)]">
+                <div className="glass3d !rounded-[2.5rem] bg-[#0A0604]/40 backdrop-blur-[24px] p-8 md:p-14 border border-[#8B5E3C]/15 relative z-10 w-full shadow-[0_30px_80px_rgba(0,0,0,0.5)] hover:border-[#8B5E3C]/25 transition-all duration-700">
                   <span className="font-mono text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-[#C4956A] mb-4 md:mb-8 block drop-shadow-md">{v.label}</span>
-                  <p className="text-lg md:text-3xl text-[#BFA899] font-light leading-relaxed">
+                  <p className="text-lg md:text-2xl text-[#BFA899] font-light leading-relaxed">
                     {v.value}
                   </p>
                 </div>
