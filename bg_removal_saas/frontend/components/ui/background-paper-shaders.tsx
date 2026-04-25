@@ -34,9 +34,12 @@ const fragmentShader = `
   void main() {
     vec2 uv = vUv;
     
-    // Create animated noise pattern
-    float noise = sin(uv.x * 20.0 + time) * cos(uv.y * 15.0 + time * 0.8);
-    noise += sin(uv.x * 35.0 - time * 2.0) * cos(uv.y * 25.0 + time * 1.2) * 0.5;
+    // Create sophisticated, flowing organic fluid noise
+    float noise = sin(uv.x * 4.0 + time * 0.5) * cos(uv.y * 3.0 + time * 0.3);
+    noise += sin(uv.y * 6.0 - time * 0.4) * cos(uv.x * 5.0 + time * 0.6) * 0.5;
+    
+    // Add swirl dynamics for rich coffee/liquid feel
+    noise += sin(length(uv - 0.5) * 5.0 - time * 0.8) * 0.3;
     
     // Mix colors based on noise and position
     vec3 color = mix(color1, color2, noise * 0.5 + 0.5);
@@ -85,7 +88,7 @@ export function ShaderPlane({
 
   return (
     <mesh ref={mesh} position={position} scale={[12, 12, 1]}>
-      <planeGeometry args={[2, 2, 64, 64]} />
+      <planeGeometry args={[2, 2, 24, 24]} />
       <shaderMaterial
         uniforms={uniforms}
         vertexShader={vertexShader}
