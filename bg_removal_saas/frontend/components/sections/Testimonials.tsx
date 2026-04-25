@@ -60,7 +60,7 @@ export function Testimonials() {
           </span>
           <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1]">
             Trusted by creatives <br className="hidden md:block"/>
-            <span className="italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#C4956A] via-[#E8B98A] to-[#8B5E3C]">
+            <span className="italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#DCA251] via-[#FFF3D6] to-[#AB7B23]">
               who refuse to compromise.
             </span>
           </h2>

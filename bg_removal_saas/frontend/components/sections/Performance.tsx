@@ -56,7 +56,7 @@ export function Performance() {
         </span>
         <h2 className="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1]">
           The details that <br className="hidden md:block" />
-          <span className="italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#C4956A] via-[#E8B98A] to-[#8B5E3C]">matter most.</span>
+          <span className="italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#DCA251] via-[#FFF3D6] to-[#AB7B23]">matter most.</span>
         </h2>
       </motion.div>
 

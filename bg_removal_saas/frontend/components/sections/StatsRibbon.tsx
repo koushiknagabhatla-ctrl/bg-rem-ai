@@ -27,7 +27,7 @@ export function StatsRibbon() {
           How it works
         </span>
         <h2 className="font-display text-3xl md:text-5xl font-extrabold text-white leading-tight">
-          Three steps. <span className="italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#C4956A] to-[#8B5E3C]">Zero friction.</span>
+          Three steps. <span className="italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#DCA251] to-[#AB7B23]">Zero friction.</span>
         </h2>
       </motion.div>
 

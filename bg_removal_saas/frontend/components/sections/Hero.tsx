@@ -82,7 +82,7 @@ export function Hero() {
           </span>
           <span className="block overflow-hidden py-1">
             <motion.span
-              className="inline-block italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#C4956A] via-[#E8B98A] to-[#8B5E3C]"
+              className="inline-block italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#DCA251] via-[#FFF3D6] to-[#AB7B23]"
               initial={{ y: '120%', filter: 'blur(14px)', opacity: 0 }}
               animate={mounted ? { y: 0, filter: 'blur(0px)', opacity: 1 } : {}}
               transition={{ duration: 1.4, delay: 0.35, ease }}

@@ -88,7 +88,7 @@ export function BeforeAfter() {
           </span>
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-[1.08] max-w-4xl mx-auto mb-4 md:mb-5">
             Every edge. <br />
-            <span className="italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#C4956A] to-[#8B5E3C]">Perfectly clean.</span>
+            <span className="italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#DCA251] to-[#AB7B23]">Perfectly clean.</span>
           </h2>
           <p className="text-base md:text-lg text-[#BFA899]/80 font-light max-w-lg mx-auto lg:mx-0 leading-relaxed">
             Watch our AI handle the details that trip up every other tool — stray hairs, transparent glass, fine mesh. All in under 300ms.

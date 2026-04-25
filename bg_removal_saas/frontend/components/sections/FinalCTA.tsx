@@ -56,7 +56,7 @@ export function FinalCTA() {
               <motion.span className="inline-block" initial={{ y: '110%' }} whileInView={{ y: 0 }} viewport={{ once: true }} transition={{ duration: 1.3, ease }}>Your studio</motion.span>
             </span>
             <span className="block overflow-hidden py-1.5">
-              <motion.span className="inline-block italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#C4956A] to-[#E8B98A]" initial={{ y: '110%' }} whileInView={{ y: 0 }} viewport={{ once: true }} transition={{ duration: 1.3, delay: 0.1, ease }}>is waiting.</motion.span>
+              <motion.span className="inline-block italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#DCA251] to-[#AB7B23]" initial={{ y: '110%' }} whileInView={{ y: 0 }} viewport={{ once: true }} transition={{ duration: 1.3, delay: 0.1, ease }}>is waiting.</motion.span>
             </span>
           </h2>
 
