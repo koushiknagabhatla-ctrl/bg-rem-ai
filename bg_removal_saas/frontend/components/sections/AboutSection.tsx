@@ -26,15 +26,15 @@ export function AboutSection() {
       end: "+=400%", // 4 items
       pin: true,
       animation: gsap.timeline()
-        .to(cardsRef.current[0], { opacity: 0, scale: 0.9, x: 100, duration: 1 }, 1)
-        .fromTo(cardsRef.current[1], { x: '100vw', opacity: 0, scale: 0.8 }, { x: '0vw', opacity: 1, scale: 1, duration: 1 }, 1)
+        .to(cardsRef.current[0], { opacity: 0, scale: 0.9, x: 100, duration: 1, ease: "power2.inOut" }, 1)
+        .fromTo(cardsRef.current[1], { x: '100vw', opacity: 0, scale: 0.8 }, { x: '0vw', opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, 1)
         
-        .to(cardsRef.current[1], { opacity: 0, scale: 0.9, x: 100, duration: 1 }, 2)
-        .fromTo(cardsRef.current[2], { x: '100vw', opacity: 0, scale: 0.8 }, { x: '0vw', opacity: 1, scale: 1, duration: 1 }, 2)
+        .to(cardsRef.current[1], { opacity: 0, scale: 0.9, x: 100, duration: 1, ease: "power2.inOut" }, 2)
+        .fromTo(cardsRef.current[2], { x: '100vw', opacity: 0, scale: 0.8 }, { x: '0vw', opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, 2)
         
-        .to(cardsRef.current[2], { opacity: 0, scale: 0.9, x: 100, duration: 1 }, 3)
-        .fromTo(cardsRef.current[3], { x: '100vw', opacity: 0, scale: 0.8 }, { x: '0vw', opacity: 1, scale: 1, duration: 1 }, 3),
-      scrub: 1, // Fluid cinematic scrub
+        .to(cardsRef.current[2], { opacity: 0, scale: 0.9, x: 100, duration: 1, ease: "power2.inOut" }, 3)
+        .fromTo(cardsRef.current[3], { x: '100vw', opacity: 0, scale: 0.8 }, { x: '0vw', opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, 3),
+      scrub: 2, // Fluid cinematic scrub
     });
   }, { scope: container });
 
@@ -69,7 +69,7 @@ export function AboutSection() {
             <div
               key={i}
               ref={(el) => { cardsRef.current[i] = el; }}
-              className={`absolute inset-0 w-full h-full flex flex-col justify-center lg:items-end lg:pr-16 ${i === 0 ? 'z-10' : 'z-20'}`}
+              className={`absolute inset-0 w-full h-full flex flex-col justify-center lg:items-end lg:pr-16 will-change-transform ${i === 0 ? 'z-10' : 'z-20'}`}
               style={{ 
                 opacity: i === 0 ? 1 : 0, 
                 transform: i === 0 ? 'translateX(0vw)' : 'translateX(100vw)' 

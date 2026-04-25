@@ -20,7 +20,7 @@ export function BeforeAfter() {
         start: "center center", 
         end: "+=3000", // The user has 3000px of scroll distance to observe the physics
         pin: true,
-        scrub: 1.5,
+        scrub: 2.5, // Ultra-smooth trailing coefficient
         anticipatePin: 1
       }
     });

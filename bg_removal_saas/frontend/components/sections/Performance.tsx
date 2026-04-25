@@ -26,15 +26,15 @@ export function Performance() {
       end: "+=400%", // 4 cards
       pin: true,
       animation: gsap.timeline()
-        .to(cardsRef.current[0], { opacity: 0, scale: 0.9, y: -100, duration: 1 }, 1)
-        .fromTo(cardsRef.current[1], { y: '100vh', opacity: 0, scale: 0.8 }, { y: '0vh', opacity: 1, scale: 1, duration: 1 }, 1)
+        .to(cardsRef.current[0], { opacity: 0, scale: 0.9, y: -100, duration: 1, ease: "power2.inOut" }, 1)
+        .fromTo(cardsRef.current[1], { y: '100vh', opacity: 0, scale: 0.8 }, { y: '0vh', opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, 1)
         
-        .to(cardsRef.current[1], { opacity: 0, scale: 0.9, y: -100, duration: 1 }, 2)
-        .fromTo(cardsRef.current[2], { y: '100vh', opacity: 0, scale: 0.8 }, { y: '0vh', opacity: 1, scale: 1, duration: 1 }, 2)
+        .to(cardsRef.current[1], { opacity: 0, scale: 0.9, y: -100, duration: 1, ease: "power2.inOut" }, 2)
+        .fromTo(cardsRef.current[2], { y: '100vh', opacity: 0, scale: 0.8 }, { y: '0vh', opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, 2)
         
-        .to(cardsRef.current[2], { opacity: 0, scale: 0.9, y: -100, duration: 1 }, 3)
-        .fromTo(cardsRef.current[3], { y: '100vh', opacity: 0, scale: 0.8 }, { y: '0vh', opacity: 1, scale: 1, duration: 1 }, 3),
-      scrub: 1, // Fluid cinematic scrub
+        .to(cardsRef.current[2], { opacity: 0, scale: 0.9, y: -100, duration: 1, ease: "power2.inOut" }, 3)
+        .fromTo(cardsRef.current[3], { y: '100vh', opacity: 0, scale: 0.8 }, { y: '0vh', opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, 3),
+      scrub: 2, // Upgraded fluid cinematic scrub
     });
   }, { scope: container });
 
@@ -56,7 +56,7 @@ export function Performance() {
           <div
             key={i}
             ref={(el) => { cardsRef.current[i] = el; }}
-            className={`!absolute inset-0 w-full h-[100vh] mt-0 flex justify-center items-center bg-[#0C0806]/95 ${i === 0 ? 'z-10' : 'z-20 rounded-t-[40px] md:rounded-t-[80px] shadow-[0_-30px_100px_rgba(0,0,0,0.8)] border-t border-[#8B5E3C]/30 glass3d !border-x-0 !border-b-0'}`}
+            className={`!absolute inset-0 w-full h-[100vh] mt-0 flex justify-center items-center bg-[#0C0806]/95 will-change-transform ${i === 0 ? 'z-10' : 'z-20 rounded-t-[40px] md:rounded-t-[80px] shadow-[0_-30px_100px_rgba(0,0,0,0.8)] border-t border-[#8B5E3C]/30 glass3d !border-x-0 !border-b-0'}`}
             style={{ 
               opacity: i === 0 ? 1 : 0, 
               transform: i === 0 ? 'translateY(0vh)' : 'translateY(100vh)' 
