@@ -2,7 +2,7 @@
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { Canvas } from "@react-three/fiber";
-import { ShaderPlane } from "./background-paper-shaders";
+import { ShaderPlane, EnergyRing } from "./background-paper-shaders";
 
 type GradientBackgroundProps = React.ComponentProps<'div'> & {
   className?: string;
@@ -21,12 +21,14 @@ export function GradientBackground({
       {/* High-performance custom fluid shader background */}
       {mounted && (
         <div className="absolute inset-0 z-0">
-          <Canvas camera={{ position: [0, 0, 1] }} gl={{ alpha: true, antialias: false }}>
+          <Canvas camera={{ position: [0, 0, 3] }} gl={{ alpha: true, antialias: true }}>
             <ShaderPlane 
-              color1="#020100"   /* Deepest black/brown */
-              color2="#1C0D05"   /* Shadowy taupe brown */
-              color3="#5B311B"   /* Bright amber/copper highlight */
+              position={[0, 0, -1]}
+              color1="#080402"   /* Deepest black/brown */
+              color2="#3D1C04"   /* Mid brown */
+              color3="#EAA752"   /* Brilliant gold highlight */
             />
+            <EnergyRing radius={1.5} position={[0, 0, -0.5]} />
           </Canvas>
         </div>
       )}
