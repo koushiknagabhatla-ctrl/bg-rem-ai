@@ -1,30 +1,30 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { UploadCloud, Zap, Download, ArrowRight } from 'lucide-react';
+import { UploadCloud, Zap, Download, ChevronRight } from 'lucide-react';
 
 const steps = [
-  { icon: UploadCloud, title: 'Upload', desc: 'Drop your photo via studio or API. Fully encrypted.' },
-  { icon: Zap, title: 'Extract', desc: 'AI isolates your subject at sub-pixel precision.' },
-  { icon: Download, title: 'Download', desc: 'Get your transparent asset — uncompressed, perfect.' },
+  { icon: UploadCloud, title: 'Upload', desc: 'Drag and drop your photo — or paste from clipboard. We handle JPG, PNG, WebP, even RAW.' },
+  { icon: Zap, title: 'AI Magic', desc: 'Our neural network analyzes depth, edges, and transparency in under 300 milliseconds.' },
+  { icon: Download, title: 'Download', desc: 'Grab your transparent PNG — lossless, full resolution, ready for any project.' },
 ];
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
 export function StatsRibbon() {
   return (
-    <section className="relative py-24 md:py-32 px-6 md:px-16 overflow-hidden">
+    <section className="relative py-20 md:py-28 px-6 md:px-16 overflow-hidden">
       
       {/* Section Header */}
       <motion.div 
         initial={{ opacity: 0, y: 30, filter: 'blur(6px)' }}
         whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true, amount: 0.5 }}
-        transition={{ duration: 1, ease }}
-        className="text-center mb-16 md:mb-20"
+        transition={{ duration: 1.2, ease }}
+        className="text-center mb-14 md:mb-18"
       >
-        <span className="font-mono text-[12px] tracking-[0.5em] uppercase text-[#E8B98A] mb-4 block">
-          The Flow
+        <span className="font-mono text-[11px] tracking-[0.5em] uppercase text-[#E8B98A]/80 mb-4 block">
+          How it works
         </span>
         <h2 className="font-display text-3xl md:text-5xl font-extrabold text-white leading-tight">
           Three steps. <span className="italic font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#C4956A] to-[#8B5E3C]">Zero friction.</span>
@@ -32,51 +32,53 @@ export function StatsRibbon() {
       </motion.div>
 
       {/* Steps Row */}
-      <div className="max-w-[1000px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 relative">
+      <div className="max-w-[1100px] mx-auto relative">
         
-        {/* Connecting lines (desktop only) */}
-        <div className="hidden md:block absolute top-1/2 left-[33%] right-[33%] h-px -translate-y-1/2 z-0">
+        {/* Connecting line (desktop only) */}
+        <div className="hidden md:block absolute top-[72px] left-[16.5%] right-[16.5%] z-0">
           <motion.div 
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 1.5, delay: 0.6, ease }}
-            className="h-px bg-gradient-to-r from-[#8B5E3C]/40 via-[#C4956A]/30 to-[#8B5E3C]/40 origin-left"
+            transition={{ duration: 1.8, delay: 0.5, ease }}
+            className="h-px bg-gradient-to-r from-[#8B5E3C]/30 via-[#C4956A]/25 to-[#8B5E3C]/30 origin-left"
           />
         </div>
 
-        {steps.map((step, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 40, filter: 'blur(6px)' }}
-            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 1, delay: i * 0.2, ease }}
-            className="relative flex flex-col items-center text-center z-10"
-          >
-            {/* Step Number */}
-            <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-[#C4956A]/60 mb-4">
-              0{i + 1}
-            </span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-6">
+          {steps.map((step, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 35, filter: 'blur(6px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 1.1, delay: i * 0.18, ease }}
+              className="relative flex flex-col items-center text-center z-10 group"
+            >
+              {/* Step Number */}
+              <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-[#C4956A]/50 mb-3">
+                Step 0{i + 1}
+              </span>
 
-            {/* Icon Container */}
-            <div className="w-20 h-20 rounded-2xl bg-[#1A0E08]/60 backdrop-blur-md border border-[#8B5E3C]/25 flex items-center justify-center shadow-[0_0_30px_rgba(232,185,138,0.08)] mb-6 hover:border-[#C4956A]/40 hover:shadow-[0_0_40px_rgba(232,185,138,0.15)] transition-all duration-700">
-              <step.icon className="w-8 h-8 text-[#E8B98A]" strokeWidth={1.5} />
-            </div>
+              {/* Icon Container with hover glow */}
+              <div className="w-[72px] h-[72px] rounded-2xl bg-[#1A0E08]/70 backdrop-blur-md border border-[#8B5E3C]/20 flex items-center justify-center shadow-[0_0_20px_rgba(232,185,138,0.05)] mb-5 group-hover:border-[#C4956A]/35 group-hover:shadow-[0_0_35px_rgba(232,185,138,0.12)] transition-all duration-700">
+                <step.icon className="w-7 h-7 text-[#E8B98A] group-hover:scale-110 transition-transform duration-500" strokeWidth={1.5} />
+              </div>
 
-            <h3 className="font-display text-xl md:text-2xl font-bold text-white mb-3">
-              {step.title}
-            </h3>
-            <p className="text-sm md:text-base text-[#BFA899] font-light leading-relaxed max-w-[240px]">
-              {step.desc}
-            </p>
+              <h3 className="font-display text-lg md:text-xl font-bold text-white mb-2">
+                {step.title}
+              </h3>
+              <p className="text-sm text-[#BFA899]/80 font-light leading-relaxed max-w-[260px]">
+                {step.desc}
+              </p>
 
-            {/* Arrow between steps (mobile) */}
-            {i < steps.length - 1 && (
-              <ArrowRight className="md:hidden w-4 h-4 text-[#C4956A]/40 mt-6 rotate-90" />
-            )}
-          </motion.div>
-        ))}
+              {/* Arrow between steps (mobile only) */}
+              {i < steps.length - 1 && (
+                <ChevronRight className="md:hidden w-4 h-4 text-[#C4956A]/30 mt-5 rotate-90" />
+              )}
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );

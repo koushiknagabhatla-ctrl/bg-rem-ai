@@ -25,16 +25,31 @@ export function LandingView() {
   const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
-    // Phase 1: Authentication Redirection
+    // Check if user navigated here with a hash (e.g. /#about, /#hero)
+    // If so, DON'T redirect — they intentionally want to see the landing page
+    const hasHash = typeof window !== 'undefined' && window.location.hash.length > 1;
+
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
+      if (session && !hasHash) {
+        // Only auto-redirect if there's NO hash anchor
         router.replace('/tool');
       } else {
         setIsChecking(false);
+
+        // If there's a hash, scroll to that section after render
+        if (hasHash) {
+          const hash = window.location.hash.replace('#', '');
+          setTimeout(() => {
+            const el = document.getElementById(hash);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }, 1200); // Wait for preloader + GSAP init
+        }
       }
     });
 
-    // Phase 2: GSAP Scroll Configuration
+    // GSAP Scroll Configuration
     gsap.registerPlugin(ScrollTrigger);
     
     ScrollTrigger.config({
